@@ -1,0 +1,3 @@
+type ErrorMessageProps = {
+    message?: string;
+};
