@@ -16,7 +16,7 @@ const ContactsPage = () => {
                 { title: "Головна", href: "/" },
                 { title: "Контакти" }
             ]} />
-            <div className="min-h-screen bg-white flex flex-col items-center p-2 sm:p-6 lg:p-8">
+            <div className="min-h-screen bg-white flex flex-col items-center p-2 sm:p-6 lg:p-8 mt-8">
                 <div className="max-w-5xl w-full">
                     <TitleBlock />
                     <div className="grid grid-cols-1 md:grid-cols-[1fr,2fr] gap-8">

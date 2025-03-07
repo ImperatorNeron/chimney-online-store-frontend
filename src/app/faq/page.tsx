@@ -10,7 +10,7 @@ const FAQPage = () => {
             <Breadcrumbs items={[{ title: "Головна", href: "/" }, { title: "Питання та відповіді" }]} />
             <div className="py-16 md:py-20 lg:py-30 lg:px-8 bg-white">
                 <div className="max-w-4xl mx-auto">
-                    <div className="text-center mb-20 md:mb-24 lg:mb-32">
+                    <div className="text-center mb-16 md:mb-20 lg:mb-28">
                         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">
                             Поширені запитання
                         </h1>

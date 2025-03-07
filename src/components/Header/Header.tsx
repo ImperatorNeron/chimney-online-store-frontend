@@ -1,6 +1,6 @@
 'use client';
-import { HeaderBottom } from "./HeaderBottom";
-import { HeaderTop } from "./HeaderTop";
+import { HeaderBottom } from "./components/desktop/HeaderBottom";
+import { HeaderTop } from "./components/desktop/HeaderTop";
 import { useScroll } from "@/hooks/useScroll";
 
 export const Header = () => {

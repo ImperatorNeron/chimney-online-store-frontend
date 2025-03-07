@@ -3,7 +3,7 @@ import { FC } from "react";
 
 const Breadcrumbs: FC<BreadcrumbsProps> = ({ items }) => {
     return (
-        <nav className="mb-6" aria-label="Breadcrumb">
+        <nav aria-label="Breadcrumb">
             <ol className="flex items-center space-x-2 text-sm">
                 {items.map((item, index) => (
                     <li key={item.title} className="flex items-center">
