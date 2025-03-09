@@ -7,3 +7,7 @@
     --swiper-navigation-color: #000000;
     --swiper-navigation-size: 30px !important;
 }
+
+.swiper-slide-thumb-active div {
+    opacity: 1 !important;
+}

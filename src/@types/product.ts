@@ -10,4 +10,5 @@ interface Product {
 
 interface ItemCardProps {
     product: Product;
+    className?: string;
 }
