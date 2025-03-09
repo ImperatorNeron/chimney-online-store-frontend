@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { CloseButton } from "./CloseButton"
 import MainSlider from "./MainSlider"
 import MainThumbnailSlider from "./MainThumbnailSlider"
-import { Swiper as SwiperClass } from 'swiper'
 
 
 const ModalItem: React.FC<ModalItemProps> = ({ setIsOpen, slideIndex, items, thumbsSwiperModal, setThumbsSwiper }) => {

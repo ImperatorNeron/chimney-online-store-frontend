@@ -1,33 +1,28 @@
-import type { Swiper } from 'swiper';
-import { Dispatch, SetStateAction } from 'react';
+interface MainSliderProps {
+    thumbsSwiper: any;
+    setSlideIndex?: (value: number) => void;
+    items: SlideItem[];
+    setIsOpen?: (value: boolean) => void;
+    initialSlideIndex?: number;
+}
 
-export interface SlideItem {
+interface MainThumbnailSliderProps {
+    setThumbsSwiper: (value: any) => void;
+    items: SlideItem[];
+    className?: string;
+}
+
+interface ModalItemProps {
+    setIsOpen: (isOpen: boolean) => void;
+    slideIndex: number;
+    items: any[];
+    thumbsSwiperModal: any;
+    setThumbsSwiper: (value: any) => void;
+}
+
+interface SlideItem {
     id: string | number;
     src: string;
     alt: string;
     thumbnail: string;
-}
-
-export interface MainSliderProps {
-    thumbsSwiper: Swiper | null;
-    setSlideIndex?: Dispatch<SetStateAction<number>>;
-    items: SlideItem[];
-    setIsOpen?: Dispatch<SetStateAction<boolean>>;
-    initialSlideIndex?: number;
-}
-
-export interface ThumbnailSliderProps {
-    setThumbsSwiper: Dispatch<SetStateAction<Swiper | null>>;
-    items: SlideItem[];
-    className?: string;
-    slidesPerView?: number;
-    spaceBetween?: number;
-}
-
-export interface ModalSliderProps {
-    setIsOpen: Dispatch<SetStateAction<boolean>>;
-    slideIndex: number;
-    items: SlideItem[];
-    thumbsSwiperModal: Swiper | null;
-    setThumbsSwiperModal: Dispatch<SetStateAction<Swiper | null>>;
 }
