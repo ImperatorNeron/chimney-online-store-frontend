@@ -1,5 +1,6 @@
 'use client';
 
+import { CartCounter } from "../../../../helpers/cartItemsCounter";
 import NavIcon from "./NavIcon";
 
 const Actions = () => (
@@ -19,10 +20,10 @@ const Actions = () => (
             label="Улюблене"
         />
         <NavIcon
-            href="#"
+            href="/cart"
             iconSrc="/icons/shopping-cart.png"
             alt="Кошик"
-            count={0}
+            count={CartCounter()}
             countColor="bg-red-500"
             label="Кошик"
         />

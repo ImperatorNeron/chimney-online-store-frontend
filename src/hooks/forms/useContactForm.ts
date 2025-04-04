@@ -1,10 +1,11 @@
 "use client";
+import { NotificationService } from "@/helpers/notification";
 import PYDANTIC_ERROR_MESSAGES from "@/page-components/contacts/constants/pydantic";
 import { createMessage } from "@/services/messagesService";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
-const useContactForm = (onSuccess: (notification: NotificationProps | null) => void) => {
+export default function useContactForm() {
     const [isLoading, setIsLoading] = useState(false);
     const { register, handleSubmit, setError, formState, reset } = useForm<FormData>({
         mode: 'onChange',
@@ -16,10 +17,7 @@ const useContactForm = (onSuccess: (notification: NotificationProps | null) => v
             const response = await createMessage(data);
             if (response === true) {
                 reset();
-                onSuccess({
-                    type: 'success',
-                    message: 'Повідомлення успішно відправлено!'
-                });
+                NotificationService.success('Повідомлення успішно відправлено!')
             } else {
                 response.forEach((error: any) => {
                     setError(error.field, {
@@ -32,16 +30,9 @@ const useContactForm = (onSuccess: (notification: NotificationProps | null) => v
             }
 
         } catch (error: any) {
-            const errorMessage = error.response?.data?.message || 'Сталася помилка при відправці';
-            onSuccess({
-                type: 'error',
-                message: errorMessage
-            });
+            NotificationService.success('Сталася помилка при відправці!')
         } finally {
             setIsLoading(false);
-            setTimeout(() => {
-                onSuccess(null);
-            }, 5000);
         }
     };
 
@@ -53,5 +44,3 @@ const useContactForm = (onSuccess: (notification: NotificationProps | null) => v
         isLoading,
     };
 };
-
-export default useContactForm;

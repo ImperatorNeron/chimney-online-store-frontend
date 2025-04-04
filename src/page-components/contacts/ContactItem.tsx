@@ -1,4 +1,4 @@
-const ContactItem: React.FC<ContactItemProps> = ({ icon, title, content }) => {
+export default function ContactItem({ icon, title, content }: ContactItemProps) {
     return (
         <div className="flex items-start space-x-4 hover:scale-105 transform transition-all duration-300 cursor-default">
             <div className="flex-shrink-0">{icon}</div>
@@ -9,5 +9,3 @@ const ContactItem: React.FC<ContactItemProps> = ({ icon, title, content }) => {
         </div>
     );
 };
-
-export default ContactItem;

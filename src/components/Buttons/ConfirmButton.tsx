@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ConfirmButton: React.FC<ConfirmButtonProps> = ({ onClick, label, icon, isLoading }) => {
+export default function ConfirmButton({ onClick, label, icon, isLoading }: ConfirmButtonProps) {
 
     return (
         <button
@@ -14,5 +14,3 @@ const ConfirmButton: React.FC<ConfirmButtonProps> = ({ onClick, label, icon, isL
         </button>
     );
 };
-
-export default ConfirmButton;

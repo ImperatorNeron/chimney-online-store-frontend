@@ -1,3 +1,0 @@
-type ErrorMessageProps = {
-    message?: string;
-};

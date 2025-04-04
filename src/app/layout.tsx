@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import './globals.css';
 import Footer from "@/components/Footer/Footer";
+import { Bounce, ToastContainer } from "react-toastify";
+import { CartProvider } from "@/contexts/CartContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,11 +31,27 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header />
-        <main className="max-w-screen-2xl mt-20 lg:mt-32 mx-auto px-3">
-          {children}
-        </main>
-        <Footer />
+
+        <CartProvider>
+          <Header />
+          <main className="max-w-screen-2xl mt-20 lg:mt-32 mx-auto px-3">
+            {children}
+          </main>
+          <Footer />
+          <ToastContainer
+            position="bottom-right"
+            theme="light"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            rtl={false}
+            transition={Bounce}
+            closeOnClick
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
+        </CartProvider>
       </body>
     </html>
   );

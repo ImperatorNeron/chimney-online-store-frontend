@@ -1,4 +1,4 @@
-import { useToggleListItem } from "@/hooks/useToggleFAQItem";
+import { useToggleListItem } from "@/hooks/faq/useToggleFAQItem";
 import { FC } from "react";
 
 const QuestionBlock: FC<QuestionBlockProps> = ({ index, item }) => {

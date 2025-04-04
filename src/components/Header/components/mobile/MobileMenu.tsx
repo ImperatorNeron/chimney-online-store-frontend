@@ -6,6 +6,7 @@ import { MobileSearchBar } from "./MobileSearchBar";
 import { NavItem } from "./NavItem";
 import { ContactInfo } from "./ContactInfo";
 import Urls from "@/constants/Urls";
+import { CartCounter } from "@/helpers/cartItemsCounter";
 
 
 export const MobileMenu: FC<MobileMenuProps> = ({ isOpen, onClose }) => (
@@ -41,11 +42,11 @@ export const MobileMenu: FC<MobileMenuProps> = ({ isOpen, onClose }) => (
 
                     <nav className="flex flex-col">
                         <NavItem
-                            href="#"
+                            href="/cart"
                             iconSrc="/icons/shopping-cart.png"
                             alt="Кошик"
                             label="Кошик"
-                            count={0}
+                            count={CartCounter()}
                             countColor="bg-red-500"
                             onClose={onClose}
                         />

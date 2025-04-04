@@ -1,7 +1,7 @@
 'use client';
 import { HeaderBottom } from "./components/desktop/HeaderBottom";
 import { HeaderTop } from "./components/desktop/HeaderTop";
-import { useScroll } from "@/hooks/useScroll";
+import { useScroll } from "@/hooks/common/useScroll";
 
 export const Header = () => {
     const { scrollY, isScrolled, isClient } = useScroll();

@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import ButtonAddToCart from './ButtonAddToCart';
 
 
 const ItemCard = ({ product, className }: ItemCardProps) => {
@@ -11,17 +12,17 @@ const ItemCard = ({ product, className }: ItemCardProps) => {
                     className="w-full h-full flex items-center"
                 >
                     <Image
-                        src={product.image}
-                        alt={product.title}
+                        src="/images/test.png"
+                        alt={product.preview.alt}
                         width={253}
                         height={253}
                         className="object-contain p-3 hover:scale-105 transition-transform duration-200 mx-auto"
                     />
                 </Link>
 
-                {product.discount && (
+                {product.discount_percentage > 0 && (
                     <span className="absolute top-1.5 left-1.5 bg-red-600 text-white px-2 py-0.5 text-[0.7rem] font-bold rounded">
-                        -{product.discount}%
+                        -{product.discount_percentage}%
                     </span>
                 )}
 
@@ -41,44 +42,38 @@ const ItemCard = ({ product, className }: ItemCardProps) => {
                     </svg>
                 </button>
             </div>
-
-            <div className="p-3 flex flex-col h-[140px]">
+            <div className="p-3 flex flex-col h-[133px] sm:h-[155px]">
                 <Link
                     href={`/products/${product.slug}`}
                     className="hover:text-gray-900 transition-colors"
                 >
-                    <h3 className="text-xs sm:text-sm font-medium text-gray-800 flex-1 line-clamp-3">
-                        {product.title}
+                    <h3 className="text-xs sm:text-sm font-medium text-gray-800 flex-1 line-clamp-3 h-[48px] sm:h-[60px]">
+                        {product.name}
                     </h3>
                 </Link>
-
+                <div className="mt-2 flex items-center gap-1.5">
+                    <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                    </span>
+                    <span className="text-[0.7rem] font-medium uppercase tracking-wide text-green-500">
+                        У наявності
+                    </span>
+                </div>
                 <div className="mt-auto flex justify-between items-center">
                     <div className="flex flex-col">
-                        {product.oldPrice && (
+                        {product.discount_percentage > 0 && (
                             <div className="text-sm text-gray-400 line-through leading-none">
-                                ₴{product.oldPrice.toFixed(2)}
+                                ₴{product.price.toFixed(2)}
                             </div>
                         )}
-                        <div className={`text-base font-bold ${product.oldPrice ? "text-red-600" : "text-gray-900"}`}>
-                            ₴{product.price.toFixed(2)}
+                        <div className={`text-base font-bold leading-none ${product.discount_percentage > 0 ? "text-red-600" : "text-gray-900"}`}>
+                            ₴{(product.discount_percentage > 0
+                                ? product.price - (product.price * product.discount_percentage / 100)
+                                : product.price).toFixed(2)}
                         </div>
                     </div>
-
-                    <button className="p-2 rounded-full hover:bg-gray-100 transition-colors">
-                        <svg
-                            className="w-6 h-6 text-gray-500"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                            />
-                        </svg>
-                    </button>
+                    <ButtonAddToCart productId={product.id} />
                 </div>
             </div>
         </article>

@@ -1,7 +1,6 @@
 import Link from 'next/link';
-import { FC } from "react";
 
-const Breadcrumbs: FC<BreadcrumbsProps> = ({ items }) => {
+export default function Breadcrumbs({ items }: BreadcrumbsProps) {
     return (
         <nav aria-label="Breadcrumb">
             <ol className="flex items-center space-x-2 text-sm">
@@ -22,13 +21,13 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({ items }) => {
                         {item.href ? (
                             <Link
                                 href={item.href}
-                                className="ml-2 text-gray-500 hover:text-gray-700 transition-colors duration-200"
+                                className="ml-2 text-gray-500 hover:text-gray-700 transition-colors duration-200 line-clamp-1"
                             >
                                 {item.title}
                             </Link>
                         ) : (
                             <span
-                                className="ml-2 text-gray-900 font-medium"
+                                className="ml-2 text-gray-900 font-medium line-clamp-1"
                                 aria-current="page"
                             >
                                 {item.title}
@@ -40,5 +39,3 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({ items }) => {
         </nav>
     );
 };
-
-export default Breadcrumbs;

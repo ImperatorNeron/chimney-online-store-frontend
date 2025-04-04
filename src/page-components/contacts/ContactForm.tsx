@@ -2,17 +2,12 @@
 import ConfirmButton from "@/components/Buttons/ConfirmButton";
 import TextareaField from "@/components/InputFields/Textarea";
 import VALIDATORS from "./constants/validators";
-import useContactForm from "@/hooks/useContactForm";
-import useInputHandlers from "@/hooks/useInputHandlers";
+import useContactForm from "@/hooks/forms/useContactForm";
+import useInputHandlers from "@/hooks/forms/useInputHandlers";
 import FormField from "@/components/InputFields/FormInputField";
 
-
-interface ContactFormProps {
-    onSuccess: (notification: NotificationProps | null) => void;
-}
-
-const ContactForm = ({ onSuccess }: ContactFormProps) => {
-    const { register, handleSubmit, formState, onSubmit, isLoading } = useContactForm(onSuccess);
+const ContactForm = () => {
+    const { register, handleSubmit, formState, onSubmit, isLoading } = useContactForm();
     const userNameHandlers = useInputHandlers(/^[A-Za-zА-Яа-яІіЇїЄє'’`\-\s]+$/);
     const phoneNumberHandlers = useInputHandlers(/^\d+$/);
 
