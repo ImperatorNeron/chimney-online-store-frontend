@@ -1,6 +1,8 @@
-export default function OrderSummary({ totalQuantity, totalPrice }: OrderSummaryProps) {
+import Link from "next/link";
+
+export default function OrderSummary({ totalQuantity, totalPrice, onClose }: OrderSummaryProps) {
     return (
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 h-fit sticky top-28">
+        <div>
             <h2 className="text-xl font-semibold text-gray-900 mb-6">Сума замовлення</h2>
 
             <div className="space-y-4">
@@ -15,10 +17,12 @@ export default function OrderSummary({ totalQuantity, totalPrice }: OrderSummary
                 </div>
 
                 <div className="pt-4">
-                    <button className="w-full bg-black text-white py-3 rounded-lg font-medium 
-                                    hover:bg-gray-800 transition-colors active:scale-[0.98]">
+                    <Link
+                        href="/checkout"
+                        onClick={onClose}
+                        className="block bg-black text-white py-3 rounded-lg font-medium text-center hover:bg-gray-800 transition-colors active:scale-[0.98]">
                         Оформити замовлення
-                    </button>
+                    </Link>
                 </div>
             </div>
         </div>

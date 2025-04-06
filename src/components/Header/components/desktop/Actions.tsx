@@ -1,6 +1,6 @@
 'use client';
 
-import { CartCounter } from "../../../../helpers/cartItemsCounter";
+import CartButton from "../common/CartButton";
 import NavIcon from "./NavIcon";
 
 const Actions = () => (
@@ -19,14 +19,7 @@ const Actions = () => (
             countColor="bg-green-500"
             label="Улюблене"
         />
-        <NavIcon
-            href="/cart"
-            iconSrc="/icons/shopping-cart.png"
-            alt="Кошик"
-            count={CartCounter()}
-            countColor="bg-red-500"
-            label="Кошик"
-        />
+        <CartButton/>
     </div>
 );
 

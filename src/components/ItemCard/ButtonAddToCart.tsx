@@ -1,16 +1,16 @@
 'use client';
-import useAddItemToCart from '@/hooks/cart/useAddItemToCart';
+import useAddToCart from '@/hooks/cart/useAddToCart';
 
 export default function ButtonAddToCart({ productId }: { productId: number }) {
-    const { addCartItem, localLoading } = useAddItemToCart();
+    const { addToCart, isError, isPending } = useAddToCart();
 
     return (
         <button
             className="p-2 rounded-full hover:bg-gray-100 transition-colors"
-            onClick={() => addCartItem(productId)}
-            disabled={localLoading === productId}
+            onClick={() => addToCart({ productId: productId })}
+            disabled={isPending}
         >
-            {localLoading === productId ? (
+            {isPending ? (
                 <div className="h-6 w-6 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
             ) : (<svg
                 className="w-6 h-6 text-gray-500"

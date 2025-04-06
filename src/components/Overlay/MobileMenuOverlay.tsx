@@ -1,27 +1,20 @@
+import Overlay from "./Overlay";
+
 import Image from "next/image";
 import Link from "next/link";
-import type { FC } from "react";
-import { MobileMenuHeader } from "./MobileMenuHeader";
-import { MobileSearchBar } from "./MobileSearchBar";
-import { NavItem } from "./NavItem";
-import { ContactInfo } from "./ContactInfo";
 import Urls from "@/constants/Urls";
-import { CartCounter } from "@/helpers/cartItemsCounter";
+import { MobileSearchBar } from "../Header/components/mobile/MobileSearchBar";
+import { NavItem } from "../Header/components/mobile/NavItem";
+import { ContactInfo } from "../Header/components/mobile/ContactInfo";
+import MenuHeader from "../Header/components/mobile/MenuHeader";
 
-
-export const MobileMenu: FC<MobileMenuProps> = ({ isOpen, onClose }) => (
-    <div
-        className={`fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-100 transition-all duration-300 ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-            }`}
-        onClick={onClose}
-    >
-        <div
-            className={`absolute top-0 right-0 w-5/6 h-full bg-white transform transition-all duration-300 ${isOpen ? "translate-x-0" : "translate-x-full"
-                }`}
-            onClick={(e) => e.stopPropagation()}
-        >
-            <MobileMenuHeader onClose={onClose} />
-
+export default function MobileMenuOverlay({ isOpen, onClose }: {
+    isOpen: boolean;
+    onClose: () => void;
+}) {
+    return (
+        <Overlay isOpen={isOpen} onClose={onClose}>
+            <MenuHeader onClose={onClose} title="Меню" />
             <div className="p-4 h-[calc(100%-64px)] overflow-y-auto">
                 <div className="flex flex-col space-y-4">
                     <MobileSearchBar />
@@ -41,15 +34,6 @@ export const MobileMenu: FC<MobileMenuProps> = ({ isOpen, onClose }) => (
                     </Link>
 
                     <nav className="flex flex-col">
-                        <NavItem
-                            href="/cart"
-                            iconSrc="/icons/shopping-cart.png"
-                            alt="Кошик"
-                            label="Кошик"
-                            count={CartCounter()}
-                            countColor="bg-red-500"
-                            onClose={onClose}
-                        />
                         <NavItem
                             href="#"
                             iconSrc="/icons/heart.png"
@@ -93,6 +77,6 @@ export const MobileMenu: FC<MobileMenuProps> = ({ isOpen, onClose }) => (
                     <ContactInfo />
                 </div>
             </div>
-        </div>
-    </div>
-);
+        </Overlay>
+    )
+}

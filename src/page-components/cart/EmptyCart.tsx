@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function EmptyCart() {
+export default function EmptyCart({ onClose }: { onClose: () => void }) {
     return (
         <div className="max-w-md mx-auto p-6 flex flex-col items-center justify-center min-h-[60vh]">
             <div className="relative mb-8 w-48 h-48 flex items-center justify-center">
@@ -54,6 +54,7 @@ export default function EmptyCart() {
                     <Link
                         href="/catalog"
                         className="px-6 py-3 bg-black text-white rounded-lg font-medium hover:bg-gray-800 transition-colors duration-200 inline-flex items-center justify-center gap-2"
+                        onClick={onClose}
                     >
                         Перейти до покупок
                         <svg
