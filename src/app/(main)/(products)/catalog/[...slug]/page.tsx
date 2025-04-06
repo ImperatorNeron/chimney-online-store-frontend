@@ -2,9 +2,12 @@ import CardsBlock from "@/components/CardsBlock/CardsBlock";
 import Pagination from "@/page-components/catalog/Pagination";
 import { fetchProducts } from "@/services/productService";
 
-export default async function CatalogPage({ searchParams }: { searchParams?: { page?: string } }) {
-    const search = await searchParams
-    const initialPage = Math.max(1, parseInt(search?.page || "1"));
+export default async function MainCategoryPage({ params, searchParams }: {
+    params: Promise<{ slug: string }>;
+    searchParams?: Promise<{ page?: string }>;
+}) {
+    console.log((await params).slug)
+    const initialPage = Math.max(1, parseInt((await searchParams)?.page || "1"));
     const limit = 12;
     const { items, pagination } = await fetchProducts((initialPage - 1) * limit, limit);
     const totalPages = Math.max(1, Math.ceil(pagination.total / limit));
