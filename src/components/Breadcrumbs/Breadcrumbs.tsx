@@ -21,13 +21,13 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
                         {item.href ? (
                             <Link
                                 href={item.href}
-                                className="ml-2 text-gray-500 hover:text-gray-700 transition-colors duration-200 line-clamp-1"
+                                className="ml-1 text-gray-500 hover:text-gray-700 transition-colors duration-200 line-clamp-1"
                             >
                                 {item.title}
                             </Link>
                         ) : (
                             <span
-                                className="ml-2 text-gray-900 font-medium line-clamp-1"
+                                className="ml-1 text-gray-900 font-medium line-clamp-1"
                                 aria-current="page"
                             >
                                 {item.title}

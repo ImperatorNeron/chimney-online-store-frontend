@@ -2,7 +2,8 @@ import CardsBlock from "@/components/CardsBlock/CardsBlock";
 import { fetchProducts } from "@/services/productService";
 
 export default async function ProductsGrid({ title }: { title: string }) {
-    const { items } = await fetchProducts(0, 10);
+    const paginationIn: PaginationIn = { offset: 0, limit: 10 }
+    const { items } = await fetchProducts(paginationIn);
     return (
         <section className="max-w-7xl mx-auto ">
             <h2 className="text-xl lg:text-3xl font-black mb-6 lg:mb-8 text-center uppercase tracking-tight">

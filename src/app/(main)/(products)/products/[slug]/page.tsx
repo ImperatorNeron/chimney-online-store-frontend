@@ -11,7 +11,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     const hasDiscount = item.discount_percentage;
     const savings = hasDiscount ? item.price - item.discount_price : 0;
 
-    const { items } = await fetchProducts(0, 5);
+    const paginationIn: PaginationIn = { offset: 0, limit: 5 }
+    const { items } = await fetchProducts(paginationIn);
 
     return (
         <div className="min-h-screen bg-white">

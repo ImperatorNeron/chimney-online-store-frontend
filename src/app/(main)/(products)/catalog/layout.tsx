@@ -1,4 +1,6 @@
 import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs"
+import DesktopFilterBlock from "@/page-components/catalog/filters/DesktopFilterBlock"
+import MobileFilterButton from "@/page-components/catalog/filters/MobileFilterButton"
 
 export default function CatalogLayout({
     children
@@ -12,10 +14,8 @@ export default function CatalogLayout({
                 { title: "Каталог" },
             ]} />
             <div className="flex gap-4 mt-5">
-                <div className="hidden md:flex flex-col bg-white p-4 shadow-lg rounded-lg border border-gray-200 self-start w-1/4">
-                    <h2 className="text-lg font-semibold text-gray-800 mb-3">Фільтри</h2>
-                    <div className="space-y-3"></div>
-                </div>
+                <DesktopFilterBlock />
+                <MobileFilterButton />
                 {children}
             </div>
         </div>
