@@ -19,7 +19,7 @@ const BannerSlider = () => {
                 pagination={{ clickable: true }}
                 autoplay={{ delay: 6000, disableOnInteraction: false }}
                 loop
-                className="h-[250px] sm:h-[300px] md:h-[400px] lg:h-[500px]"
+                className="h-[250px] sm:h-[300px] md:h-[400px] lg:h-[500px] rounded-md"
             >
                 {slides.map((slide) => (
                     <SwiperSlide key={slide.id}>
@@ -28,7 +28,7 @@ const BannerSlider = () => {
                                 src={slide.src}
                                 alt={slide.alt}
                                 fill
-                                className="object-cover rounded-lg"
+                                className="object-cover rounded-md"
                                 priority
                             />
                         </div>

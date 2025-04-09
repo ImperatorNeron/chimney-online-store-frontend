@@ -1,5 +1,3 @@
-'use client';
-
 import Actions from "./Actions";
 import CatalogButton from "./CatalogButton";
 import SearchBar from "./SearchBar";

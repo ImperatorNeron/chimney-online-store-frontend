@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { createPortal } from "react-dom";
 
 type OverlayProps = {
@@ -12,6 +12,14 @@ export default function Overlay({ isOpen, onClose, className, children }: Overla
     const [mounted, setMounted] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
 
+    const setPadding = useCallback((value: string) => {
+        document.body.style.paddingRight = value;
+        const header = document.querySelector("header");
+        if (header) {
+            (header as HTMLElement).style.paddingRight = value;
+        }
+    }, []);
+
     useEffect(() => {
         let timer: NodeJS.Timeout;
         let rafId: number;
@@ -22,27 +30,29 @@ export default function Overlay({ isOpen, onClose, className, children }: Overla
                 requestAnimationFrame(() => {
                     setIsVisible(true);
                     document.documentElement.style.overflow = "hidden";
+                    const isLg = window.matchMedia("(min-width: 1024px)").matches;
+                    setPadding(isLg ? "15px" : "");
                 });
             });
         } else {
             setIsVisible(false);
             document.documentElement.style.overflow = "";
-            timer = setTimeout(() => {
-                setMounted(false);
-            }, 300);
+            setPadding("");
+            timer = setTimeout(() => setMounted(false), 300);
         }
 
         return () => {
             clearTimeout(timer);
             cancelAnimationFrame(rafId);
         };
-    }, [isOpen]);
+    }, [isOpen, setPadding]);
 
     useEffect(() => {
         return () => {
             document.documentElement.style.overflow = "";
+            setPadding("");
         };
-    }, []);
+    }, [setPadding]);
 
     if (!mounted) return null;
 
@@ -58,9 +68,7 @@ export default function Overlay({ isOpen, onClose, className, children }: Overla
                 onClick={(e) => e.stopPropagation()}
                 style={{ willChange: "transform" }}
             >
-                <div className="overflow-y-auto h-full">
-                    {children}
-                </div>
+                <div className="overflow-y-auto h-full">{children}</div>
             </div>
         </div>,
         document.body

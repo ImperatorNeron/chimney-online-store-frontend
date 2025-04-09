@@ -1,6 +1,8 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Thumbs } from "swiper/modules";
 import Image from 'next/image';
+import 'swiper/css';
+import 'swiper/css/thumbs';
 
 const MainThumbnailSlider = ({
     setThumbsSwiper,
@@ -8,24 +10,26 @@ const MainThumbnailSlider = ({
     className = "thumbnail-slider"
 }: MainThumbnailSliderProps) => {
     return (
-        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-10 w-5/6 sm:w-2/4">
+        <div className="absolute top-1/2 left-2 z-10 h-[240px] w-[56px] -translate-y-1/2">
             <Swiper
                 onSwiper={setThumbsSwiper}
                 modules={[Thumbs]}
-                spaceBetween={10}
-                slidesPerView={4}
+                direction="vertical"
+                spaceBetween={4}
+                slidesPerView={4.05}
                 watchSlidesProgress={true}
-                className={className}
+                className={`${className} h-full !flex !flex-col`}
+                style={{ height: '100%' }}
             >
                 {items.map((slide) => (
-                    <SwiperSlide key={slide.id}>
-                        <div className="relative w-full h-14 cursor-pointer transition-opacity opacity-40 hover:opacity-100">
+                    <SwiperSlide key={slide.id} className="!h-14">
+                        <div className="w-[56px] h-14 relative cursor-pointer transition-opacity opacity-40 hover:opacity-100">
                             <Image
                                 src={slide.thumbnail}
                                 alt={slide.alt}
-                                fill
-                                className="object-contain rounded-lg border border-gray-500"
-                                sizes="100px"
+                                width={56}
+                                height={56}
+                                className="object-cover rounded-lg border border-gray-500"
                             />
                         </div>
                     </SwiperSlide>

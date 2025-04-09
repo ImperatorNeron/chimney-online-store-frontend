@@ -17,12 +17,13 @@ const ModalItem: React.FC<ModalItemProps> = ({ setIsOpen, slideIndex, items, thu
         <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 px-4 "
             onClick={() => setIsOpen(false)}>
-            <div className="relative w-full max-w-[500px] md:max-w-none md:w-4/6 h-[50vh] md:h-[80vh] max-h-[600px] min-h-[300px] max-w-5xl bg-gray-50 pb-16 rounded-xl" onClick={(e) => e.stopPropagation()}>
+            <div className="relative w-full max-w-[500px] md:max-w-none md:w-4/6 h-[80vh] min-h-[300px] max-w-5xl bg-gray-50 rounded-xl" onClick={(e) => e.stopPropagation()}>
                 <CloseButton onClick={() => setIsOpen(false)} />
                 <MainSlider
                     thumbsSwiper={thumbsSwiperModal && !thumbsSwiperModal.destroyed ? thumbsSwiperModal : null}
                     initialSlideIndex={slideIndex}
                     items={items}
+                    className="scale-[1.25] sm:scale-[1.15] md:scale-[1.1]"
                 />
                 <MainThumbnailSlider setThumbsSwiper={setThumbsSwiper} items={items} />
             </div>

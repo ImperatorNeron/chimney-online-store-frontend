@@ -18,7 +18,7 @@ const ItemSlider = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <div className="relative h-96 pb-14">
+        <div className="relative h-96 lg:h-full">
             <MainSlider thumbsSwiper={thumbsSwiper} setSlideIndex={setSlideIndex} items={items} setIsOpen={setIsOpen} />
             <MainThumbnailSlider setThumbsSwiper={setThumbsSwiper} items={items} />
 

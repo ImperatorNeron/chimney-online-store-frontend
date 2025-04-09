@@ -6,7 +6,7 @@ export default function AddToCartButton({ productId }: { productId: number }) {
 
     return (
         <button
-            className="flex-1 border-2 border-gray-900 py-3 rounded-lg font-medium hover:bg-gray-50 transition"
+            className="flex-1 border-2 border-gray-900 text-sm xs:text-base py-2.5 rounded-lg font-medium hover:bg-gray-50 transition"
             onClick={() => addToCart({ productId: productId })}
             disabled={isPending}
         >

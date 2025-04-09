@@ -11,3 +11,7 @@
 .swiper-slide-thumb-active div {
     opacity: 1 !important;
 }
+
+.swiper {
+    touch-action: auto !important;
+}

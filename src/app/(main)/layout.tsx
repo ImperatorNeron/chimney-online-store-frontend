@@ -8,7 +8,7 @@ export default function CatalogLayout({
     return (
         <>
             <Header />
-            <main className="max-w-screen-2xl mt-20 lg:mt-32 mx-auto px-3">
+            <main className="max-w-screen-2xl mt-[72px] lg:mt-[114px] mx-auto px-3">
                 {children}
             </main>
         </>

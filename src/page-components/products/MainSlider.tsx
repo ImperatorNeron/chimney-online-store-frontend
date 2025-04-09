@@ -8,14 +8,14 @@ const MainSlider = ({
     setSlideIndex = () => { },
     items,
     setIsOpen = () => { },
-    initialSlideIndex = 0
+    initialSlideIndex = 0,
+    className = ""
 }: MainSliderProps) => {
     return (
         <Swiper
             modules={[Navigation, Autoplay, Thumbs]}
             spaceBetween={10}
             thumbs={{ swiper: thumbsSwiper }}
-            navigation={true}
             autoplay={{ delay: 6000, disableOnInteraction: false }}
             loop={true}
             initialSlide={initialSlideIndex}
@@ -29,7 +29,7 @@ const MainSlider = ({
                             src={slide.src}
                             alt={slide.alt}
                             fill
-                            className="object-contain rounded-lg"
+                            className={`object-contain rounded-lg ${className}`}
                             priority
                             sizes="(max-width: 768px) 100vw, 75vw"
                             onClick={() => setIsOpen && setIsOpen(true)}

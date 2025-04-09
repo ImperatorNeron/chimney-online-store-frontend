@@ -5,7 +5,7 @@ import ButtonAddToCart from './ButtonAddToCart';
 
 const ItemCard = ({ product, className }: ItemCardProps) => {
     return (
-        <article className={`${className} group bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-200 border border-gray-200`}>
+        <article className={`${className} group bg-white rounded-lg shadow hover:shadow-md transition-all duration-200 border border-gray-200`}>
             <div className="relative aspect-square flex items-center">
                 <Link
                     href={`/products/${product.slug}`}

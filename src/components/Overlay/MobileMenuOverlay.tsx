@@ -7,6 +7,7 @@ import { MobileSearchBar } from "../Header/components/mobile/MobileSearchBar";
 import { NavItem } from "../Header/components/mobile/NavItem";
 import { ContactInfo } from "../Header/components/mobile/ContactInfo";
 import MenuHeader from "../Header/components/mobile/MenuHeader";
+import CatalogButton from "../Header/components/desktop/CatalogButton";
 
 export default function MobileMenuOverlay({ isOpen, onClose }: {
     isOpen: boolean;
@@ -19,19 +20,7 @@ export default function MobileMenuOverlay({ isOpen, onClose }: {
                 <div className="flex flex-col space-y-4">
                     <MobileSearchBar />
 
-                    <Link
-                        href="#"
-                        className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors duration-200"
-                    >
-                        <Image
-                            src="/icons/category.png"
-                            alt="Каталог"
-                            width={20}
-                            height={20}
-                            className="w-5 h-5 filter invert"
-                        />
-                        <span className="font-medium">Каталог товарів</span>
-                    </Link>
+                    <CatalogButton />
 
                     <nav className="flex flex-col">
                         <NavItem

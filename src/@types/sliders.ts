@@ -4,6 +4,7 @@ interface MainSliderProps {
     items: SlideItem[];
     setIsOpen?: (value: boolean) => void;
     initialSlideIndex?: number;
+    className?: string;
 }
 
 interface MainThumbnailSliderProps {
