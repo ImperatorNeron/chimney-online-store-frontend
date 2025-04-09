@@ -1,4 +1,4 @@
-const useInputHandlers = (pattern: RegExp) => {
+export default function useInputHandlers(pattern: RegExp) {
     const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (!pattern.test(e.key)) {
             e.preventDefault();
@@ -17,5 +17,3 @@ const useInputHandlers = (pattern: RegExp) => {
         onPaste: handlePaste,
     };
 };
-
-export default useInputHandlers;

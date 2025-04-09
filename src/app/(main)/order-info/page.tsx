@@ -1,7 +1,7 @@
-import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import Image from "next/image";
 
-const OrderInfoPage = () => {
+export default function OrderInfoPage() {
     return (
         <div className="bg-white">
             <Breadcrumbs items={[
@@ -122,5 +122,3 @@ const OrderInfoPage = () => {
         </div>
     );
 }
-
-export default OrderInfoPage;

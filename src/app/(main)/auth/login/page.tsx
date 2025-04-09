@@ -1,8 +1,7 @@
-import { FC } from 'react'
-import LoginForm from '@/page-components/auth/login/Form'
-import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs'
+import LoginForm from '@/components/modules/auth/components/LoginForm'
+import Breadcrumbs from '@/components/layout/Breadcrumbs'
 
-const LoginPage: FC = () => {
+export default function LoginPage() {
     return (
         <div>
             <Breadcrumbs items={[
@@ -31,7 +30,5 @@ const LoginPage: FC = () => {
                 </div>
             </div>
         </div>
-    )
-}
-
-export default LoginPage
+    );
+};

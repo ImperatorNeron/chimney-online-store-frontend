@@ -1,8 +1,8 @@
 'use client';
-import ErrorComponent from "@/components/Errors/LoadingError";
+import GlobalLoadingFailure from "@/components/shared/GlobalLoadingFailure";
 
 export default function ComponentError({ error }: { error: Error }) {
     return (
-        <ErrorComponent error={error} />
+        <GlobalLoadingFailure error={error} />
     );
 }

@@ -1,5 +1,5 @@
-import BannerSlider from "@/page-components/home/BannerSlider"
-import FeaturesGrid from "@/page-components/home/Features"
+import BannerSlider from "@/app/(main)/(home)/components/BannerSlider"
+import FeaturesGrid from "@/app/(main)/(home)/components/Features"
 
 export default function CatalogLayout({
     children

@@ -1,10 +1,10 @@
-import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
-import ContactBlock from "@/page-components/contacts/ContactBlock";
-import ContactForm from "@/page-components/contacts/ContactForm";
-import MapBlock from "@/page-components/contacts/MapBlock";
-import TitleBlock from "@/page-components/contacts/TitleBlock";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
+import ContactBlock from "@/app/(main)/contacts/components/ContactBlock";
+import ContactForm from "@/components/modules/contacts/components/ContactForm";
+import MapBlock from "@/app/(main)/contacts/components/MapBlock";
+import TitleBlock from "@/app/(main)/contacts/components/TitleBlock";
 
-const ContactsPage = () => {
+export default function ContactsPage() {
     return (
         <div>
             <Breadcrumbs items={[
@@ -26,4 +26,3 @@ const ContactsPage = () => {
     );
 };
 
-export default ContactsPage;

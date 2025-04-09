@@ -1,22 +1,21 @@
-// app/products/[slug]/page.tsx (або відповідна директорія)
-
-import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
-import CardsBlock from "@/components/CardsBlock/CardsBlock";
-import AddToCartButton from "@/page-components/products/ButtonAddToCart";
-import ItemSlider from "@/page-components/products/ItemSlider";
-import Tabs from "@/page-components/products/Tabs";
-import { fetchProduct, fetchProducts } from "@/services/productService";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
+import ProductList from "@/components/modules/products/components/ProductList";
+import AddProductToCartButton from "@/components/modules/product/components/AddProductToCartButton";
+import ProductSlider from "@/components/modules/product/components/ProductSlider";
+import Tabs from "@/components/modules/product/components/Tabs";
 import { HeartIcon, TagIcon, CreditCardIcon, ShieldCheckIcon, TruckIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
+import { productService } from "@/services/product.service";
+
+
 export default async function ProductPage({
     params
 }: {
     params: { slug: string };
 }) {
-    const { item } = await fetchProduct((await params).slug);
+    const { item } = await productService.fetchProduct((await params).slug);
     const hasDiscount = item.discount_percentage;
     const savings = hasDiscount ? item.price - item.discount_price : 0;
 
-    // Фіктивні характеристики
     const specifications = [
         { name: "Матеріал", value: "Алюміній" },
         { name: "Розмір", value: "25 × 35 × 5 см" },
@@ -27,7 +26,7 @@ export default async function ProductPage({
     ];
 
     const paginationIn = { offset: 0, limit: 5 };
-    const { items } = await fetchProducts(paginationIn);
+    const { items } = await productService.fetchProducts(paginationIn);
 
     return (
         <div className="min-h-screen bg-white">
@@ -41,7 +40,7 @@ export default async function ProductPage({
             <div className="max-w-7xl mx-auto px-1 pb-6">
                 <div className="flex flex-col lg:flex-row gap-8 mt-8">
                     <div className="lg:w-1/2 bg-gray-50 rounded-xl">
-                        <ItemSlider />
+                        <ProductSlider />
                     </div>
 
                     <div className="lg:w-1/2 space-y-4">
@@ -126,7 +125,7 @@ export default async function ProductPage({
                                 <button className="flex-1 bg-gray-900 text-sm xs:text-base text-white py-2.5 rounded-lg font-medium hover:bg-gray-800 transition">
                                     Замовити
                                 </button>
-                                <AddToCartButton productId={item.id} />
+                                <AddProductToCartButton productId={item.id} />
                             </div>
 
                             <div className="grid grid-cols-1 gap-4 pt-4 border-t border-gray-200">
@@ -175,7 +174,7 @@ export default async function ProductPage({
                     Схожі товари
                 </h2>
                 <div className="col-start-1 col-end-2 md:col-start-1 md:col-end-3 overflow-x-auto lg:overflow-x-visible -mx-4 px-4">
-                    <CardsBlock
+                    <ProductList
                         items={items}
                         className="flex gap-2 pb-8"
                         itemClassName="flex-1 min-w-[188px]"

@@ -1,9 +1,9 @@
 'use client';
-import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs';
+import Breadcrumbs from '@/components/layout/Breadcrumbs';
 import { faqItems } from '@/constants/FAQ';
-import QuestionBlock from '@/page-components/faq/QuestionBlock';
+import QuestionBlock from '@/app/(main)/faq/components/QuestionBlock';
 
-const FAQPage = () => {
+export default function FAQPage() {
 
     return (
         <div>
@@ -51,5 +51,3 @@ const FAQPage = () => {
 
     );
 };
-
-export default FAQPage;

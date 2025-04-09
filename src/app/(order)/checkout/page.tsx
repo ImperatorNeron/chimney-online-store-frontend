@@ -1,8 +1,8 @@
 'use client'
-import ContactInfoSection from '@/page-components/checkout/ContactInfoSection';
-import DeliveryMethodSection from '@/page-components/checkout/DeliveryMethodSection';
-import OrderSummary from '@/page-components/checkout/OrderSummary';
-import PaymentMethodSection from '@/page-components/checkout/PaymentMethodSection';
+import ContactInfoSection from '@/components/modules/checkout/components/ContactInfoSection';
+import DeliveryMethodSection from '@/components/modules/checkout/components/DeliveryMethodSection';
+import OrderSummary from '@/components/modules/checkout/components/OrderSummary';
+import PaymentMethodSection from '@/components/modules/checkout/components/PaymentMethodSection';
 import { useState } from 'react';
 
 

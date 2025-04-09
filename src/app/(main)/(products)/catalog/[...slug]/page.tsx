@@ -1,8 +1,8 @@
-import CardsBlock from "@/components/CardsBlock/CardsBlock";
-import LimitSelector from "@/page-components/catalog/LimitSelector";
-import OrderSelector from "@/page-components/catalog/OrderSelector";
-import Pagination from "@/page-components/catalog/Pagination";
-import { fetchProducts } from "@/services/productService";
+import ProductList from "@/components/modules/products/components/ProductList";
+import LimitSelector from "@/components/modules/catalog/components/LimitSelector";
+import OrderSelector from "@/components/modules/catalog/components/OrderSelector";
+import Pagination from "@/components/modules/catalog/components/Pagination";
+import { productService } from "@/services/product.service";
 
 export default async function CatalogPage({ params, searchParams }: {
     params: Promise<{ slug: string }>;
@@ -27,7 +27,7 @@ export default async function CatalogPage({ params, searchParams }: {
         ordering: (await searchParams)?.ordering || "asc",
     }
 
-    const { items, pagination } = await fetchProducts(paginationIn, ordering, filters);
+    const { items, pagination } = await productService.fetchProducts(paginationIn, ordering, filters);
     const totalPages = Math.max(1, Math.ceil(pagination.total / limit));
     const currentPage = Math.min(initialPage, totalPages);
 
@@ -37,7 +37,7 @@ export default async function CatalogPage({ params, searchParams }: {
                 <LimitSelector />
                 <OrderSelector />
             </div>
-            <CardsBlock items={items} className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 lg:gap-3" />
+            <ProductList items={items} className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 lg:gap-3" />
             {totalPages > 1 && <Pagination limit={limit} currentPage={currentPage} totalPages={totalPages} />}
         </div>
     );

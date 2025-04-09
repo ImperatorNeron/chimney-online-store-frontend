@@ -1,11 +1,9 @@
-import CardsBlock from "@/components/CardsBlock/CardsBlock";
-import LoadingCardsBlock from "@/components/CardsBlock/LoadingCardsBlock";
+import LoadingProductList from "@/components/shared/LoadingProductList";
 
 export default function ProductLoagingPage() {
     return (
         <div className="min-h-screen bg-white">
             <div className="max-w-7xl mx-auto px-1 pb-6">
-                {/* Breadcrumbs Skeleton */}
                 <div className="flex gap-2 py-4">
                     {[1, 2, 3].map((i) => (
                         <div key={i} className="flex items-center gap-2">
@@ -16,10 +14,7 @@ export default function ProductLoagingPage() {
                 </div>
 
                 <div className="flex flex-col lg:flex-row gap-8 mt-8">
-                    {/* Image Gallery Skeleton */}
                     <div className="lg:w-1/2 bg-gray-100 h-96 rounded-xl animate-pulse" />
-
-                    {/* Product Info Skeleton */}
                     <div className="lg:w-1/2 space-y-6">
                         <div className="h-8 w-3/4 bg-gray-200 rounded animate-pulse" />
 
@@ -41,8 +36,6 @@ export default function ProductLoagingPage() {
                         </div>
                     </div>
                 </div>
-
-                {/* Description & Specs Skeleton */}
                 <div className="grid md:grid-cols-2 gap-8 mt-12">
                     <div className="space-y-4">
                         <div className="h-6 w-32 bg-gray-200 rounded animate-pulse" />
@@ -61,23 +54,14 @@ export default function ProductLoagingPage() {
                         ))}
                     </div>
                 </div>
-
-                {/* Related Products Skeleton */}
                 <div className="mt-12">
                     <div className="h-6 w-48 bg-gray-200 rounded animate-pulse mb-6" />
                     <div className="col-start-1 col-end-2 md:col-start-1 md:col-end-3 overflow-x-auto lg:overflow-x-visible-mx-4 -mx-4 px-4">
-                        <LoadingCardsBlock totalCards={5} className="flex gap-2 pb-8" itemClassName="flex-1 min-w-[188px]" />
+                        <LoadingProductList totalCards={5} className="flex gap-2 pb-8" itemClassName="flex-1 min-w-[188px]" />
                     </div>
                 </div>
             </div>
         </div>
     )
-    // return (
-    //     <div>
-    //         <h2 className="text-2xl font-bold text-gray-900 mt-4 md:mt-16 tracking-tight">Схожі товари</h2>
-    //         <div className="col-start-1 col-end-2 md:col-start-1 md:col-end-3 overflow-x-auto lg:overflow-x-visible-mx-4 -mx-4 px-4">
-    //             <LoadingCardsBlock totalCards={5} className="flex gap-2 pb-8" itemClassName="flex-1 min-w-[188px]" />
-    //         </div>
-    //     </div>
-    // )
+
 }

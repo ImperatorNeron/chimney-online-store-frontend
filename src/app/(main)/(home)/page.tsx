@@ -1,7 +1,7 @@
-import CategoriesServer from "@/page-components/home/categories/CategoriesServer";
-import ProductsGrid from "@/page-components/home/ProductGrid";
+import CategoriesServer from "@/components/modules/categories/components/CategoriesServer";
+import ProductsGrid from "@/components/modules/products/components/ProductGrid";
 
-const Home = () => {
+export default function Home() {
     return (
         <div className="space-y-16 sm:space-y-24 mt-8 sm:my-16">
             <CategoriesServer />
@@ -9,6 +9,4 @@ const Home = () => {
             <ProductsGrid title={"Нові надходження"} />
         </div>
     );
-}
-
-export default Home;
+};

@@ -1,4 +1,4 @@
-import { Header } from "@/components/Header/Header";
+import Header from "@/components/layout/header/Header";
 
 export default function CatalogLayout({
     children

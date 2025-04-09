@@ -1,6 +1,6 @@
-import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs"
-import DesktopFilterBlock from "@/page-components/catalog/filters/DesktopFilterBlock"
-import MobileFilterButton from "@/page-components/catalog/filters/MobileFilterButton"
+import Breadcrumbs from "@/components/layout/Breadcrumbs"
+import DesktopFilterBlock from "@/components/modules/catalog/components/DesktopFilterBlock"
+import MobileFilterButton from "@/components/modules/catalog/components/MobileFilterButton"
 
 export default function CatalogLayout({
     children

@@ -1,0 +1,11 @@
+export default function InputField({ id, type = "text", placeholder, className = "", ...props }: InputFieldProps) {
+    return (
+        <input
+            type={type}
+            id={id}
+            placeholder={placeholder}
+            className={`w-full px-4 py-3 bg-gray-50 text-gray-900 border border-gray-300 rounded-md ${className}`}
+            {...props}
+        />
+    );
+};
