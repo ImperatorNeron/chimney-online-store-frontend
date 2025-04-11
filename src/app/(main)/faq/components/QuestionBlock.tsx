@@ -1,38 +1,35 @@
 import useToggleListItem from "@/hooks/useToggleFAQItem";
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
 
 export default function QuestionBlock({ index, item }: QuestionBlockProps) {
     const { activeIndices, toggleItem } = useToggleListItem();
 
     return (
-        <div
-            key={index}
-            className="bg-gray-50 rounded-xl md:rounded-2xl shadow-md md:shadow-lg transition-all duration-200 overflow-hidden border border-gray-200"
-        >
+        <div className="border-b border-gray-200 last:border-0 transition-colors">
             <button
                 onClick={() => toggleItem(index)}
-                className="w-full px-4 py-4 sm:px-6 sm:py-5 md:px-8 md:py-6 text-left flex justify-between items-center hover:bg-gray-50 transition-colors"
+                className="w-full px-4 py-4 sm:px-5 sm:py-5 md:px-6 md:py-5 lg:px-8 lg:py-6 text-left flex justify-between items-center hover:bg-gray-50 transition-all"
             >
-                <span className="text-base sm:text-lg md:text-xl font-semibold text-gray-900">
+                <span className="text-base sm:text-lg md:text-xl lg:text-xl font-normal text-gray-900 pr-4">
                     {item.question}
                 </span>
-                <span className={`transform transition-transform ${activeIndices.includes(index) ? 'rotate-180' : ''}`}>
-                    <svg className="w-6 h-6 sm:w-8 sm:h-8 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
+                <span className={`shrink-0 transform transition-transform ${activeIndices.includes(index) ? 'rotate-180' : ''
+                    }`}>
+                    <ChevronDownIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-gray-900" />
                 </span>
             </button>
 
             <div className={`transition-all duration-300 ease-in-out overflow-hidden 
-        ${activeIndices.includes(index) ? 'max-h-[1500px] opacity-100' : 'max-h-0 opacity-0'}`}>
-                <div className="px-4 sm:px-6 md:px-8 pb-4 sm:pb-6 md:pb-8 border-t border-gray-200 bg-gray-100">
-                    <p className="text-sm sm:text-base md:text-lg text-gray-700 mb-4 sm:mb-6 md:mb-8 leading-relaxed pt-4 sm:pt-6">
+                ${activeIndices.includes(index) ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                <div className="pb-4 px-4 sm:px-5 sm:pb-5 md:px-6 md:pb-6 lg:px-8 lg:pb-8">
+                    <p className="text-sm sm:text-base md:text-lg lg:text-lg text-gray-600 leading-relaxed sm:leading-loose">
                         {item.answer}
                     </p>
                     {item.videoId && (
-                        <div className="aspect-w-16 aspect-h-9 w-full">
+                        <div className="mt-4 sm:mt-5 md:mt-6 lg:mt-8 rounded-lg overflow-hidden">
                             <iframe
                                 src={`https://www.youtube.com/embed/${item.videoId}`}
-                                className="w-full h-[200px] sm:h-[300px] md:h-[500px] rounded-lg shadow-md transition-opacity duration-300"
+                                className="w-full h-[200px] sm:h-[250px] md:h-[350px] lg:h-[450px] xl:h-[600px]"
                                 title="YouTube video player"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowFullScreen

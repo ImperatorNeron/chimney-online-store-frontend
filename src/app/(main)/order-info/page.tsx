@@ -1,124 +1,85 @@
-import Breadcrumbs from "@/components/layout/Breadcrumbs";
-import Image from "next/image";
+import Breadcrumbs from '@/components/layout/Breadcrumbs';
+import { TruckIcon, EnvelopeIcon, UserIcon, MapPinIcon, CreditCardIcon, CurrencyDollarIcon, DevicePhoneMobileIcon } from '@heroicons/react/24/outline'
+import ModernOption from './components/ModerOption';
 
-export default function OrderInfoPage() {
+export default function PaymentDeliveryPage() {
     return (
-        <div className="bg-white">
-            <Breadcrumbs items={[
-                { title: "Головна", href: "/" },
-                { title: "Оплата та доставка" }
-            ]} />
-            <div className="container mx-auto py-12">
-                <div className="grid lg:grid-cols-2 gap-12 mb-5 lg:mb-20">
-                    <div className="space-y-10">
-                        <section>
-                            <h2 className="text-3xl font-bold text-black mb-8 text-center lg:text-start">Варіанти доставки</h2>
-                            <div className="grid gap-6">
-                                <div className="p-6 group bg-white rounded-md shadow-md hover:shadow-xl transition-all duration-200 border border-gray-200">
-                                    <h3 className="text-xl font-semibold text-black mb-2 flex items-center">
-                                        <span className="w-3 h-3 bg-gray-400 rounded-full mr-3 group-hover:bg-gray-600 transition-colors"></span>
-                                        Нова Пошта
-                                    </h3>
-                                    <ul className="list-disc pl-8 space-y-2 text-gray-600">
-                                        <li>Термін доставки: 1-3 дні</li>
-                                        <li>Можливість адресної доставки</li>
-                                    </ul>
-                                </div>
-                                <div className="p-6 group bg-white rounded-md shadow-md hover:shadow-xl transition-all duration-200 border border-gray-200">
-                                    <h3 className="text-xl font-semibold text-black mb-2 flex items-center">
-                                        <span className="w-3 h-3 bg-gray-400 rounded-full mr-3 group-hover:bg-gray-600 transition-colors"></span>
-                                        Укрпошта та ін.
-                                    </h3>
-                                    <ul className="list-disc pl-8 space-y-2 text-gray-600">
-                                        <li>Термін доставки: 2-5 дні</li>
-                                        <li>Можливість адресної доставки</li>
-                                    </ul>
-                                </div>
-                                <div className="p-6 group bg-white rounded-md shadow-md hover:shadow-xl transition-all duration-200 border border-gray-200">
-                                    <h3 className="text-xl font-semibold text-black mb-2 flex items-center">
-                                        <span className="w-3 h-3 bg-gray-400 rounded-full mr-3 group-hover:bg-gray-600 transition-colors"></span>
-                                        Самовивіз (Волинь)
-                                    </h3>
-                                    <ul className="list-disc pl-8 space-y-2 text-gray-600">
-                                        <li>Наш пункт видачі у Волині</li>
-                                        <li>Безкоштовно</li>
-                                    </ul>
-                                </div>
+        <div>
+            <Breadcrumbs items={[{ title: "Головна", href: "/" }, { title: "Доставка та оплата" }]} />
+            <div className="py-12 md:py-16 lg:py-20 xl:py-24 2xl:py-28">
+                <div className="max-w-6xl mx-auto">
+                    <div className="text-center mb-12 md:mb-16 lg:mb-20 xl:mb-24">
+                        <h1 className="text-4xl font-medium text-gray-900 tracking-tight">Оплата & Доставка</h1>
+                        <div className="mt-6">
+                            <div className="inline-flex items-center text-gray-600 space-x-4">
+                                <span className="font-medium px-4">Графік роботи: Пн-Пт 9:00-18:00, Сб 10:00-15:00</span>
                             </div>
-                        </section>
-                        <section>
-                            <h2 className="text-3xl font-bold text-black mb-6 text-center lg:text-start">Тарифи доставки</h2>
-                            <div className="bg-gray-100 py-6 px-3 lg:p-6 group rounded-md shadow-md hover:shadow-xl transition-all duration-200 border border-gray-200">
-                                <ul className="space-y-4">
-                                    <li className="flex justify-between items-center py-3 px-3 bg-white rounded-lg border border-gray-200">
-                                        <span className="text-gray-600">Замовлення від 1500 грн</span>
-                                        <span className="font-semibold text-black">Безкоштовно</span>
-                                    </li>
-                                    <li className="flex justify-between items-center py-3 px-3 bg-white rounded-lg border border-gray-200">
-                                        <span className="text-gray-600">Замовлення до 1500 грн</span>
-                                        <span className="font-semibold text-black">Від 50 грн</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </section>
+                        </div>
                     </div>
 
-                    <div className="space-y-10">
-                        <section>
-                            <h2 className="text-3xl font-bold text-black mb-8 text-center lg:text-start">Способи оплати</h2>
-                            <div className="space-y-10">
-                                <section>
-                                    <div className="grid grid-cols-2 gap-6">
-                                        <div className="p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-200 border border-gray-200 flex flex-col items-center text-center group">
-                                            <div className="mb-4 transition-transform group-hover:scale-110">
-                                                <Image
-                                                    src="/icons/online-payment.png"
-                                                    alt="Оплата онлайн"
-                                                    width={64}
-                                                    height={64}
-                                                />
-                                            </div>
-                                            <h3 className="font-semibold text-black mb-2">Оплата онлайн</h3>
-                                            <p className="text-sm text-gray-600">Реквізити надасть менеджер</p>
-                                        </div>
-                                        <div className="p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-200 border border-gray-200 flex flex-col items-center text-center group">
-                                            <div className="mb-4 transition-transform group-hover:scale-110">
-                                                <Image
-                                                    src="/icons/cash-on-delivery.png"
-                                                    alt="Накладений платіж"
-                                                    width={64}
-                                                    height={64}
-                                                />
-                                            </div>
-                                            <h3 className="font-semibold text-black mb-2">Накладений платіж</h3>
-                                            <p className="text-sm text-gray-600">Оплата при отриманні</p>
-                                        </div>
-                                    </div>
-                                </section>
+                    <div className="grid lg:grid-cols-2 gap-8">
+                        <section className="space-y-6">
+                            <div className="">
+                                <h2 className="text-2xl font-semibold text-gray-900 mb-8 flex items-center space-x-3">
+                                    <TruckIcon className="h-7 w-7 text-gray-600" />
+                                    <span>Доставка</span>
+                                </h2>
+                                <div className="space-y-3">
+                                    <ModernOption
+                                        title="Нова Пошта"
+                                        icon={<MapPinIcon className="h-5 w-5 text-blue-600" />}
+                                        details="1-2 дні • Відстеження онлайн"
+                                        price="Від 50₴"
+                                    />
+                                    <ModernOption
+                                        title="Укр Пошта"
+                                        icon={<EnvelopeIcon className="h-5 w-5 text-green-600" />}
+                                        details="3-5 днів • До відділення"
+                                        price="Від 40₴"
+                                    />
+                                    <ModernOption
+                                        title="Самовивіз"
+                                        icon={<UserIcon className="h-5 w-5 text-purple-600" />}
+                                        details="вул. Центральна 15, Луцьк"
+                                        price="Безкоштовно"
+                                    />
+                                    <ModernOption
+                                        title="По Волині"
+                                        icon={<TruckIcon className="h-5 w-5 text-orange-600" />}
+                                        details="До 24 годин • Кур'єр"
+                                        price="Фіксовано 80₴"
+                                    />
+                                </div>
                             </div>
                         </section>
-                        <section>
-                            <div className="bg-gray-100 py-8 px-6 lg:p-8 rounded-lg shadow-md hover:shadow-xl transition-all duration-200 border border-gray-200">
-                                <h3 className="text-xl font-semibold text-black mb-6">Графік роботи</h3>
-                                <ul className="space-y-4">
-                                    <li className="flex justify-between items-center py-2.5 px-3 bg-white rounded-lg border border-gray-200">
-                                        <span className="text-black">Понеділок - П'ятниця</span>
-                                        <span className="font-medium text-black">09:00 - 18:00</span>
-                                    </li>
-                                    <li className="flex justify-between items-center py-2.5 px-3 bg-white rounded-lg border bg-gray-100 ">
-                                        <span className="text-black">Субота</span>
-                                        <span className="font-medium text-black">Вихідний</span>
-                                    </li>
-                                    <li className="flex justify-between items-center py-2.5 px-3 bg-white rounded-lg border bg-gray-100 ">
-                                        <span className="text-black">Неділя</span>
-                                        <span className="font-medium text-black">Вихідний</span>
-                                    </li>
-                                </ul>
+
+                        <section className="space-y-3">
+                            <h2 className="text-2xl font-semibold text-gray-900 mb-8 flex items-center space-x-3">
+                                <CurrencyDollarIcon className="h-7 w-7 text-gray-600" />
+                                <span>Оплата</span>
+                            </h2>
+                            <div className="space-y-3">
+                                <ModernOption
+                                    title="LiqPay Online"
+                                    icon={<CreditCardIcon className="h-5 w-5 text-indigo-600" />}
+                                    details="VISA/Mastercard • Миттєво"
+                                />
+                                <ModernOption
+                                    title="Накладений платіж"
+                                    icon={<DevicePhoneMobileIcon className="h-5 w-5 text-rose-600" />}
+                                    details="+2% комісія • Нова Пошта"
+                                />
+                                <ModernOption
+                                    title="Переказ на карту"
+                                    icon={<CurrencyDollarIcon className="h-5 w-5 text-emerald-600" />}
+                                    details="ПриватБанк / Monobank"
+                                />
                             </div>
                         </section>
                     </div>
                 </div>
             </div>
         </div>
-    );
+
+    )
 }

@@ -22,6 +22,6 @@ export const faqItems = [
     {
         question: "Чи є безкоштовний період?",
         answer: "Так, ми пропонуємо 14-денний безкоштовний пробний період для всіх нових користувачів.",
-        videoId: "videoId3"
+        videoId: "kM_CB9NQEVw"
     },
 ];

@@ -11,6 +11,7 @@ interface PaginationIn {
 
 interface Filters {
     category_slug?: string;
+    text?: string;
 }
 
 interface Ordering {

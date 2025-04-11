@@ -4,7 +4,7 @@ import OverlayHeader from "@/components/shared/OverlayHeader";
 import OpenCatalogButton from "@/components/modules/menu/components/OpenCatalogButton";
 import PrimaryInformation from "@/components/shared/PrimaryInformation";
 import NavigationLink from "@/components/shared/NavigationLink";
-import SearchBar from "@/components/shared/SearchBar";
+import SearchBar from "@/components/modules/catalog/components/SearchBar";
 
 export default function MobileMenuOverlay({ isOpen, onClose }: {
     isOpen: boolean;

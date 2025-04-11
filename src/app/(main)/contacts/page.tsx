@@ -11,18 +11,17 @@ export default function ContactsPage() {
                 { title: "Головна", href: "/" },
                 { title: "Контакти" }
             ]} />
-            <div className="min-h-screen bg-white flex flex-col items-center p-2 sm:p-6 lg:p-8 mt-8">
-                <div className="max-w-5xl w-full">
+            <div className="flex flex-col items-center py-12 md:py-16 lg:py-20 xl:py-24 2xl:py-28">
+                <div className="max-w-7xl w-full">
                     <TitleBlock />
-                    <div className="grid grid-cols-1 md:grid-cols-[1fr,2fr] gap-8">
-                        <ContactBlock />
+                    <ContactBlock />
+                    <div className="grid grid-cols-1 lg:grid-cols-[3fr,2fr] gap-8 lg:gap-10 mt-8 md:mt-24 px-2 sm:px-5">
+                        <MapBlock />
                         <ContactForm />
                     </div>
-                    <MapBlock />
                 </div>
             </div>
         </div>
-
     );
 };
 

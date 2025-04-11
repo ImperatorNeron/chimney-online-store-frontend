@@ -1,10 +1,18 @@
-export default function ContactItem({ icon, title, content }: ContactItemProps) {
+export default function ContactItem({ icon, title, content }: {
+    icon: React.ReactNode;
+    title: string;
+    content: React.ReactNode;
+}) {
     return (
-        <div className="flex items-start space-x-4 hover:scale-105 transform transition-all duration-300 cursor-default">
-            <div className="flex-shrink-0">{icon}</div>
-            <div>
-                <h3 className="text-lg font-semibold text-black">{title}</h3>
-                {content}
+        <div className="flex items-center rounded-xl py-3 px-2 sm:p-6 gap-5 w-full max-w-sm lg:max-w-md hover:lg:shadow transition-shadow duration-300">
+            <div className="flex-shrink-0 p-3 bg-gray-100 rounded-lg">
+                {icon}
+            </div>
+            <div className="flex flex-col gap-1">
+                <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+                <div className="text-gray-600 text-base">
+                    {content}
+                </div>
             </div>
         </div>
     );

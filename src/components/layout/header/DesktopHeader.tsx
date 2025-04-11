@@ -1,6 +1,6 @@
 import OpenCatalogButton from "@/components/modules/menu/components/OpenCatalogButton";
 import DesktopHeaderActions from "./DesktopHeaderActions";
-import SearchBar from "@/components/shared/SearchBar";
+import SearchBar from "@/components/modules/catalog/components/SearchBar";
 
 export default function DesktopHeader() {
     return (

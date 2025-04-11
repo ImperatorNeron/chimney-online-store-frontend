@@ -1,47 +1,39 @@
-import { MapPinIcon, DevicePhoneMobileIcon, EnvelopeIcon, LinkIcon } from '@heroicons/react/24/solid';
+import { DevicePhoneMobileIcon, EnvelopeIcon, LinkIcon } from '@heroicons/react/24/solid';
+import Link from 'next/link';
 import React from 'react';
 import ContactItem from './ContactItem';
 
 export default function ContactBlock() {
     return (
-        <div className="space-y-6 flex-1">
+        <div className="flex-1 flex lg:justify-around flex-col lg:flex-row lg:items-center lg:gap-6">
             <ContactItem
-                icon={<MapPinIcon className='w-6 h-6 text-gray-600' />}
-                title="Адреса"
-                content={
-                    <div>
-                        вул. Центральна, 123<br />
-                        Київ, Україна
-                    </div>
-                }
-            />
-            <ContactItem
-                icon={<DevicePhoneMobileIcon className='w-6 h-6 text-gray-600' />}
+                icon={<DevicePhoneMobileIcon className='w-7 h-7 text-gray-600' />}
                 title="Телефон"
-                content={<a href='#'>+38 (099) 123-4567</a>}
+                content={<Link href='#' className="hover:text-gray-600 transition-colors">+38 (099) 123-4567</Link>}
             />
             <ContactItem
-                icon={<EnvelopeIcon className='w-6 h-6 text-gray-600' />}
+                icon={<EnvelopeIcon className='w-7 h-7 text-gray-600' />}
                 title="Email"
-                content={<a href='#'>contact@example.com</a>}
+                content={<Link href='#' className="hover:text-gray-800 transition-colors">contact@example.com</Link>}
             />
             <ContactItem
-                icon={<LinkIcon className='w-6 h-6 text-gray-600' />}
+                icon={<LinkIcon className='w-7 h-7 text-gray-600' />}
                 title="Соцмережі"
                 content={
-                    <div className="flex space-x-3 mt-1">
-                        <a href="#" className="text-gray-600 hover:text-black transition-colors">
+                    <div className="flex gap-2 lg:gap-3 mt-1">
+                        <Link href="#" className="text-gray-600 hover:text-gray-800 transition-colors">
                             Telegram
-                        </a>
-                        <a href="#" className="text-gray-600 hover:text-black transition-colors">
+                        </Link>
+                        <Link href="#" className="text-gray-600 hover:text-gray-800 transition-colors">
                             Facebook
-                        </a>
-                        <a href="#" className="text-gray-600 hover:text-black transition-colors">
+                        </Link>
+                        <Link href="#" className="text-gray-600 hover:text-gray-800 transition-colors">
                             Instagram
-                        </a>
+                        </Link>
                     </div>
                 }
             />
         </div>
     );
 };
+
