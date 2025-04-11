@@ -1,8 +1,8 @@
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
-import ContactBlock from "@/app/(main)/contacts/components/ContactBlock";
+import ContactBlock from "@/app/(full-layout)/contacts/components/ContactBlock";
 import ContactForm from "@/components/modules/contacts/components/ContactForm";
-import MapBlock from "@/app/(main)/contacts/components/MapBlock";
-import TitleBlock from "@/app/(main)/contacts/components/TitleBlock";
+import MapBlock from "@/app/(full-layout)/contacts/components/MapBlock";
+import TitleBlock from "@/app/(full-layout)/contacts/components/TitleBlock";
 
 export default function ContactsPage() {
     return (
