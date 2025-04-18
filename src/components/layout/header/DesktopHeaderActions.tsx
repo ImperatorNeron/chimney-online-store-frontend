@@ -1,17 +1,11 @@
-'use client';
-
 import OpenCartButton from "@/components/modules/cart/components/OpenCartButton";
 import NavigationIcon from "@/components/shared/NavigationIcon";
+import ProfileNavigationIcon from "@/components/shared/ProfileNavigationIcon";
 
 export default function DesktopHeaderActions() {
     return (
         <div className="flex items-center gap-4 ml-4">
-            <NavigationIcon
-                href="/auth/login"
-                iconSrc="/icons/person.png"
-                alt="Увійти"
-                label="Увійти"
-            />
+            <ProfileNavigationIcon />
             <NavigationIcon
                 href="#"
                 iconSrc="/icons/heart.png"

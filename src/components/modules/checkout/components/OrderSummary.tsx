@@ -1,24 +1,33 @@
 import LoadingSkeleton from "./LoadingSkeleton";
 import CartItemList from "../../cart/components/CartItemList";
-import useCart from "@/components/modules/cart/hooks/useCart";
 import SectionContainer from "./SectionContainer";
+import { useAuthStore } from "@/store/auth.store";
+import { useCartStore } from "@/store/cart.store";
+import { useEffect } from "react";
 
 export default function OrderSummary() {
 
-    const { cart, isLoading, isError } = useCart();
+    const { isInitialized } = useAuthStore();
+    const { cart, loading, error, fetchCart } = useCartStore();
+
+    useEffect(() => {
+        if (isInitialized) {
+            fetchCart();
+        }
+    }, [isInitialized, fetchCart]);
 
     return (
         <SectionContainer className="p-0 sm:p-0 border-white">
-            {isLoading ? (
+            {loading ? (
                 <LoadingSkeleton count={2} />
             ) : (
                 <>
                     <h2 className="text-2xl font-bold py-4 text-center text-gray-900 border-b">Ваше замовлення</h2>
-                    <CartItemList cart={cart?.data} />
+                    <CartItemList cart={cart?.data ?? null} />
                     <div className="space-y-5 mx-4 my-4">
                         <div className="flex justify-between text-xl font-bold pt-2">
                             <span className="text-gray-900">Всього:</span>
-                            <span className="text-gray-900">₴{cart?.data.total_price}</span>
+                            <span className="text-gray-900">₴{cart?.data.total_price || 0}</span>
                         </div>
                         <button
                             className="w-full py-3 my-3 bg-gray-900 text-white rounded-lg mt-4 hover:bg-gray-800 

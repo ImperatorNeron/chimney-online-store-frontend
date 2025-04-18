@@ -1,13 +1,34 @@
-import useRemoveFromCart from "@/components/modules/cart/hooks/useRemoveFromCart";
-import useUpdateCart from "@/components/modules/cart/hooks/useUpdateCart";
+'use client'
+
+import { useState } from "react";
+import { useCartStore } from "@/store/cart.store";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function CartItem({item}: {item: CartItem}) {
+export default function CartItem({ item }: { item: CartItem }) {
     const hasDiscount = item.product.discount_percentage > 0;
+    const [updateLoading, setUpdateLoading] = useState(false);
+    const [removeLoading, setRemoveLoading] = useState(false);
 
-    const { updateCart, isError, isPending } = useUpdateCart();
-    const { removeFromCart, isError: isErr, isPending: isPen } = useRemoveFromCart();
+    const { changeQuantity, removeFromCart } = useCartStore();
+
+    const handleChange = async (action: "increment" | "decrement") => {
+        setUpdateLoading(true);
+        try {
+            await changeQuantity(item.id, action);
+        } finally {
+            setUpdateLoading(false);
+        }
+    };
+
+    const handleRemove = async () => {
+        setRemoveLoading(true);
+        try {
+            await removeFromCart(item.id);
+        } finally {
+            setRemoveLoading(false);
+        }
+    };
 
     return (
         <div className="relative p-4 bg-white border-b">
@@ -36,12 +57,12 @@ export default function CartItem({item}: {item: CartItem}) {
                             {item.product.name}
                         </Link>
                         <button
-                            onClick={() => removeFromCart({ itemId: item.id })}
+                            onClick={handleRemove}
                             className="text-gray-400 hover:text-gray-600 transition-colors p-1 -mr-1"
-                            disabled={isPen}
+                            disabled={removeLoading}
                             aria-label="Remove item"
                         >
-                            {isPen ? (
+                            {removeLoading ? (
                                 <div className="h-4 w-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
                             ) : (
                                 <svg
@@ -61,23 +82,23 @@ export default function CartItem({item}: {item: CartItem}) {
                         <div className="flex justify-between items-center mt-2">
                             <div className="flex items-center rounded-md border border-gray-200 bg-white overflow-hidden">
                                 <button
-                                    onClick={() => updateCart({ itemId: item.id, action: "decrement" })}
+                                    onClick={() => handleChange("decrement")}
                                     className="px-3 py-1 text-gray-600 hover:text-red-600 hover:bg-red-50 disabled:opacity-40 transition-colors text-lg"
-                                    disabled={isPending || item.quantity <= 1}
+                                    disabled={updateLoading || item.quantity <= 1}
                                 >
                                     −
                                 </button>
                                 <span className="px-3 py-1 text-gray-900 font-medium text-md min-w-[32px] text-center">
-                                    {isPending ? (
+                                    {updateLoading ? (
                                         <div className="h-4 w-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin mx-auto" />
                                     ) : (
                                         item.quantity
                                     )}
                                 </span>
                                 <button
-                                    onClick={() => updateCart({ itemId: item.id, action: "increment" })}
+                                    onClick={() => handleChange("increment")}
                                     className="px-3 py-1 text-gray-600 hover:text-green-600 hover:bg-green-50 disabled:opacity-40 transition-colors text-lg"
-                                    disabled={isPending}
+                                    disabled={updateLoading}
                                 >
                                     +
                                 </button>

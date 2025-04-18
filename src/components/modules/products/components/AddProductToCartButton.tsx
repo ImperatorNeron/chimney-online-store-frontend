@@ -1,16 +1,29 @@
 'use client';
-import useAddToCart from '@/components/modules/cart/hooks/useAddToCart';
+import { NotificationService } from '@/services/notification.service';
+import { useCartStore } from '@/store/cart.store';
+import { useState } from 'react';
 
 export default function AddProductToCartButton({ productId }: { productId: number }) {
-    const { addToCart, isError, isPending } = useAddToCart();
+    const [addLoading, setAddLoading] = useState(false);
+    const { addToCart } = useCartStore();
+
+    const handleAdd = async () => {
+        setAddLoading(true);
+        try {
+            await addToCart(productId);
+        } finally {
+            setAddLoading(false);
+            NotificationService.success("Товар успішно додано в корзину!")
+        }
+    };
 
     return (
         <button
             className="p-2 rounded-full hover:bg-gray-100 transition-colors"
-            onClick={() => addToCart({ productId: productId })}
-            disabled={isPending}
+            onClick={handleAdd}
+            disabled={addLoading}
         >
-            {isPending ? (
+            {addLoading ? (
                 <div className="h-6 w-6 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
             ) : (<svg
                 className="w-6 h-6 text-gray-500"

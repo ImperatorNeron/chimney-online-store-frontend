@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import './globals.css';
 import Footer from "@/components/layout/footer/Footer";
 import { Bounce, ToastContainer } from "react-toastify";
-import { CartProvider } from "@/providers/cart.provider";
+import RefreshCheck from "@/components/modules/auth/components/RefreshAuthComponent";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,23 +30,22 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <CartProvider>
-          {children}
-          <Footer />
-          <ToastContainer
-            position="bottom-right"
-            theme="light"
-            autoClose={3000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            rtl={false}
-            transition={Bounce}
-            closeOnClick
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-          />
-        </CartProvider>
+        <RefreshCheck />
+        {children}
+        <Footer />
+        <ToastContainer
+          position="bottom-right"
+          theme="light"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          rtl={false}
+          transition={Bounce}
+          closeOnClick
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </body>
     </html>
   );

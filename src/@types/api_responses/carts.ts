@@ -11,3 +11,13 @@ interface CartData {
     total_price: number;
     total_quantity: number;
 }
+
+interface CartApiResponse {
+    data: CartData;
+    meta: Record<string, unknown>;
+    errors: Array<{
+        code: string;
+        message: string;
+        meta: Record<string, unknown>;
+    }>;
+}

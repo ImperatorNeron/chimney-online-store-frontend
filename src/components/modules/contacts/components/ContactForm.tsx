@@ -5,6 +5,7 @@ import VALIDATORS from "../constants/validators";
 import useContactForm from "@/components/modules/contacts/hooks/useContactForm";
 import useInputHandlers from "@/hooks/forms/useInputHandlers";
 import FormField from "@/components/shared/FormField";
+import { ChatBubbleLeftIcon, IdentificationIcon, PhoneIcon } from "@heroicons/react/24/outline";
 
 export default function ContactForm() {
     const { register, handleSubmit, formState, onSubmit, isLoading } = useContactForm();
@@ -23,6 +24,7 @@ export default function ContactForm() {
                     {...register("user_name", VALIDATORS.NAME)}
                     onKeyPress={userNameHandlers.onKeyPress}
                     onPaste={userNameHandlers.onPaste}
+                    icon={IdentificationIcon}
                 />
                 <FormField
                     id="contact"
@@ -33,6 +35,7 @@ export default function ContactForm() {
                     {...register("phone_number", VALIDATORS.PHONE)}
                     onKeyPress={phoneNumberHandlers.onKeyPress}
                     onPaste={phoneNumberHandlers.onPaste}
+                    icon={PhoneIcon}
                 />
                 <FormField
                     component={TextareaField}
@@ -42,6 +45,7 @@ export default function ContactForm() {
                     errorMessage={formState.errors.message?.message}
                     {...register("message", VALIDATORS.MESSAGE)}
                     rows={4}
+                    icon={ChatBubbleLeftIcon}
                 />
                 <ConfirmButton label="Надіслати" isLoading={isLoading} />
             </form>

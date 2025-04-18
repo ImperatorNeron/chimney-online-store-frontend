@@ -10,7 +10,7 @@ import { productService } from "@/services/product.service";
 export default async function ProductPage({
     params
 }: {
-    params: { slug: string };
+    params: Promise<{ slug: string }>;
 }) {
     const { item } = await productService.fetchProduct((await params).slug);
     const hasDiscount = item.discount_percentage;

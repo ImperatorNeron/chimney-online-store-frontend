@@ -1,6 +1,7 @@
 import FormField from "@/components/shared/FormField";
 import SectionContainer from "./SectionContainer";
 import RadioOption from "@/components/shared/RadioOption";
+import { MapPinIcon } from "@heroicons/react/24/outline";
 
 export default function DeliveryMethodSection({
     deliveryMethod,
@@ -28,7 +29,7 @@ export default function DeliveryMethodSection({
                     />
                 ))}
             </div>
-            <FormField id="address" label="Адреса доставки" placeholder="Твоя адреса" />
+            <FormField id="address" label="Адреса доставки" placeholder="Твоя адреса" icon={MapPinIcon} />
         </SectionContainer>
     )
 }

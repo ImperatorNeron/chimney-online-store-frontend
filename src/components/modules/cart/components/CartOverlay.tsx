@@ -11,7 +11,6 @@ export default function CartOverlay({ cart, isOpen, onClose }: {
     isOpen: boolean;
     onClose: () => void;
 }) {
-
     return (
         <Overlay isOpen={isOpen} onClose={onClose} className="w-full">
             <OverlayHeader onClose={onClose} title={"Корзина"} />

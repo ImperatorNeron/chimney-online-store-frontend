@@ -1,3 +1,5 @@
+'use client'
+
 import useToggleListItem from "@/hooks/useToggleFAQItem";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 

@@ -5,11 +5,13 @@ import OpenCatalogButton from "@/components/modules/menu/components/OpenCatalogB
 import PrimaryInformation from "@/components/shared/PrimaryInformation";
 import NavigationLink from "@/components/shared/NavigationLink";
 import SearchBar from "@/components/modules/catalog/components/SearchBar";
+import { useAuthStore } from "@/store/auth.store";
 
 export default function MobileMenuOverlay({ isOpen, onClose }: {
     isOpen: boolean;
     onClose: () => void;
 }) {
+    const { isAuthenticated } = useAuthStore();
     return (
         <Overlay isOpen={isOpen} onClose={onClose}>
             <OverlayHeader onClose={onClose} title="Меню" />
@@ -30,10 +32,10 @@ export default function MobileMenuOverlay({ isOpen, onClose }: {
                             onClose={onClose}
                         />
                         <NavigationLink
-                            href={Urls.login}
+                            href={isAuthenticated ? "/profile" : "/auth/login"}
                             iconSrc="/icons/person.png"
-                            alt="Увійти"
-                            label="Увійти"
+                            alt={isAuthenticated ? "Профіль" : "Увійти"}
+                            label={isAuthenticated ? "Профіль" : "Увійти"}
                             onClose={onClose}
                         />
                         <NavigationLink

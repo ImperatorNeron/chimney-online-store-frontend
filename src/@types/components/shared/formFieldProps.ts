@@ -7,5 +7,6 @@ interface FormFieldProps {
     placeholder?: string;
     errorMessage?: string;
     className?: string;
+    icon: React.ElementType,
     [key: string]: any;
 }

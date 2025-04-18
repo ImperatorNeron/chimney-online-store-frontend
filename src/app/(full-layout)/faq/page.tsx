@@ -1,4 +1,3 @@
-'use client';
 import Breadcrumbs from '@/components/layout/Breadcrumbs';
 import { faqItems } from '@/constants/FAQ';
 import QuestionBlock from '@/app/(full-layout)/faq/components/QuestionBlock';

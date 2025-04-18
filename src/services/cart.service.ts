@@ -1,58 +1,45 @@
-class CartService {
-    async getCart(): Promise<{ data: CartData }> {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart`, {
-            method: 'GET',
-            credentials: 'include',
-        });
-        if (!response.ok) {
-            throw new Error('Failed to fetch cart');
-        }
-        const data = await response.json();
-        if (data.errors?.length) throw new Error(data.errors[0].message);
+import { getAuthHeaders } from "@/utils/request.headers";
 
-        return { data: data.data };
-    }
+export const fetchCart = async () => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart`, {
+        method: 'GET',
+        headers: await getAuthHeaders(),
+        credentials: 'include',
+    });
+    if (!res.ok) throw new Error('Не вдалося завантажити корзину');
+    return res.json();
+};
 
-    async addToCart(productId: number, quantity: number) {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                product_id: productId,
-                quantity: quantity,
-            }),
-        });
+export const addToCart = async (productId: number, quantity = 1) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart`, {
+        method: 'POST',
+        headers: await getAuthHeaders(),
+        credentials: 'include',
+        body: JSON.stringify({ product_id: productId, quantity }),
+    });
+    if (!res.ok) throw new Error(`Не вдалося додати продукт ${productId}`);
+};
 
-        if (!response.ok) throw new Error('Не вдалось додати товар до корзини');
-    }
+export const changeItemQuantity = async (
+    cartItemId: number,
+    action: 'increment' | 'decrement',
+    quantity: number = 1
+) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/change-item-quantity/${cartItemId}`, {
+        method: 'PATCH',
+        headers: await getAuthHeaders(),
+        credentials: 'include',
+        body: JSON.stringify({ action, quantity }),
+    });
+    if (!res.ok) throw new Error(`Не вдалося змінити кількість товару ${cartItemId}`);
+};
 
-    async updateCartItem(itemId: number, action: string) {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/change-item-quantity/${itemId}`, {
-            method: 'PATCH',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                quantity: 1,
-                action: action
-            }),
-        });
+export const removeItemFromCart = async (cartItemId: number) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/${cartItemId}`, {
+        method: 'DELETE',
+        headers: await getAuthHeaders(),
+        credentials: 'include',
+    });
+    if (!res.ok) throw new Error(`Не вдалося видалити товар ${cartItemId}`);
+};
 
-        if (!response.ok) throw new Error('Не вдалось оновити кількість');
-    }
-
-    async removeFromCart(itemId: number) {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/${itemId}`, {
-            method: 'DELETE',
-            credentials: 'include',
-        });
-
-        if (!response.ok) throw new Error('Не вдалось видалити товар');
-    }
-}
-
-export const cartService = new CartService();

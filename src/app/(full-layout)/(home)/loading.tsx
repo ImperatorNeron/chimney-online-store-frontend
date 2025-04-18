@@ -1,6 +1,7 @@
 import LoadingProductList from "@/components/shared/LoadingProductList";
 
 export default function LoadingPromoCards() {
+
     return (
         <>
             <section className="max-w-7xl mx-auto py-6 lg:py-8">
