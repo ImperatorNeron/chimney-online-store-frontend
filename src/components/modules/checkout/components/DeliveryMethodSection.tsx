@@ -1,35 +1,43 @@
-import FormField from "@/components/shared/FormField";
 import SectionContainer from "./SectionContainer";
-import RadioOption from "@/components/shared/RadioOption";
-import { MapPinIcon } from "@heroicons/react/24/outline";
+import { MapPinIcon, TruckIcon } from "@heroicons/react/24/outline";
+import FormField from "@/components/shared/FormField";
+import FieldErrorMessage from "@/components/ui/FieldError";
+import Label from "@/components/ui/Label";
+import FormSelect from "@/components/shared/FormSelect";
+import { inputPatterns } from "@/utils/field.patterns";
 
-export default function DeliveryMethodSection({
-    deliveryMethod,
-    setDeliveryMethod,
-}: {
-    deliveryMethod: string;
-    setDeliveryMethod: (method: string) => void;
-}) {
+export default function DeliveryMethodSection({ errors, register }: { errors: any; register: any; }) {
+
     return (
         <SectionContainer>
             <h2 className="text-xl font-semibold text-gray-900 mb-6">Спосіб доставки</h2>
-            <div className="space-y-2 mb-6">
-                {[
-                    { value: 'nova-poshta', label: 'Нова Пошта' },
-                    { value: 'ukrposhta', label: 'Укрпошта' },
-                    { value: 'volyn-delivery', label: 'Доставка по Волині' },
-                ].map((method) => (
-                    <RadioOption
-                        key={method.value}
-                        name="delivery"
-                        value={method.value}
-                        label={method.label}
-                        checked={deliveryMethod === method.value}
-                        onChange={setDeliveryMethod}
-                    />
-                ))}
+            <div className="mb-4">
+                <Label label={"Оберіть спосіб доставки"} htmlFor={"shipping_method"} required />
+                <FormSelect
+                    id="shipping_method"
+                    register={register("shipping_method")}
+                    icon={TruckIcon}
+                    options={[
+                        { value: "nova_poshta", label: "Нова Пошта" },
+                        { value: "ukrposhta", label: "Укрпошта" },
+                        { value: "courier", label: "Доставка по Волині" }
+                    ]}
+                />
+                {errors.shipping_method && (
+                    <FieldErrorMessage message={errors.shipping_method.message} />
+                )}
             </div>
-            <FormField id="address" label="Адреса доставки" placeholder="Твоя адреса" icon={MapPinIcon} />
+
+            <FormField
+                id="address"
+                label="Адреса доставки"
+                placeholder="Твоя адреса"
+                required
+                icon={MapPinIcon}
+                errorMessage={errors.address?.message}
+                pattern={inputPatterns.address}
+                {...register("address")}
+            />
         </SectionContainer>
-    )
+    );
 }

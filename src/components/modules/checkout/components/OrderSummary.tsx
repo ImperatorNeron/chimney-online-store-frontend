@@ -6,7 +6,7 @@ import { useCartStore } from "@/store/cart.store";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-export default function OrderSummary() {
+export default function OrderSummary({ isSubmitting }: { isSubmitting: any }) {
     const router = useRouter();
     const { isInitialized } = useAuthStore();
     const { cart, loading, error, fetchCart } = useCartStore();
@@ -18,14 +18,18 @@ export default function OrderSummary() {
     }, [isInitialized, fetchCart]);
 
     useEffect(() => {
-        if (!loading && isInitialized) {
+        if (!loading && isInitialized && cart) {
             const items = cart?.data?.items ?? [];
             const total = cart?.data?.total_price ?? 0;
             if (items.length === 0 || total === 0) {
-                router.push("/");
+                handleGoHome();
             }
         }
     }, [loading, isInitialized, cart, router]);
+
+    const handleGoHome = () => {
+        router.push("/");
+    };
 
     return (
         <SectionContainer className="p-0 sm:p-0 border-white">
@@ -40,12 +44,24 @@ export default function OrderSummary() {
                             <span className="text-gray-900">Всього:</span>
                             <span className="text-gray-900">₴{cart?.data.total_price || 0}</span>
                         </div>
-                        <button
-                            className="w-full py-3 my-3 bg-gray-900 text-white rounded-lg mt-4 hover:bg-gray-800 
+                        <div>
+                            <button
+                                className="w-full py-3 my-3 bg-gray-900 text-white rounded-lg mt-4 hover:bg-gray-800 
                                   transition-colors font-semibold text-base shadow-sm hover:shadow-md"
-                        >
-                            Підтвердити замовлення
-                        </button>
+                                disabled={isSubmitting}
+                                type="submit"
+                            >
+                                {isSubmitting ? "Обробка..." : "Підтвердити замовлення"}
+                            </button>
+                            <button
+                                onClick={handleGoHome}
+                                className="w-full py-3 border border-gray-300 rounded-lg 
+                                  transition-colors font-semibold text-base shadow-sm hover:bg-gray-100"
+                                type="button"
+                            >
+                                Повернутися на головну
+                            </button>
+                        </div>
                     </div>
                 </>
             )}
