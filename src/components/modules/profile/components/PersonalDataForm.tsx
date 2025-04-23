@@ -6,8 +6,8 @@ import ConfirmButton from '@/components/ui/ConfirmButton';
 import { usePersonalDataForm } from '../hooks/usePersonalDataForm';
 
 
-export default function PersonalDataForm({ user }: PersonalDataFormProps) {
-    const { formData, isLoading, handleChange, handleSubmit } = usePersonalDataForm(user);
+export default function PersonalDataForm({ user }: { user: User; }) {
+    const { register, handleSubmit, errors, isSubmitting } = usePersonalDataForm(user);
 
     return (
         <form onSubmit={handleSubmit} className="max-w-xl mx-auto p-0">
@@ -16,31 +16,31 @@ export default function PersonalDataForm({ user }: PersonalDataFormProps) {
             </h1>
             <div className="space-y-5">
                 <FormField
-                    id="firstName"
+                    id="first_name"
                     label="Ім'я"
                     required={false}
                     placeholder="Анатолій"
-                    defaultValue={formData.firstName}
+                    errorMessage={errors.first_name?.message}
                     icon={IdentificationIcon}
-                    onChange={handleChange("firstName")}
+                    {...register("first_name")}
                 />
                 <FormField
-                    id="lastName"
+                    id="last_name"
                     label="Прізвище"
                     required={false}
                     placeholder="Куліш"
-                    defaultValue={formData.lastName}
+                    errorMessage={errors.last_name?.message}
                     icon={IdentificationIcon}
-                    onChange={handleChange("lastName")}
+                    {...register("last_name")}
                 />
                 <FormField
                     id="patronymic"
                     label="По батькові"
                     required={false}
                     placeholder="Сергійович"
-                    defaultValue={formData.patronymic}
+                    errorMessage={errors.patronymic?.message}
                     icon={IdentificationIcon}
-                    onChange={handleChange("patronymic")}
+                    {...register("patronymic")}
                 />
                 <FormField
                     id="email"
@@ -48,22 +48,22 @@ export default function PersonalDataForm({ user }: PersonalDataFormProps) {
                     type="email"
                     required={false}
                     placeholder="youremail@gmail.com"
-                    defaultValue={formData.email}
+                    errorMessage={errors.email?.message}
                     icon={EnvelopeIcon}
-                    onChange={handleChange("email")}
+                    {...register("email")}
                 />
                 <FormField
-                    id="phone"
+                    id="phone_number"
                     label="Номер телефону"
                     type="tel"
                     required={false}
                     placeholder="+380 XX XXX XX XX"
-                    defaultValue={formData.phone}
+                    errorMessage={errors.phone_number?.message}
                     icon={PhoneIcon}
-                    onChange={handleChange("phone")}
+                    {...register("phone_number")}
                 />
 
-                <ConfirmButton label="Зберегти зміни" isLoading={isLoading} />
+                <ConfirmButton label="Зберегти зміни" isLoading={isSubmitting} />
             </div>
         </form>
     );

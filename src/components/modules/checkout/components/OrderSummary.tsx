@@ -4,9 +4,10 @@ import SectionContainer from "./SectionContainer";
 import { useAuthStore } from "@/store/auth.store";
 import { useCartStore } from "@/store/cart.store";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function OrderSummary() {
-
+    const router = useRouter();
     const { isInitialized } = useAuthStore();
     const { cart, loading, error, fetchCart } = useCartStore();
 
@@ -15,6 +16,16 @@ export default function OrderSummary() {
             fetchCart();
         }
     }, [isInitialized, fetchCart]);
+
+    useEffect(() => {
+        if (!loading && isInitialized) {
+            const items = cart?.data?.items ?? [];
+            const total = cart?.data?.total_price ?? 0;
+            if (items.length === 0 || total === 0) {
+                router.push("/");
+            }
+        }
+    }, [loading, isInitialized, cart, router]);
 
     return (
         <SectionContainer className="p-0 sm:p-0 border-white">

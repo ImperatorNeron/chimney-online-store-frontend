@@ -27,10 +27,10 @@ export default function QuestionBlock({ index, item }: QuestionBlockProps) {
                     <p className="text-sm sm:text-base md:text-lg lg:text-lg text-gray-600 leading-relaxed sm:leading-loose">
                         {item.answer}
                     </p>
-                    {item.videoId && (
+                    {item.embed_url && (
                         <div className="mt-4 sm:mt-5 md:mt-6 lg:mt-8 rounded-lg overflow-hidden">
                             <iframe
-                                src={`https://www.youtube.com/embed/${item.videoId}`}
+                                src={item.embed_url}
                                 className="w-full h-[200px] sm:h-[250px] md:h-[350px] lg:h-[450px] xl:h-[600px]"
                                 title="YouTube video player"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

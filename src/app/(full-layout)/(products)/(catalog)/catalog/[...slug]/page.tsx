@@ -9,6 +9,8 @@ export default async function CatalogPage({ params, searchParams }: {
         searchParams!,
         (await params).slug.at(-1),
     );
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     return (
         <div className="w-full lg:w-3/4">
             <Catalog items={items} currentPage={currentPage} totalPages={totalPages} limit={limit} />

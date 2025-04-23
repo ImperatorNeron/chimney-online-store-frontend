@@ -1,8 +1,12 @@
 import Breadcrumbs from '@/components/layout/Breadcrumbs';
 import { faqItems } from '@/constants/FAQ';
 import QuestionBlock from '@/app/(full-layout)/faq/components/QuestionBlock';
+import { faqService } from '@/services/faq.service';
 
-export default function FAQPage() {
+export default async function FAQPage() {
+
+    const { items } = await faqService.getFAQS();
+
     return (
         <div className="bg-white">
             <Breadcrumbs items={[{ title: "Головна", href: "/" }, { title: "Питання та відповіді" }]} />
@@ -18,7 +22,7 @@ export default function FAQPage() {
                     </div>
 
                     <div className="space-y-4 md:space-y-5 lg:space-y-6">
-                        {faqItems.map((item, index) => (
+                        {items.map((item, index) => (
                             <QuestionBlock key={index} item={item} index={index} />
                         ))}
                     </div>

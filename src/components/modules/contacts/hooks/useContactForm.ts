@@ -1,36 +1,31 @@
 "use client";
 import { NotificationService } from "@/services/notification.service";
-import PYDANTIC_ERROR_MESSAGES from "@/components/modules/contacts/constants/pydantic";
 import { messageService } from "@/services/message.service";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { messageSchema, MessageSchema } from "@/schemas/message";
+import { zodResolver } from "@hookform/resolvers/zod";
+import useInputHandlers from "@/hooks/forms/useInputHandlers";
 
 export default function useContactForm() {
     const [isLoading, setIsLoading] = useState(false);
-    const { register, handleSubmit, setError, formState, reset } = useForm<Message>({
-        mode: 'onChange',
+    const { register, handleSubmit, formState, reset } = useForm<MessageSchema>({
+        resolver: zodResolver(messageSchema),
     });
 
-    const onSubmit: SubmitHandler<Message> = async (data) => {
+    const userNameHandlers = useInputHandlers(/^[A-Za-zА-Яа-яІіЇїЄє'’`\-\s]+$/);
+    const phoneNumberHandlers = useInputHandlers(/^\d+$/);
+
+    const onSubmit: SubmitHandler<MessageSchema> = async (data) => {
         setIsLoading(true);
         try {
             const response = await messageService.createMessage(data);
             if (response === true) {
                 reset();
                 NotificationService.success('Повідомлення успішно відправлено!')
-            } else {
-                response.forEach((error: any) => {
-                    setError(error.field, {
-                        type: 'manual',
-                        message: PYDANTIC_ERROR_MESSAGES[error.field]?.[error.errorType] ||
-                            PYDANTIC_ERROR_MESSAGES.general[error.errorType] ||
-                            'Неправильне заповнення поля'
-                    });
-                });
             }
-
         } catch (error: any) {
-            NotificationService.success('Сталася помилка при відправці!')
+            NotificationService.error('Сталася помилка при відправці!')
         } finally {
             setIsLoading(false);
         }
@@ -41,6 +36,8 @@ export default function useContactForm() {
         handleSubmit,
         formState,
         onSubmit,
+        userNameHandlers,
+        phoneNumberHandlers,
         isLoading,
     };
 };

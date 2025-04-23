@@ -14,14 +14,9 @@ interface User {
 }
 
 interface PersonalData {
-    firstName: string;
-    lastName: string;
-    patronymic: string;
-    email: string;
-    phone: string;
-}
-
-
-interface PersonalDataFormProps {
-    user: User;
+    first_name?: string;
+    last_name?: string;
+    patronymic?: string;
+    email?: string;
+    phone_number?: string;
 }

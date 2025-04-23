@@ -1,4 +1,4 @@
-import { checkAuthRequest, loginRequest, logoutRequest, refreshRequest } from '@/services/auth.service'
+import { checkAuthRequest, loginRequest, logoutRequest, refreshRequest, registrationRequest } from '@/services/auth.service'
 import { create } from 'zustand';
 
 
@@ -15,6 +15,7 @@ interface AuthState {
     isAuthenticated: boolean;
     isInitialized: boolean;
 
+    register: (data: Registration) => Promise<void>;
     login: (username: string, password: string) => Promise<void>;
     refresh: () => Promise<void>;
     isTokenValid: () => boolean;
@@ -35,12 +36,20 @@ export const useAuthStore = create<AuthState>((set, get) => {
         isAuthenticated: false,
         isInitialized: false,
 
+        register: async (data: Registration) => {
+            try {
+                await registrationRequest(data);
+                await get().login(data.username, data.password);
+            } catch (error) {
+                throw error;
+            }
+        },
+
         login: async (username: string, password: string) => {
             try {
                 const data = await loginRequest(username, password);
                 setToken(data);
             } catch (error) {
-                console.error('Login error:', error);
                 throw error;
             }
         },

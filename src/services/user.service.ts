@@ -14,11 +14,11 @@ export class UserService {
 
     private static preparePayload(data: PersonalData) {
         return {
-            first_name: data.firstName.trim(),
-            last_name: data.lastName.trim(),
-            patronymic: data.patronymic.trim(),
-            email: data.email.trim(),
-            phone_number: data.phone.trim(),
+            first_name: data.first_name?.trim(),
+            last_name: data.last_name?.trim(),
+            patronymic: data.patronymic?.trim(),
+            email: data.email?.trim(),
+            phone_number: data.phone_number?.trim(),
         };
     }
 }

@@ -1,3 +1,15 @@
+export const registrationRequest = async (data: Registration) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+    });
+
+    if (!res.ok) throw new Error('Registration failed');
+    return res.json();
+}
+
+
 export const loginRequest = async (username: string, password: string): Promise<AuthResponse> => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
         method: 'POST',
