@@ -7,15 +7,7 @@ import PaymentMethodSectionSelect from "@/components/modules/checkout/components
 import { useOrderForm } from "@/components/modules/checkout/hooks/useOrderForm";
 
 export default function OrderPage() {
-    const {
-        register,
-        handleSubmit,
-        errors,
-        isSubmitting,
-        user,
-        loading,
-        error,
-    } = useOrderForm();
+    const { formState, register, handleSubmit, onSubmit, user, loading, error } = useOrderForm();
 
     return (
         <div className="space-y-8 flex-1">
@@ -23,20 +15,20 @@ export default function OrderPage() {
                 Оформлення замовлення
             </h1>
 
-            <form onSubmit={handleSubmit} className="flex flex-col lg:flex-row gap-8">
+            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col lg:flex-row gap-8">
                 <div className="lg:w-full flex flex-col gap-4">
                     <ContactInfoSection
-                        errors={errors}
+                        errors={formState.errors}
                         register={register}
                         user={user}
                         loading={loading}
                         error={error}
                     />
-                    <DeliveryMethodSection errors={errors} register={register} />
-                    <PaymentMethodSectionSelect errors={errors} register={register} />
+                    <DeliveryMethodSection errors={formState.errors} register={register} />
+                    <PaymentMethodSectionSelect errors={formState.errors} register={register} />
                 </div>
                 <div className="lg:min-w-[450px] lg:max-w-[450px]">
-                    <OrderSummary isSubmitting={isSubmitting} />
+                    <OrderSummary isSubmitting={formState.isSubmitting} />
                 </div>
             </form>
         </div>

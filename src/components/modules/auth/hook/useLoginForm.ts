@@ -1,19 +1,16 @@
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
 import { useAuthStore } from '@/store/auth.store';
 import { loginSchema, LoginSchema } from '@/schemas/login';
-import useInputHandlers from '@/hooks/forms/useInputHandlers';
+import { NotificationService } from '@/services/notification.service';
 
 export default function useLoginForm() {
     const router = useRouter();
     const login = useAuthStore((state) => state.login);
-    const [loginError, setLoginError] = useState("");
 
-    const usernameHandlers = useInputHandlers(/^[a-zA-Z0-9_-]+$/);
 
-    const form = useForm<LoginSchema>({
+    const { register, handleSubmit, formState } = useForm<LoginSchema>({
         resolver: zodResolver(loginSchema),
         defaultValues: { username: "", password: "" },
     });
@@ -22,15 +19,10 @@ export default function useLoginForm() {
         try {
             await login(data.username, data.password);
             router.push("/profile");
-        } catch {
-            setLoginError("Невірний логін або пароль");
+        } catch (error: any) {
+            NotificationService.error(error.message);
         }
     };
 
-    return {
-        form,
-        onSubmit,
-        loginError,
-        usernameHandlers
-    };
-}
+    return { register, handleSubmit, formState, onSubmit };
+};

@@ -1,13 +1,5 @@
-import { checkAuthRequest, loginRequest, logoutRequest, refreshRequest, registrationRequest } from '@/services/auth.service'
+import { authService } from '@/api/services/auth.service';
 import { create } from 'zustand';
-
-
-interface AuthResponse {
-    access_token: string;
-    access_token_expire_seconds: number;
-    token_type: string;
-}
-
 
 interface AuthState {
     accessToken: string | null;
@@ -15,7 +7,7 @@ interface AuthState {
     isAuthenticated: boolean;
     isInitialized: boolean;
 
-    register: (data: Registration) => Promise<void>;
+    register: (data: RegisterUserSchema) => Promise<void>;
     login: (username: string, password: string) => Promise<void>;
     refresh: () => Promise<void>;
     isTokenValid: () => boolean;
@@ -25,7 +17,7 @@ interface AuthState {
 }
 
 export const useAuthStore = create<AuthState>((set, get) => {
-    const setToken = (data: AuthResponse) => {
+    const setToken = (data: TokenInfoSchema) => {
         const expiresAt = Date.now() + data.access_token_expire_seconds * 1000;
         set({ accessToken: data.access_token, expiresAt, isAuthenticated: true });
     };
@@ -36,22 +28,14 @@ export const useAuthStore = create<AuthState>((set, get) => {
         isAuthenticated: false,
         isInitialized: false,
 
-        register: async (data: Registration) => {
-            try {
-                await registrationRequest(data);
-                await get().login(data.username, data.password);
-            } catch (error) {
-                throw error;
-            }
+        register: async (data: RegisterUserSchema) => {
+            await authService.register(data);
+            await get().login(data.username, data.password);
         },
 
         login: async (username: string, password: string) => {
-            try {
-                const data = await loginRequest(username, password);
-                setToken(data);
-            } catch (error) {
-                throw error;
-            }
+            const data = await authService.login({ username, password });
+            setToken(data);
         },
 
         isTokenValid: () => {
@@ -63,23 +47,21 @@ export const useAuthStore = create<AuthState>((set, get) => {
             if (get().isTokenValid()) return;
 
             try {
-                const data = await refreshRequest();
+                const data = await authService.refresh();
                 setToken(data);
             } catch (error) {
-                console.error('Refresh error:', error);
-                try {
-                    await logoutRequest();
-                } catch (logoutError) {
-                    console.error('Logout error:', logoutError);
-                }
                 set({ accessToken: null, expiresAt: null, isAuthenticated: false });
+
+                try {
+                    await authService.logout();
+                } catch { }
                 throw error;
             }
         },
 
         checkAuthentication: async () => {
             try {
-                const isAuth = await checkAuthRequest();
+                const isAuth = await authService.checkAuth();
                 set({ isAuthenticated: isAuth });
 
                 if (isAuth) await get().refresh();

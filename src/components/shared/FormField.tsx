@@ -29,6 +29,7 @@ export default function FormField({
                     className="w-full p-3 pl-[55px] border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 transition"
                     onKeyPress={handlers.onKeyPress}
                     onPaste={handlers.onPaste}
+                    required={required}
                     {...props}
                 />
                 <Icon className="w-10 h-5 text-gray-400 absolute top-4 left-1 border-r-2" />

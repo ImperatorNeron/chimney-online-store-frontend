@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { UserIcon, HeartIcon, ClockIcon, ShoppingBagIcon } from '@heroicons/react/24/outline';
 import SideMenu from './components/SideMenu';
 import MobileMenu from './components/MobileMenu';
-import PersonalDataForm from '../../../components/modules/profile/components/PersonalDataForm';
-import useUserData from '../../../components/modules/profile/hooks/useUserData';
+import useUserData from '@/components/modules/profile/hooks/useUserData';
+import PersonalDataForm from '@/components/modules/profile/components/PersonalDataForm';
 
 export default function DashboardPage() {
     const { user, loading, error } = useUserData();

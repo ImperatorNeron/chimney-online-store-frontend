@@ -1,56 +1,18 @@
 import { z } from "zod";
+import { emailField, nameField, optional, passwordField, phoneField, usernameField } from "./fields";
 
 export const registrationSchema = z.object({
-    username: z
-        .string()
-        .min(3, "Логін має містити не менше 3 символів")
-        .max(50, "Логін має містити не більше 50 символів")
-        .regex(/^[a-zA-Z0-9_-]+$/, "Логін може містити лише літери, цифри, _ та -"),
-
-    password: z
-        .string()
-        .min(4, "Пароль має містити не менше 4 символів")
-        .max(255, "Пароль занадто довгий"),
-
-    confirm_password: z
-        .string()
-        .min(4, "Пароль має містити не менше 4 символів")
-        .max(255, "Пароль занадто довгий"),
-
-    email: z
-        .string()
-        .email("Невірний формат електронної пошти")
-        .min(5, "Email має містити не менше 5 символів")
-        .max(255, "Email має містити не більше 255 символів")
-        .optional(),
-
-    phone_number: z
-        .string()
-        .min(9, "Номер телефону має бути щонайменше 9 символів")
-        .max(11, "Номер телефону не може бути довше 11 символів")
-        .regex(/^\d+$/, "Номер телефону має містити лише цифри")
-        .optional(),
-
-    first_name: z
-        .string()
-        .min(2, "Ім’я має містити щонайменше 2 символи")
-        .max(50, "Ім’я має містити не більше 50 символів")
-        .regex(/^[A-Za-zА-Яа-яІіЇїЄєҐґ\-' ]+$/u, "Ім’я може містити лише літери, дефіси, апострофи та пробіли")
-        .optional(),
-
-    last_name: z
-        .string()
-        .min(2, "Прізвище має містити щонайменше 2 символи")
-        .max(50, "Прізвище має містити не більше 50 символів")
-        .regex(/^[A-Za-zА-Яа-яІіЇїЄєҐґ\-' ]+$/u, "Прізвище може містити лише літери, дефіси, апострофи та пробіли")
-        .optional(),
-
-    patronymic: z
-        .string()
-        .min(2, "По батькові має містити щонайменше 2 символи")
-        .max(50, "По батькові має містити не більше 50 символів")
-        .regex(/^[A-Za-zА-Яа-яІіЇїЄєҐґ\-' ]+$/u, "По батькові може містити лише літери, дефіси, апострофи та пробіли")
-        .optional()
+    username: usernameField,
+    password: passwordField,
+    confirm_password: passwordField,
+    email: optional(emailField.trim()),
+    phone_number: optional(phoneField.trim()),
+    first_name: optional(nameField.trim()),
+    last_name: optional(nameField.trim()),
+    patronymic: optional(nameField.trim()),
+}).refine((data) => data.password === data.confirm_password, {
+    message: "Паролі не співпадають",
+    path: ["confirm_password"],
 });
 
 export type RegistrationSchema = z.infer<typeof registrationSchema>;

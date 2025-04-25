@@ -4,17 +4,10 @@ import TextareaField from "@/components/ui/Textarea";
 import useContactForm from "@/components/modules/contacts/hooks/useContactForm";
 import FormField from "@/components/shared/FormField";
 import { ChatBubbleLeftIcon, IdentificationIcon, PhoneIcon } from "@heroicons/react/24/outline";
+import { inputPatterns } from "@/utils/field.patterns";
 
 export default function ContactForm() {
-    const {
-        register,
-        handleSubmit,
-        formState,
-        onSubmit,
-        userNameHandlers,
-        phoneNumberHandlers,
-        isLoading
-    } = useContactForm();
+    const { register, handleSubmit, formState, onSubmit } = useContactForm();
 
     return (
         <div>
@@ -26,8 +19,7 @@ export default function ContactForm() {
                     placeholder="Микола"
                     errorMessage={formState.errors.user_name?.message}
                     {...register("user_name")}
-                    onKeyPress={userNameHandlers.onKeyPress}
-                    onPaste={userNameHandlers.onPaste}
+                    pattern={inputPatterns.name}
                     icon={IdentificationIcon}
                 />
                 <FormField
@@ -37,8 +29,7 @@ export default function ContactForm() {
                     placeholder="0991234567"
                     errorMessage={formState.errors.phone_number?.message}
                     {...register("phone_number")}
-                    onKeyPress={phoneNumberHandlers.onKeyPress}
-                    onPaste={phoneNumberHandlers.onPaste}
+                    pattern={inputPatterns.phone}
                     icon={PhoneIcon}
                 />
                 <FormField
@@ -49,9 +40,10 @@ export default function ContactForm() {
                     errorMessage={formState.errors.message?.message}
                     {...register("message")}
                     rows={4}
+                    pattern={inputPatterns.message}
                     icon={ChatBubbleLeftIcon}
                 />
-                <ConfirmButton label="Надіслати" isLoading={isLoading} />
+                <ConfirmButton label="Надіслати" isLoading={formState.isSubmitting} />
             </form>
         </div>
 

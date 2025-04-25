@@ -15,16 +15,10 @@ export const useOrderForm = () => {
     const { user, loading, error } = useUserData(false);
     const { getValidToken } = useAuthStore.getState();
 
-    const formMethods = useForm<CreateOrderZodSchema>({
-        resolver: zodResolver(orderSchema),
+    const { register, handleSubmit, formState, reset } = useForm<CreateOrderZodSchema>({
+        resolver: zodResolver(orderSchema)
     });
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors, isSubmitting },
-        reset,
-    } = formMethods;
 
     useEffect(() => {
         if (user && !loading) {
@@ -55,10 +49,10 @@ export const useOrderForm = () => {
     };
 
     return {
+        formState,
         register,
-        handleSubmit: handleSubmit(onSubmit),
-        errors,
-        isSubmitting,
+        handleSubmit,
+        onSubmit,
         user,
         loading,
         error,

@@ -33,7 +33,6 @@ export default function ContactInfoSection({ errors, register, user, loading, er
                     required
                     placeholder="Анатолій"
                     errorMessage={errors.first_name?.message}
-                    defaultValue={user?.first_name || ''}
                     icon={IdentificationIcon}
                     pattern={inputPatterns.name}
                     {...register("first_name")}
@@ -44,7 +43,6 @@ export default function ContactInfoSection({ errors, register, user, loading, er
                     required
                     placeholder="Куліш"
                     errorMessage={errors.last_name?.message}
-                    defaultValue={user?.last_name || ''}
                     icon={IdentificationIcon}
                     pattern={inputPatterns.name}
                     {...register("last_name")}
@@ -55,7 +53,6 @@ export default function ContactInfoSection({ errors, register, user, loading, er
                     required
                     placeholder="Сергійович"
                     errorMessage={errors.patronymic?.message}
-                    defaultValue={user?.patronymic || ''}
                     icon={IdentificationIcon}
                     pattern={inputPatterns.name}
                     {...register("patronymic")}
@@ -67,7 +64,6 @@ export default function ContactInfoSection({ errors, register, user, loading, er
                     required
                     placeholder="+380 XX XXX XX XX"
                     errorMessage={errors.phone_number?.message}
-                    defaultValue={user?.phone_number || ''}
                     icon={PhoneIcon}
                     pattern={inputPatterns.phone}
                     {...register("phone_number")}
@@ -78,7 +74,6 @@ export default function ContactInfoSection({ errors, register, user, loading, er
                     type="email"
                     placeholder="youremail@gmail.com"
                     errorMessage={errors.email?.message}
-                    defaultValue={user?.email || ''}
                     icon={EnvelopeIcon}
                     pattern={inputPatterns.email}
                     {...register("email")}

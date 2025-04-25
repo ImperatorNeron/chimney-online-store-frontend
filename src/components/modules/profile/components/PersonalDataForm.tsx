@@ -4,13 +4,14 @@ import { EnvelopeIcon, PhoneIcon, IdentificationIcon } from '@heroicons/react/24
 import FormField from '@/components/shared/FormField';
 import ConfirmButton from '@/components/ui/ConfirmButton';
 import { usePersonalDataForm } from '../hooks/usePersonalDataForm';
+import { inputPatterns } from '@/utils/field.patterns';
 
 
 export default function PersonalDataForm({ user }: { user: User; }) {
-    const { register, handleSubmit, errors, isSubmitting } = usePersonalDataForm(user);
+    const { register, handleSubmit, formState, onSubmit } = usePersonalDataForm(user);
 
     return (
-        <form onSubmit={handleSubmit} className="max-w-xl mx-auto p-0">
+        <form onSubmit={handleSubmit(onSubmit)} className="max-w-xl mx-auto p-0">
             <h1 className="text-2xl font-semibold text-center mb-6 border-b pb-3">
                 Персональні дані
             </h1>
@@ -18,52 +19,55 @@ export default function PersonalDataForm({ user }: { user: User; }) {
                 <FormField
                     id="first_name"
                     label="Ім'я"
-                    required={false}
-                    placeholder="Анатолій"
-                    errorMessage={errors.first_name?.message}
+                    {...register('first_name')}
+                    errorMessage={formState.errors.first_name?.message}
+                    placeholder="Введіть ваше ім'я"
+                    pattern={inputPatterns.name}
                     icon={IdentificationIcon}
-                    {...register("first_name")}
                 />
+
                 <FormField
                     id="last_name"
                     label="Прізвище"
-                    required={false}
-                    placeholder="Куліш"
-                    errorMessage={errors.last_name?.message}
+                    {...register('last_name')}
+                    errorMessage={formState.errors.last_name?.message}
+                    placeholder="Введіть ваше прізвище"
+                    pattern={inputPatterns.name}
                     icon={IdentificationIcon}
-                    {...register("last_name")}
                 />
+
                 <FormField
                     id="patronymic"
-                    label="По батькові"
-                    required={false}
-                    placeholder="Сергійович"
-                    errorMessage={errors.patronymic?.message}
+                    label="Прізвище"
+                    {...register('patronymic')}
+                    errorMessage={formState.errors.patronymic?.message}
+                    placeholder="Введіть по батькові"
+                    pattern={inputPatterns.name}
                     icon={IdentificationIcon}
-                    {...register("patronymic")}
                 />
                 <FormField
                     id="email"
-                    label="Email"
                     type="email"
-                    required={false}
-                    placeholder="youremail@gmail.com"
-                    errorMessage={errors.email?.message}
+                    label="Email"
+                    {...register('email')}
+                    errorMessage={formState.errors.email?.message}
+                    placeholder="example@mail.com"
+                    pattern={inputPatterns.email}
                     icon={EnvelopeIcon}
-                    {...register("email")}
-                />
-                <FormField
-                    id="phone_number"
-                    label="Номер телефону"
-                    type="tel"
-                    required={false}
-                    placeholder="+380 XX XXX XX XX"
-                    errorMessage={errors.phone_number?.message}
-                    icon={PhoneIcon}
-                    {...register("phone_number")}
                 />
 
-                <ConfirmButton label="Зберегти зміни" isLoading={isSubmitting} />
+                <FormField
+                    id="phone_number"
+                    type="tel"
+                    label="Телефон"
+                    {...register('phone_number')}
+                    errorMessage={formState.errors.phone_number?.message}
+                    placeholder="+380123456789"
+                    pattern={inputPatterns.phone}
+                    icon={PhoneIcon}
+                />
+
+                <ConfirmButton label="Зберегти зміни" isLoading={formState.isSubmitting} />
             </div>
         </form>
     );

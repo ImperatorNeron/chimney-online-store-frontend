@@ -4,9 +4,10 @@ import ConfirmButton from '@/components/ui/ConfirmButton';
 import FormField from '@/components/shared/FormField';
 import { EnvelopeIcon, IdentificationIcon, LockClosedIcon, PhoneIcon, UserIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 import useRegisterForm from '../hook/useRegistrationForm';
+import { inputPatterns } from '@/utils/field.patterns';
 
 export default function RegistrationForm() {
-    const { register, handleSubmit, formState, onSubmit, isLoading } = useRegisterForm();
+    const { register, handleSubmit, formState, onSubmit } = useRegisterForm();
 
     return (
         <div>
@@ -18,9 +19,9 @@ export default function RegistrationForm() {
                             id="first_name"
                             label="Ім'я"
                             {...register('first_name')}
-                            error={formState.errors.first_name?.message}
+                            errorMessage={formState.errors.first_name?.message}
                             placeholder="Введіть ваше ім'я"
-                            className="input-primary"
+                            pattern={inputPatterns.name}
                             icon={IdentificationIcon}
                         />
 
@@ -28,9 +29,9 @@ export default function RegistrationForm() {
                             id="last_name"
                             label="Прізвище"
                             {...register('last_name')}
-                            error={formState.errors.last_name?.message}
+                            errorMessage={formState.errors.last_name?.message}
                             placeholder="Введіть ваше прізвище"
-                            className="input-primary"
+                            pattern={inputPatterns.name}
                             icon={IdentificationIcon}
                         />
 
@@ -38,9 +39,9 @@ export default function RegistrationForm() {
                             id="patronymic"
                             label="Прізвище"
                             {...register('patronymic')}
-                            error={formState.errors.patronymic?.message}
+                            errorMessage={formState.errors.patronymic?.message}
                             placeholder="Введіть по батькові"
-                            className="input-primary"
+                            pattern={inputPatterns.name}
                             icon={IdentificationIcon}
                         />
                     </div>
@@ -54,9 +55,9 @@ export default function RegistrationForm() {
                         label="Логін"
                         required
                         {...register('username')}
-                        error={formState.errors.username?.message}
+                        errorMessage={formState.errors.username?.message}
                         placeholder="Придумайте логін"
-                        className="input-primary"
+                        pattern={inputPatterns.username}
                         icon={UserIcon}
                     />
 
@@ -66,9 +67,9 @@ export default function RegistrationForm() {
                             type="email"
                             label="Email"
                             {...register('email')}
-                            error={formState.errors.email?.message}
+                            errorMessage={formState.errors.email?.message}
                             placeholder="example@mail.com"
-                            className="input-primary"
+                            pattern={inputPatterns.email}
                             icon={EnvelopeIcon}
                         />
 
@@ -77,9 +78,9 @@ export default function RegistrationForm() {
                             type="tel"
                             label="Телефон"
                             {...register('phone_number')}
-                            error={formState.errors.phone_number?.message}
+                            errorMessage={formState.errors.phone_number?.message}
                             placeholder="+380123456789"
-                            className="input-primary"
+                            pattern={inputPatterns.phone}
                             icon={PhoneIcon}
                         />
                     </div>
@@ -91,9 +92,9 @@ export default function RegistrationForm() {
                             label="Пароль"
                             required
                             {...register('password')}
-                            error={formState.errors.password?.message}
+                            errorMessage={formState.errors.password?.message}
                             placeholder="••••••••"
-                            className="input-primary"
+                            pattern={inputPatterns.password}
                             icon={LockClosedIcon}
                         />
 
@@ -103,9 +104,9 @@ export default function RegistrationForm() {
                             label="Підтвердження паролю"
                             required
                             {...register('confirm_password')}
-                            error={formState.errors.confirm_password?.message}
+                            errorMessage={formState.errors.confirm_password?.message}
                             placeholder="••••••••"
-                            className="input-primary"
+                            pattern={inputPatterns.password}
                             icon={LockClosedIcon}
                         />
                     </div>
@@ -115,7 +116,7 @@ export default function RegistrationForm() {
                     <ConfirmButton
                         label='Зареєструватися'
                         icon={<UserPlusIcon className='h-5 w-5' />}
-                        isLoading={isLoading}
+                        isLoading={formState.isSubmitting}
                     />
                 </div>
             </form>

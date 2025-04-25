@@ -2,9 +2,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { NotificationService } from "@/services/notification.service";
-import { UserService } from "@/services/user.service";
 import { useAuthStore } from "@/store/auth.store";
 import { profileSchema, ProfileSchema } from "@/schemas/profile";
+import { userService } from "@/api/services/user.service";
 
 
 export function usePersonalDataForm(user: User) {
@@ -14,7 +14,7 @@ export function usePersonalDataForm(user: User) {
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting },
+        formState,
         reset,
     } = useForm<ProfileSchema>({
         resolver: zodResolver(profileSchema),
@@ -35,23 +35,18 @@ export function usePersonalDataForm(user: User) {
         }
 
         try {
-            const response = await UserService.updateUser(data, token);
-
-            if (!response.ok) {
-                NotificationService.error('Виникла помилка, спробуйте ще раз');
-            } else {
-                NotificationService.success('Профіль успішно оновлено!');
-                reset(data);
-            }
-        } catch {
-            NotificationService.error('Виникла помилка, спробуйте ще раз');
+            await userService.update(data, token);
+            NotificationService.success('Профіль успішно оновлено!');
+            reset(data);
+        } catch (error: any) {
+            NotificationService.error(error.message);
         }
     };
 
     return {
         register,
-        handleSubmit: handleSubmit(onSubmit),
-        errors,
-        isSubmitting,
+        handleSubmit,
+        formState,
+        onSubmit
     };
 }
