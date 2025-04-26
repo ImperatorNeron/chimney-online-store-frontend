@@ -18,7 +18,7 @@ export default function useLoginForm() {
     const onSubmit = async (data: LoginSchema) => {
         try {
             await login(data.username, data.password);
-            router.push("/profile");
+            router.push("/profile/me");
         } catch (error: any) {
             NotificationService.error(error.message);
         }

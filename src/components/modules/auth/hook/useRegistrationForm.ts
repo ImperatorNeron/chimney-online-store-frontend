@@ -23,7 +23,7 @@ export default function useRegisterForm() {
         try {
             await registration(data);
             NotificationService.success("Реєстрація пройшла успішно");
-            router.push("/profile");
+            router.push("/profile/me");
         } catch (error: any) {
             NotificationService.error(error.message);
         }

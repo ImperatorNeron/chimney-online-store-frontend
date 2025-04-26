@@ -32,7 +32,7 @@ class ProductService {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const data: ApiResponseList<Product> = await response.json();
+        const data: ApiResponseListWithPagination<Product> = await response.json();
 
         if (data.errors?.length > 0) {
             throw new Error(data.errors[0].message);

@@ -1,31 +1,21 @@
-interface MenuItem {
-    id: number;
-    title: string;
-    icon: React.FC<React.SVGProps<SVGSVGElement>>;
-}
+"use client";
 
-interface MobileMenuProps {
-    activeSection: number;
-    setActiveSection: (id: number) => void;
-    menuItems: MenuItem[];
-}
+import Link from "next/link";
+import { menuItems } from "../constants";
 
-export default function MobileMenu({ activeSection, setActiveSection, menuItems }: MobileMenuProps) {
+export default function MobileMenu() {
     return (
-        <div className="flex md:hidden w-full bg-white p-3 justify-around">
+        <div className="flex lg:hidden w-full bg-white p-3 justify-around">
             {menuItems.map((item) => {
                 const Icon = item.icon;
                 return (
-                    <button
+                    <Link
                         key={item.id}
-                        onClick={() => setActiveSection(item.id)}
-                        className={`flex flex-1 items-center justify-center p-2 transition-colors ${activeSection === item.id
-                            ? "text-gray-900"
-                            : "text-gray-600 hover:text-gray-900"
-                            }`}
+                        href={item.href}
+                        className="flex flex-1 items-center justify-center p-2 transition-colors text-gray-600 hover:text-gray-900"
                     >
                         {Icon && <Icon className="h-6 w-6" />}
-                    </button>
+                    </Link>
                 );
             })}
         </div>

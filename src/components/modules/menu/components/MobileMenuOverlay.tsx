@@ -32,7 +32,7 @@ export default function MobileMenuOverlay({ isOpen, onClose }: {
                             onClose={onClose}
                         />
                         <NavigationLink
-                            href={isAuthenticated ? "/profile" : "/auth/login"}
+                            href={isAuthenticated ? "/profile/me" : "/auth/login"}
                             iconSrc="/icons/person.png"
                             alt={isAuthenticated ? "Профіль" : "Увійти"}
                             label={isAuthenticated ? "Профіль" : "Увійти"}
