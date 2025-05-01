@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useLayoutEffect } from 'react';
 
 export default function useHeaderTransform() {
     const [scrollY, setScrollY] = useState(0);
@@ -20,7 +20,7 @@ export default function useHeaderTransform() {
         }
     }, []);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const headerTopHeight = 40;
         const width = window.innerWidth;
 

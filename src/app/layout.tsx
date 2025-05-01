@@ -4,6 +4,7 @@ import './globals.css';
 import Footer from "@/components/layout/footer/Footer";
 import { Bounce, ToastContainer } from "react-toastify";
 import RefreshCheck from "@/components/modules/auth/components/RefreshAuthComponent";
+import FeedBackButton from "@/components/layout/FeedBackButton";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -46,6 +47,7 @@ export default function RootLayout({
           draggable
           pauseOnHover
         />
+        <FeedBackButton />
       </body>
     </html>
   );

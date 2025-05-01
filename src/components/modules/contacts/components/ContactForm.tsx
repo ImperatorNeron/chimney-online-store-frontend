@@ -5,9 +5,16 @@ import useContactForm from "@/components/modules/contacts/hooks/useContactForm";
 import FormField from "@/components/shared/FormField";
 import { ChatBubbleLeftIcon, IdentificationIcon, PhoneIcon } from "@heroicons/react/24/outline";
 import { inputPatterns } from "@/utils/field.patterns";
+import { useEffect } from "react";
 
-export default function ContactForm() {
+export default function ContactForm({ onClose }: { onClose?: () => void }) {
     const { register, handleSubmit, formState, onSubmit } = useContactForm();
+
+    useEffect(() => {
+        if (formState.isSubmitSuccessful && onClose) {
+            onClose();
+        }
+    }, [formState.isSubmitSuccessful, onClose]);
 
     return (
         <div>

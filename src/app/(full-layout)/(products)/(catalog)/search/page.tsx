@@ -14,15 +14,15 @@ export default async function SearchPage({ searchParams }: {
         searchParams!
     );
 
-    const characteristics = await productService.getFilters(searchParams!)
+    const filters = await productService.getFilters(searchParams!)
 
     return (
         <div className="flex gap-4 mt-5">
             {/* TODO: add empty filters */}
-            {characteristics.min_price !== characteristics.max_price
-                ? <DesktopFilterBlock filters={characteristics} />
+            {filters.min_price !== filters.max_price
+                ? <DesktopFilterBlock filters={filters} />
                 : <div>Інший блок, </div>}
-            <MobileFilterButton filters={characteristics} />
+            <MobileFilterButton filters={filters} />
             <div className="w-full lg:w-3/4">
                 <div className="flex gap-3 mb-4">
                     <LimitSelector />

@@ -16,12 +16,12 @@ export default async function CatalogPage({ params, searchParams }: {
         (await params).slug.at(-1),
     );
 
-    const characteristics = await productService.getFilters(searchParams!, (await params).slug.at(-1))
+    const filters = await productService.getFilters(searchParams!, (await params).slug.at(-1))
 
     return (
         <div className="flex gap-4 mt-5">
-            <DesktopFilterBlock filters={characteristics} />
-            <MobileFilterButton filters={characteristics} />
+            <DesktopFilterBlock filters={filters} />
+            <MobileFilterButton filters={filters} />
             <div className="w-full lg:w-3/4">
                 <div className="flex gap-3 mb-4">
                     <LimitSelector />

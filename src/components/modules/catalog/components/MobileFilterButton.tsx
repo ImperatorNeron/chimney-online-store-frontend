@@ -9,10 +9,10 @@ export default function MobileFilterButton({ filters }: { filters: BaseFilters }
         <>
             <button
                 onClick={toggleMenu}
-                className="fixed bottom-4 left-4 z-[9999] flex h-14 w-14 items-center justify-center rounded-full bg-gray-800 text-white shadow-lg transition hover:bg-gray-900 lg:hidden"
+                className="fixed bottom-4 left-4 flex h-12 w-12 items-center justify-center rounded-full bg-gray-800 p-3 shadow-lg transition-colors duration-200 hover:bg-gray-600 z-50 lg:hidden"
                 aria-label="Відкрити фільтри"
             >
-                <FunnelIcon className="h-6 w-6" />
+                <FunnelIcon className="h-6 w-6 text-white" />
             </button>
 
             <FiltersOverlay

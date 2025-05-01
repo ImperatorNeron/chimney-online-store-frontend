@@ -39,7 +39,7 @@ export class ProductService {
         if (slug) params.append("slug", String(slug));
         if (!slug && sp?.text) params.append("text", String(sp?.text))
 
-        const url = `${this.endpoint}/characteristics?${params.toString()}`
+        const url = `${this.endpoint}/filters?${params.toString()}`
         const response = await http.get<ApiResponseOne<BaseFilters>>(url);
         return response.data;
     }
