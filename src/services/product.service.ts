@@ -45,11 +45,12 @@ class ProductService {
     };
 
     async fetchProduct(
-        slug: string
+        slug: string,
+        id: number
     ): Promise<{ item: Product }> {
 
         const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/products/${encodeURIComponent(slug)}`
+            `${process.env.NEXT_PUBLIC_API_URL}/products/${encodeURIComponent(slug)}/${encodeURIComponent(id)}`
         );
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);

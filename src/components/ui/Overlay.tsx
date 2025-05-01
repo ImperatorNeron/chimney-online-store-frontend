@@ -16,7 +16,7 @@ export default function Overlay({ isOpen, onClose, className, children }: Overla
         >
             <div
                 className={
-                    `fixed inset-y-0 right-0 w-5/6 lg:w-2/5 bg-white transform 
+                    `fixed inset-y-0 right-0 w-5/6 sm:w-3/6 lg:w-2/5 bg-white transform 
                     transition-transform duration-300 ease-in-out shadow-2xl 
                     ${isVisible ? "translate-x-0" : "translate-x-full"} ${className}`
                 }

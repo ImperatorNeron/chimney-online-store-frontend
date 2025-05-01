@@ -1,5 +1,11 @@
 import { catalogService } from "@/services/catalog.services";
-import Catalog from "@/components/modules/catalog/components/Catalog";
+import DesktopFilterBlock from "@/components/modules/catalog/components/DesktopFilterBlock";
+import MobileFilterButton from "@/components/modules/catalog/components/MobileFilterButton";
+import { productService } from "@/api/services/products.service";
+import LimitSelector from "@/components/modules/catalog/components/LimitSelector";
+import OrderSelector from "@/components/modules/catalog/components/OrderSelector";
+import ProductList from "@/components/modules/products/components/ProductList";
+import Pagination from "@/components/modules/catalog/components/Pagination";
 
 export default async function CatalogPage({ params, searchParams }: {
     params: Promise<{ slug: string[] }>;
@@ -9,11 +15,21 @@ export default async function CatalogPage({ params, searchParams }: {
         searchParams!,
         (await params).slug.at(-1),
     );
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    const characteristics = await productService.getFilters(searchParams!, (await params).slug.at(-1))
 
     return (
-        <div className="w-full lg:w-3/4">
-            <Catalog items={items} currentPage={currentPage} totalPages={totalPages} limit={limit} />
+        <div className="flex gap-4 mt-5">
+            <DesktopFilterBlock filters={characteristics} />
+            <MobileFilterButton filters={characteristics} />
+            <div className="w-full lg:w-3/4">
+                <div className="flex gap-3 mb-4">
+                    <LimitSelector />
+                    <OrderSelector />
+                </div>
+                <ProductList items={items} className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 lg:gap-3" />
+                {totalPages > 1 && <Pagination limit={limit} currentPage={currentPage} totalPages={totalPages} />}
+            </div>
         </div>
     );
 };

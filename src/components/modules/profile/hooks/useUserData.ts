@@ -30,7 +30,6 @@ export default function useUserData(redirectIfUnauthorized: boolean = true) {
                             return;
                         }
                     } catch (e) {
-                        console.error('Помилка перевірки автентифікації:', e);
                         if (redirectIfUnauthorized) router.push('/auth/login');
                         return;
                     }

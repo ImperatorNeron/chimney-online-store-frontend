@@ -67,7 +67,6 @@ export const useAuthStore = create<AuthState>((set, get) => {
                 if (isAuth) await get().refresh();
                 return isAuth;
             } catch (error) {
-                console.error('Check auth error:', error);
                 set({ isAuthenticated: false });
                 return false;
             }

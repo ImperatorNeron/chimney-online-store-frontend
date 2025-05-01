@@ -18,7 +18,6 @@ class FAQService {
             return { items: data.data };
 
         } catch (error) {
-            console.error('Failed to fetch FAQs:', error);
             throw new Error('Не вдалося завантажити питання. Спробуйте оновити сторінку');
         }
     }

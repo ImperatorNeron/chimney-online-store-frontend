@@ -11,7 +11,6 @@ export default async function CategoriesServer() {
         const categories = data.data
         return <Categories categories={categories} />
     } catch (error) {
-        console.error('Failed to fetch categories:', error)
         return (
             <div className="max-w-7xl mx-auto text-red-500 text-center p-4">
                 Помилка завантаження категорій: {(error as Error).message}

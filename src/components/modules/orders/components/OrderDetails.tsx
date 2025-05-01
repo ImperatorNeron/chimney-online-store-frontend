@@ -34,7 +34,7 @@ export default function OrderDetails({ order }: { order: ReadExtendedOrderSchema
                         className="py-4 flex justify-between items-center gap-4"
                     >
                         <Link
-                            href={`/products/${item.product.slug}`}
+                            href={`/products/${item.product.slug}/${item.product.id}`}
                             className="text-xs sm:text-base font-medium text-gray-900 hover:underline"
                         >
                             {item.product.name}

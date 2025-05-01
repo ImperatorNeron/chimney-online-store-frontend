@@ -10,7 +10,7 @@ export default function OpenCatalogButton() {
         <>
             <button
                 onClick={() => setIsOpen(true)}
-                className="bg-gray-800 text-white px-12 py-2 rounded-lg hover:bg-gray-700 flex items-center justify-center"
+                className="bg-gray-800 text-white px-4 lg:px-12 py-2 rounded-lg hover:bg-gray-700 flex items-center justify-center"
             >
                 <Image
                     src={isOpen ? "/icons/thin-close.png" : "/icons/category.png"}

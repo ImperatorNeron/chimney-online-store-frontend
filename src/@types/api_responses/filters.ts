@@ -9,7 +9,18 @@ interface PaginationIn {
     limit: number;
 }
 
-interface Filters {
+type BaseFilters = {
+    diameter?: string;
+    length?: string;
+    thickness?: string;
+    angle?: string;
+    metal_type?: string;
+    min_price: number;
+    max_price: number;
+    // [key: string]: string | undefined;
+}
+
+interface Filters extends BaseFilters {
     category_slug?: string;
     text?: string;
 }

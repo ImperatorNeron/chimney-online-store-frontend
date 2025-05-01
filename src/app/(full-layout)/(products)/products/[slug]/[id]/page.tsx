@@ -4,30 +4,30 @@ import AddProductToCartButton from "@/components/modules/product/components/AddP
 import ProductSlider from "@/components/modules/product/components/ProductSlider";
 import Tabs from "@/components/modules/product/components/Tabs";
 import { HeartIcon, TagIcon, CreditCardIcon, ShieldCheckIcon, TruckIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
-import { productService } from "@/services/product.service";
+import { productService } from "@/api/services/products.service";
 
 
 export default async function ProductPage({
     params
 }: {
-    params: Promise<{ slug: string }>;
+    params: Promise<{ slug: string, id: number }>;
 }) {
-    const { item } = await productService.fetchProduct((await params).slug);
+    const item = await productService.getProduct((await params).id, (await params).slug);
     const hasDiscount = item.discount_percentage;
     const savings = hasDiscount ? item.price - item.discount_price : 0;
 
     const specifications = [
-        { name: "Матеріал", value: "Алюміній" },
-        { name: "Розмір", value: "25 × 35 × 5 см" },
-        { name: "Вага", value: "1.2 кг" },
-        { name: "Колір", value: "Сірий металік" },
-        { name: "Гарантія", value: "2 роки" },
-        { name: "Країна виробник", value: "Україна" }
-    ];
+        { name: 'Код товару', value: item.id.toString() },
+        { name: 'Найменування', value: item.name },
+        item.diameter && { name: "Діаметр", value: item.diameter.toString() },
+        item.length && { name: "Довжина", value: item.length.toString() },
+        item.thickness && { name: "Товщина", value: item.thickness.toString() },
+        item.angle && { name: "Кут", value: item.angle.toString() },
+        item.metal_type && { name: "Метал", value: item.metal_type },
+    ].filter((spec): spec is { name: string; value: string } => !!spec);
 
     const paginationIn = { offset: 0, limit: 5 };
-    const { items } = await productService.fetchProducts(paginationIn);
-
+    const { items } = await productService.getProducts(paginationIn);
     return (
         <div className="min-h-screen bg-white">
             <div>
@@ -163,13 +163,11 @@ export default async function ProductPage({
                     </div>
                 </div>
 
-                {/* Компонент для табів */}
                 <Tabs
-                    description={item.description}
+                    description={item.description || ""}
                     specifications={specifications}
                 />
 
-                {/* Схожі товари */}
                 <h2 className="text-2xl font-bold text-gray-900 mt-16 mb-4 tracking-tight">
                     Схожі товари
                 </h2>

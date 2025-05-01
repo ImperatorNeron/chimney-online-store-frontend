@@ -23,3 +23,52 @@ interface ItemCardProps {
     product: Product;
     className?: string;
 }
+
+
+interface BaseProductSchema {
+    name: string;
+    slug: string;
+    description?: string;
+    price: number;
+    extra_attrs?: Record<string, any>;
+    category_id: number;
+}
+
+interface ReadProductSchema extends BaseProductSchema {
+    id: number;
+    created_at: string;
+    updated_at: string;
+    discount_price: number;
+    discount_percentage: number;
+    diameter?: string;
+    length?: string;
+    thickness?: string;
+    angle?: string;
+    metal_type?: string;
+}
+
+interface CreateProductSchema extends BaseProductSchema { }
+
+interface ReadProductImageSchema {
+    id: number;
+    url: string;
+    alt?: string;
+}
+
+interface ReadPreviewProductSchema extends ReadProductSchema {
+    preview?: ReadProductImageSchema;
+}
+
+interface ReadFullProductSchema extends ReadProductSchema {
+    images: ReadProductImageSchema[];
+}
+
+interface ReadUniqueProductSchema {
+    id: number;
+    name: string;
+    slug: string;
+    description?: string;
+    category_id: number;
+    created_at: string;
+    updated_at: string;
+}

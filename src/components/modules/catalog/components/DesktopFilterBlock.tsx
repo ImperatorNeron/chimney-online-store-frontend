@@ -1,8 +1,13 @@
-export default function DesktopFilterBlock() {
+import Filters from "./Filters";
+
+export default function DesktopFilterBlock({ filters }: { filters: BaseFilters }) {
     return (
-        <div className="hidden lg:flex flex-col p-4 rounded-lg shadow-md border border-gray-200 h-[500px] self-start w-1/4">
-            <h2 className="text-lg font-semibold text-gray-800 mb-3">Фільтри</h2>
-            <div className="space-y-3"></div>
+        <div className="hidden lg:flex flex-col p-4 rounded-xl shadow-sm bg-white border border-gray-200 self-start w-80">
+            <div className="pb-4 border-b border-gray-200 mb-4">
+                <h2 className="text-xl font-bold text-gray-900">Фільтри</h2>
+            </div>
+
+            <Filters filters={filters} />
         </div>
     );
-};
+}

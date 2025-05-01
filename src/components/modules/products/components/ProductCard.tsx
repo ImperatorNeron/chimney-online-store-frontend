@@ -8,7 +8,7 @@ export default function ProductCard({ product, className }: ItemCardProps) {
         <article className={`${className} group bg-white rounded-lg shadow hover:shadow-md transition-all duration-200 border border-gray-200`}>
             <div className="relative aspect-square flex items-center">
                 <Link
-                    href={`/products/${product.slug}`}
+                    href={`/products/${product.slug}/${product.id}`}
                     className="w-full h-full flex items-center"
                 >
                     <Image
@@ -44,7 +44,7 @@ export default function ProductCard({ product, className }: ItemCardProps) {
             </div>
             <div className="p-3 flex flex-col h-[133px] sm:h-[155px]">
                 <Link
-                    href={`/products/${product.slug}`}
+                    href={`/products/${product.slug}/${product.id}`}
                     className="hover:text-gray-900 transition-colors"
                 >
                     <h3 className="text-xs sm:text-sm font-medium text-gray-800 flex-1 line-clamp-3 h-[48px] sm:h-[60px]">

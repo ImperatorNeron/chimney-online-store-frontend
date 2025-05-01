@@ -3,4 +3,5 @@ export const endpoints = {
     messages: '/messages',
     auth: '/auth',
     users: '/users',
+    products: '/products',
 };
