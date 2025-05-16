@@ -6,12 +6,14 @@ import PrimaryInformation from "@/components/shared/PrimaryInformation";
 import NavigationLink from "@/components/shared/NavigationLink";
 import SearchBar from "@/components/modules/catalog/components/SearchBar";
 import { useAuthStore } from "@/store/auth.store";
+import { useFavouritesStore } from "@/store/favourite.store";
 
 export default function MobileMenuOverlay({ isOpen, onClose }: {
     isOpen: boolean;
     onClose: () => void;
 }) {
     const { isAuthenticated } = useAuthStore();
+    const likedCount = useFavouritesStore(state => state.getLikedCount());
     return (
         <Overlay isOpen={isOpen} onClose={onClose}>
             <OverlayHeader onClose={onClose} title="Меню" />
@@ -23,11 +25,11 @@ export default function MobileMenuOverlay({ isOpen, onClose }: {
 
                     <nav className="flex flex-col">
                         <NavigationLink
-                            href="#"
+                            href={isAuthenticated ? "/profile/favourite" : "/auth/login"}
                             iconSrc="/icons/heart.png"
                             alt="Улюблене"
                             label="Улюблене"
-                            count={0}
+                            count={likedCount}
                             countColor="bg-green-500"
                             onClose={onClose}
                         />

@@ -3,8 +3,9 @@ import ProductList from "@/components/modules/products/components/ProductList";
 import AddProductToCartButton from "@/components/modules/product/components/AddProductToCartButton";
 import ProductSlider from "@/components/modules/product/components/ProductSlider";
 import Tabs from "@/components/modules/product/components/Tabs";
-import { HeartIcon, TagIcon, CreditCardIcon, ShieldCheckIcon, TruckIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
+import { TagIcon, CreditCardIcon, ShieldCheckIcon, TruckIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
 import { productService } from "@/api/services/products.service";
+import LikeButton from "@/components/modules/product/components/LikeButton";
 
 
 export default async function ProductPage({
@@ -26,6 +27,8 @@ export default async function ProductPage({
         item.metal_type && { name: "Метал", value: item.metal_type },
     ].filter((spec): spec is { name: string; value: string } => !!spec);
 
+    console.log(item.images)
+
     const paginationIn = { offset: 0, limit: 5 };
     const { items } = await productService.getProducts(paginationIn);
     return (
@@ -40,7 +43,7 @@ export default async function ProductPage({
             <div className="max-w-7xl mx-auto px-1 pb-6">
                 <div className="flex flex-col lg:flex-row gap-8 mt-8">
                     <div className="lg:w-1/2 bg-gray-50 rounded-xl">
-                        <ProductSlider />
+                        <ProductSlider images={item.images} />
                     </div>
 
                     <div className="lg:w-1/2 space-y-4">
@@ -74,10 +77,7 @@ export default async function ProductPage({
                                 )}
                             </div>
 
-                            <button className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-lg transition">
-                                <HeartIcon className="w-6 h-6 text-gray-600" />
-                                <span className="text-sm text-gray-500">Улюблене</span>
-                            </button>
+                            <LikeButton productId={item.id} />
                         </div>
 
                         <div className="space-y-4">

@@ -13,7 +13,7 @@ export default function HistoryPage() {
     return (
         <div className="lg:px-8 lg:py-10">
             <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-6 border-b pb-4 text-center lg:text-left">
-                Історія замовлень
+                Поточні замовленя
             </h1>
             <OrderList orders={data} />
         </div>

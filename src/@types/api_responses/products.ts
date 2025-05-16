@@ -1,5 +1,6 @@
 interface Preview {
     file_path: string;
+    filename: string;
     alt: string;
     product_id: number;
     id: number;
@@ -50,9 +51,9 @@ interface ReadProductSchema extends BaseProductSchema {
 interface CreateProductSchema extends BaseProductSchema { }
 
 interface ReadProductImageSchema {
-    id: number;
-    url: string;
-    alt?: string;
+    id: string | number;
+    filename: string;
+    alt: string;
 }
 
 interface ReadPreviewProductSchema extends ReadProductSchema {

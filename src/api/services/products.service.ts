@@ -1,5 +1,8 @@
 import { http } from '@/api/http';
 import { endpoints } from '../endpoints';
+import { paths } from '../types/openapi';
+
+type CreateProductByIdsResponse = paths["/api/v1/products/by-ids"]["get"]["responses"]["200"]["content"]["application/json"]
 
 export class ProductService {
     private endpoint = endpoints.products;
@@ -41,6 +44,14 @@ export class ProductService {
 
         const url = `${this.endpoint}/filters?${params.toString()}`
         const response = await http.get<ApiResponseOne<BaseFilters>>(url);
+        return response.data;
+    }
+
+    async getProductsByIds(ids: number[]) {
+        const params = new URLSearchParams();
+        ids.forEach(id => params.append("product_ids", id.toString()));
+        const url = `${this.endpoint}/by-ids?${params.toString()}`
+        const response = await http.get<CreateProductByIdsResponse>(url);
         return response.data;
     }
 

@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import AddProductToCartButton from './AddProductToCartButton';
+import AddProductToLikeButton from './AddProductToLikeButton';
 
 
 export default function ProductCard({ product, className }: ItemCardProps) {
@@ -12,7 +13,8 @@ export default function ProductCard({ product, className }: ItemCardProps) {
                     className="w-full h-full flex items-center"
                 >
                     <Image
-                        src="/images/test.png"
+                        // src="/images/test.png"
+                        src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${product.preview.filename}`}
                         alt={product.preview.alt}
                         width={253}
                         height={253}
@@ -26,21 +28,7 @@ export default function ProductCard({ product, className }: ItemCardProps) {
                     </span>
                 )}
 
-                <button className="absolute top-1.5 right-1.5 p-2 rounded-full shadow-sm hover:bg-gray-100 transition-colors z-10">
-                    <svg
-                        className="w-6 h-6 text-gray-500"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                        />
-                    </svg>
-                </button>
+                <AddProductToLikeButton productId={product.id} />
             </div>
             <div className="p-3 flex flex-col h-[133px] sm:h-[155px]">
                 <Link

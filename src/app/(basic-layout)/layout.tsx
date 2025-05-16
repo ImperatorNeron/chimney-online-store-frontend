@@ -2,7 +2,7 @@ import { ArrowLeftIcon } from '@heroicons/react/24/solid';
 
 import Link from 'next/link';
 
-export default function CheckoutLayout({ children }: { children: React.ReactNode }) {
+export default function BasicLayout({ children }: { children: React.ReactNode }) {
     return (
         <div className=" mx-auto sm:px-8 px-4 py-10 max-w-screen-2xl">
             <div className="mb-16">

@@ -38,10 +38,10 @@ export default function CartItem({ item }: { item: CartItem }) {
                 </div>
             )}
 
-            <div className="flex gap-2">
-                <div className="relative w-20 h-20 flex-shrink-0">
+            <div className="flex gap-4">
+                <div className="relative w-16 h-16 flex-shrink-0">
                     <Image
-                        src="/images/test.png"
+                        src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${item.product.preview.filename}`}
                         alt={item.product.preview.alt}
                         width={100}
                         height={100}

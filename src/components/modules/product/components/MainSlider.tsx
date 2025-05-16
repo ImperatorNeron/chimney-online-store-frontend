@@ -19,14 +19,14 @@ export default function MainSlider({
             autoplay={{ delay: 6000, disableOnInteraction: false }}
             loop={true}
             initialSlide={initialSlideIndex}
-            className="w-full h-full"
+            className="w-full h-full rounded-xl"
             onSlideChange={(swiper) => setSlideIndex && setSlideIndex(swiper.realIndex)}
         >
             {items.map((slide) => (
                 <SwiperSlide key={slide.id}>
                     <div className="relative w-full h-full">
                         <Image
-                            src={slide.src}
+                            src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${slide.filename}`}
                             alt={slide.alt}
                             fill
                             className={`object-contain rounded-lg ${className}`}

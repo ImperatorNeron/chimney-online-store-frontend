@@ -25,7 +25,7 @@ export default function MainThumbnailSlider({
                     <SwiperSlide key={slide.id} className="!h-14">
                         <div className="w-[56px] h-14 relative cursor-pointer transition-opacity opacity-40 hover:opacity-100">
                             <Image
-                                src={slide.thumbnail}
+                                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${slide.filename}`}
                                 alt={slide.alt}
                                 width={56}
                                 height={56}

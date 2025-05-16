@@ -1,7 +1,7 @@
 interface MainSliderProps {
     thumbsSwiper: any;
     setSlideIndex?: (value: number) => void;
-    items: SlideItem[];
+    items: ReadProductImageSchema[];
     setIsOpen?: (value: boolean) => void;
     initialSlideIndex?: number;
     className?: string;
@@ -9,7 +9,7 @@ interface MainSliderProps {
 
 interface MainThumbnailSliderProps {
     setThumbsSwiper: (value: any) => void;
-    items: SlideItem[];
+    items: ReadProductImageSchema[];
     className?: string;
 }
 
@@ -19,11 +19,4 @@ interface ModalItemProps {
     items: any[];
     thumbsSwiperModal: any;
     setThumbsSwiper: (value: any) => void;
-}
-
-interface SlideItem {
-    id: string | number;
-    src: string;
-    alt: string;
-    thumbnail: string;
 }
