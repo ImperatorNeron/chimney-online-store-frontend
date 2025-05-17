@@ -21,7 +21,9 @@ export default function CartOverlay({ cart, isOpen, onClose }: {
                         {cart && <OrderSummary onClose={onClose} totalQuantity={cart.total_quantity} totalPrice={cart.total_price} />}
                     </div>
                 ) : (
-                    <EmptyCart onClose={onClose} />
+                    <div className="flex flex-col h-[calc(100%-55px)] justify-center">
+                        <EmptyCart onClose={onClose} />
+                    </div>
                 )
             }
         </Overlay>

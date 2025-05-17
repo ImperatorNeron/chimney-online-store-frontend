@@ -1,7 +1,6 @@
 'use client'
 import useUserData from '@/components/modules/profile/hooks/useUserData';
 import SideMenu from './components/SideMenu';
-import MobileMenu from './components/MobileMenu';
 import { ProfileContext } from '@/provider/profile.provider';
 import { useMemo } from 'react';
 
@@ -17,7 +16,7 @@ export default function ProfileLayout({ children }: { children: React.ReactNode 
         <ProfileContext.Provider value={userValue}>
             <div className="flex flex-col lg:flex-row">
                 <SideMenu username={userValue.username} />
-                <MobileMenu />
+
                 <div className="flex-1 px-3 py-6 md:px-8 md:py-8 min-h-[60vh]">
                     {children}
                 </div>

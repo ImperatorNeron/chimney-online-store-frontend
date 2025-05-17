@@ -16,12 +16,3 @@ interface NavIconProps {
     label: string;
 }
 
-interface NavItemProps {
-    href: string;
-    iconSrc: string;
-    alt: string;
-    label: string;
-    count?: number;
-    countColor?: string;
-    onClose: () => void;
-};

@@ -7,6 +7,7 @@ import NavigationLink from "@/components/shared/NavigationLink";
 import SearchBar from "@/components/modules/catalog/components/SearchBar";
 import { useAuthStore } from "@/store/auth.store";
 import { useFavouritesStore } from "@/store/favourite.store";
+import { ClockIcon, HeartIcon, ShoppingBagIcon, UserIcon } from "@heroicons/react/24/outline";
 
 export default function MobileMenuOverlay({ isOpen, onClose }: {
     isOpen: boolean;
@@ -24,22 +25,41 @@ export default function MobileMenuOverlay({ isOpen, onClose }: {
                     <OpenCatalogButton />
 
                     <nav className="flex flex-col">
-                        <NavigationLink
-                            href={isAuthenticated ? "/profile/favourite" : "/auth/login"}
-                            iconSrc="/icons/heart.png"
-                            alt="Улюблене"
-                            label="Улюблене"
-                            count={likedCount}
-                            countColor="bg-green-500"
-                            onClose={onClose}
-                        />
+                        {isAuthenticated &&
+                            (<NavigationLink
+                                href={isAuthenticated ? "/profile/favorites" : "/auth/login"}
+                                heroIcon={HeartIcon}
+                                alt="Улюблене"
+                                label="Улюблене"
+                                count={likedCount}
+                                countColor="bg-green-500"
+                                onClose={onClose}
+                            />)}
                         <NavigationLink
                             href={isAuthenticated ? "/profile/me" : "/auth/login"}
-                            iconSrc="/icons/person.png"
+                            heroIcon={UserIcon}
                             alt={isAuthenticated ? "Профіль" : "Увійти"}
                             label={isAuthenticated ? "Профіль" : "Увійти"}
                             onClose={onClose}
                         />
+                        {isAuthenticated &&
+                            (<NavigationLink
+                                href="/profile/history"
+                                heroIcon={ClockIcon}
+                                alt="Історія"
+                                label="Історія"
+                                onClose={onClose}
+                            />)
+                        }
+                        {isAuthenticated &&
+                            (<NavigationLink
+                                href="/profile/orders"
+                                heroIcon={ShoppingBagIcon}
+                                alt="Поточні замовлення"
+                                label="Поточні замовлення"
+                                onClose={onClose}
+                            />)
+                        }
                         <NavigationLink
                             href={Urls.contacts}
                             iconSrc="/icons/contact-us.png"
