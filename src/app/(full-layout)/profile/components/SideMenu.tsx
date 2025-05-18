@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { UserIcon } from "@heroicons/react/24/outline";
+import { ShieldCheckIcon, UserIcon } from "@heroicons/react/24/outline";
 import { menuItems } from "../constants";
 
-export default function SideMenu({ username }: { username: string }) {
+export default function SideMenu({ username, isAdmin }: { username: string, isAdmin: boolean }) {
     const pathname = usePathname();
 
     return (
@@ -16,10 +16,18 @@ export default function SideMenu({ username }: { username: string }) {
                 </div>
                 <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-gray-900 truncate">{username}</p>
-                    <p className="text-xs text-gray-500">Покупець</p>
+                    <p className="text-xs text-gray-500">{isAdmin ? "Адміністратор" : "Покупець"}</p>
                 </div>
             </div>
-
+            <div className="mb-8">
+                <Link
+                    href="/admin-panel"
+                    className="flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-sm transition-colors duration-200 shadow-sm"
+                >
+                    <ShieldCheckIcon className="w-6 h-6" />
+                    <span className="font-medium">Панель адміністратора</span>
+                </Link>
+            </div>
             <nav>
                 <ul className="space-y-2">
                     {menuItems.map((item) => {

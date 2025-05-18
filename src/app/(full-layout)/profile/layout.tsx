@@ -15,7 +15,7 @@ export default function ProfileLayout({ children }: { children: React.ReactNode 
     return (
         <ProfileContext.Provider value={userValue}>
             <div className="flex flex-col lg:flex-row">
-                <SideMenu username={userValue.username} />
+                <SideMenu username={userValue.username} isAdmin={userValue.is_superuser} />
 
                 <div className="flex-1 px-3 py-6 md:px-8 md:py-8 min-h-[60vh]">
                     {children}
