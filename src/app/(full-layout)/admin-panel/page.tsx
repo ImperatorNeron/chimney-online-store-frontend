@@ -18,13 +18,13 @@ export default function AdminPanel() {
         {
             title: 'Статус замовлень',
             icon: <DocumentTextIcon className="h-10 w-10" />,
-            href: '/admin/orders',
+            href: '/admin-panel/orders',
             description: 'Оновити статус замовлень або додати номер накладної'
         },
         {
             title: 'Додати товар',
             icon: <PlusCircleIcon className="h-10 w-10" />,
-            href: '/admin/add-product',
+            href: '/admin-panel/products',
             description: 'Створення нових карток товарів у каталозі'
         },
     ];

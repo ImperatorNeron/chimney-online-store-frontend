@@ -3,7 +3,9 @@
 import OrderList from '@/components/modules/orders/components/OrderList';
 import useOrderHistory from '@/components/modules/orders/hooks/useOrderHistory';
 import EmptyState from '@/components/shared/EmptyState';
-import { ClockIcon, HeartIcon } from '@heroicons/react/24/outline';
+import { ClockIcon } from '@heroicons/react/24/outline';
+
+
 
 export default function HistoryPage() {
     const { data, loading, error } = useOrderHistory();

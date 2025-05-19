@@ -152,7 +152,8 @@ export interface paths {
         get: operations["get_message_api_v1_messages__message_id__get"];
         put?: never;
         post?: never;
-        delete?: never;
+        /** Delete new message */
+        delete: operations["delete_message_api_v1_messages__message_id__delete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -507,6 +508,23 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/api/v1/orders/{order_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update Order Info */
+        patch: operations["update_order_info_api_v1_orders__order_id__patch"];
         trace?: never;
     };
     "/api/ping": {
@@ -993,6 +1011,8 @@ export interface components {
              * @description Invalid order status
              */
             status: string;
+            /** Waybill Number */
+            waybill_number?: string | null;
             /**
              * Created At
              * Format: date-time
@@ -1246,6 +1266,8 @@ export interface components {
              * @description Invalid order status
              */
             status: string;
+            /** Waybill Number */
+            waybill_number?: string | null;
             /**
              * Created At
              * Format: date-time
@@ -1622,6 +1644,19 @@ export interface components {
              */
             parent_id?: number | null;
         };
+        /** UpdateOrderSchema */
+        UpdateOrderSchema: {
+            /**
+             * Status
+             * @description Invalid order status
+             * @default pending
+             */
+            status: string | null;
+            /** Waybill Number */
+            waybill_number?: string | null;
+            /** Price Discount */
+            price_discount: number;
+        };
         /** UserUpdateSchema */
         UserUpdateSchema: {
             /** Email address of the user */
@@ -1915,6 +1950,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ApiResponseSchema_ReadMessageSchema_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_message_api_v1_messages__message_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                message_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
             /** @description Validation Error */
@@ -2858,6 +2924,41 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ApiResponseSchema_list_ReadExtendedOrderSchema__"];
+                };
+            };
+        };
+    };
+    update_order_info_api_v1_orders__order_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                order_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateOrderSchema"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponseSchema_ReadOrderBaseSchema_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

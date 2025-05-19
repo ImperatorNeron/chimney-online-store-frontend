@@ -3,8 +3,11 @@ import SectionContainer from "./SectionContainer";
 import FormSelect from "@/components/shared/FormSelect";
 import Label from "@/components/ui/Label";
 import { CreditCardIcon } from "@heroicons/react/24/outline";
+import { PAYMENT_METHODS } from "@/constants/orders";
 
 export default function PaymentMethodSectionSelect({ errors, register }: { errors: any; register: any; }) {
+
+    const paymentOptions = Object.entries(PAYMENT_METHODS).map(([value, label]) => ({ value, label }));
 
     return (
         <SectionContainer>
@@ -14,11 +17,7 @@ export default function PaymentMethodSectionSelect({ errors, register }: { error
                 id="payment_method"
                 register={register("payment_method")}
                 icon={CreditCardIcon}
-                options={[
-                    { value: "cash", label: "Оплата при отриманні" },
-                    { value: "card", label: "Оплатити зараз (LiqPay)" },
-                    { value: "online", label: "Оплата на карту" }
-                ]}
+                options={paymentOptions}
             />
             {errors.payment_method && (
                 <FieldErrorMessage message={errors.payment_method.message} />

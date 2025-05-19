@@ -1,8 +1,8 @@
 'use client'
 
-import EmptyMessages from "@/components/modules/admin/components/emptyMessages";
-import MessageCard from "@/components/modules/admin/components/messageCard";
-import PaginationControls from "@/components/modules/admin/components/pagination";
+import EmptyMessages from "@/components/modules/admin/components/messages/emptyMessages";
+import MessageCard from "@/components/modules/admin/components/messages/messageCard";
+import PaginationControls from "@/components/modules/admin/components/messages/pagination";
 import useMessages from "@/components/modules/admin/hooks/useMessages";
 
 

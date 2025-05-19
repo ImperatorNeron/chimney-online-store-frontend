@@ -5,8 +5,11 @@ import FieldErrorMessage from "@/components/ui/FieldError";
 import Label from "@/components/ui/Label";
 import FormSelect from "@/components/shared/FormSelect";
 import { inputPatterns } from "@/utils/field.patterns";
+import { SHIPPING_METHODS } from "@/constants/orders";
 
 export default function DeliveryMethodSection({ errors, register }: { errors: any; register: any; }) {
+
+    const shippingOptions = Object.entries(SHIPPING_METHODS).map(([value, label]) => ({ value, label }));
 
     return (
         <SectionContainer>
@@ -17,11 +20,7 @@ export default function DeliveryMethodSection({ errors, register }: { errors: an
                     id="shipping_method"
                     register={register("shipping_method")}
                     icon={TruckIcon}
-                    options={[
-                        { value: "nova_poshta", label: "Нова Пошта" },
-                        { value: "ukrposhta", label: "Укрпошта" },
-                        { value: "courier", label: "Доставка по Волині" }
-                    ]}
+                    options={shippingOptions}
                 />
                 {errors.shipping_method && (
                     <FieldErrorMessage message={errors.shipping_method.message} />
