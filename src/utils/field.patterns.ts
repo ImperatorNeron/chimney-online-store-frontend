@@ -7,5 +7,6 @@ export const inputPatterns = {
     latinOnly: /^[A-Za-z\s]+$/,
     cyrillicOnly: /^[А-Яа-яІіЇїЄє\s]+$/,
     address: /^[A-Za-zА-Яа-яІіЇїЄєҐґ0-9\s.,'’`"\-/()]+$/,
-    message: /^[A-Za-zА-Яа-яІіЇїЄєҐґ0-9\s.,!?()'"`«»:-]*$/
+    message: /^[A-Za-zА-Яа-яІіЇїЄєҐґ0-9\s.,!?()'"`«»:-]*$/,
+    slug: /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 }

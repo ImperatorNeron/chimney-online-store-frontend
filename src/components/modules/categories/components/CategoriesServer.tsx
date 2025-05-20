@@ -1,14 +1,12 @@
-import { categoryService } from "@/services/category.service"
+import { categoryService } from "@/api/services/category.service"
 import Categories from "./Categories"
 
 export default async function CategoriesServer() {
     try {
-        const { data } = await categoryService.getCategories()
-        if (!data.data) {
+        const categories = await categoryService.getCategories()
+        if (!categories) {
             throw new Error('Invalid categories data structure')
         }
-
-        const categories = data.data
         return <Categories categories={categories} />
     } catch (error) {
         return (

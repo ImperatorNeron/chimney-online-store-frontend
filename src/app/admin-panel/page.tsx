@@ -19,7 +19,7 @@ export default function AdminPanel() {
             title: 'Статус замовлень',
             icon: <DocumentTextIcon className="h-10 w-10" />,
             href: '/admin-panel/orders',
-            description: 'Оновити статус замовлень або додати номер накладної'
+            description: 'Оновити статус замовлень, додати номер накладної або додати знижку'
         },
         {
             title: 'Додати товар',
@@ -30,8 +30,8 @@ export default function AdminPanel() {
     ];
 
     return (
-        <div className="min-h-screen bg-white py-6 sm:py-8 px-2 sm:px-6">
-            <h1 className="text-3xl font-bold text-black mb-8 border-b-2 border-gray-200 pb-4">
+        <div className="bg-white py-6 sm:py-8 px-4 sm:px-6">
+            <h1 className="text-xl sm:text-3xl font-bold text-black text-center mb-8 border-b-2 border-gray-200 pb-4">
                 Оберіть дію, яку Ви хочете зробити
             </h1>
 

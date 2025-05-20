@@ -5,10 +5,13 @@ async function request<T>(
     options: RequestInit = {},
     bearerToken?: string
 ): Promise<T> {
-    const headers: HeadersInit = {
-        'Content-Type': 'application/json',
-        ...options.headers,
+    const headers: Record<string, string> = {
+        ...(options.headers as Record<string, string>),
     };
+
+    if (!(options.body instanceof FormData)) {
+        headers['Content-Type'] = 'application/json';
+    }
 
     if (bearerToken) {
         (headers as Record<string, string>)['Authorization'] = `Bearer ${bearerToken}`;
@@ -33,8 +36,8 @@ async function request<T>(
 
 export const http = {
     get: <T>(url: string, token?: string) => request<T>(url, {}, token),
-    post: <T>(url: string, body?: unknown, token?: string) =>
-        request<T>(url, { method: 'POST', body: JSON.stringify(body) }, token),
+    post: <T>(url: string, body?: unknown | FormData, token?: string) =>
+        request<T>(url, { method: 'POST', body: body instanceof FormData ? body : JSON.stringify(body) }, token),
     patch: <T>(url: string, body: unknown, token?: string) =>
         request<T>(url, { method: 'PATCH', body: JSON.stringify(body) }, token),
     delete: <T>(url: string, token?: string) =>

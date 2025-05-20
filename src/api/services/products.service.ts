@@ -2,7 +2,10 @@ import { http } from '@/api/http';
 import { endpoints } from '../endpoints';
 import { paths } from '../types/openapi';
 
-type CreateProductByIdsResponse = paths["/api/v1/products/by-ids"]["get"]["responses"]["200"]["content"]["application/json"]
+type ReadProductByIdsResponse = paths["/api/v1/products/by-ids"]["get"]["responses"]["200"]["content"]["application/json"]
+type ReadUniqueResponse = paths["/api/v1/products/unique"]["get"]["responses"]["200"]["content"]["application/json"]
+type CreateUniqueProductRequest = paths["/api/v1/products/unique"]["post"]["requestBody"]["content"]["multipart/form-data"]
+type CreateUniqueProductResponse = paths["/api/v1/products/unique"]["post"]["responses"]["200"]["content"]["application/json"]
 
 export class ProductService {
     private endpoint = endpoints.products;
@@ -51,8 +54,25 @@ export class ProductService {
         const params = new URLSearchParams();
         ids.forEach(id => params.append("product_ids", id.toString()));
         const url = `${this.endpoint}/by-ids?${params.toString()}`
-        const response = await http.get<CreateProductByIdsResponse>(url);
+        const response = await http.get<ReadProductByIdsResponse>(url);
         return response.data;
+    }
+
+    async getUniqueProducts(token: string, limit: number = 20, offset: number = 0) {
+        const url = `${this.endpoint}/unique/?limit=${encodeURIComponent(limit)}&offset=${encodeURIComponent(offset)}`
+        const response = await http.get<ReadUniqueResponse>(url, token);
+        return response.data
+    }
+
+    async createUniqueProduct(token: string, product: FormData) {
+        const url = `${this.endpoint}/unique`
+        const response = await http.post<CreateUniqueProductResponse>(url, product, token);
+        return response.data
+    }
+
+    async deleteUniqueProduct(token: string, productId: number) {
+        const url = `${this.endpoint}/unique/${encodeURIComponent(productId)}`
+        await http.delete(url, token);
     }
 
 }

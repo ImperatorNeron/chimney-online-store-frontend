@@ -1,8 +1,10 @@
+import { categoryService } from "@/api/services/category.service";
+import { ReadCategoriesData } from "@/api/types/types";
 import { useEffect, useState } from "react";
-import { categoryService } from "@/services/category.service";
+
 
 export default function useCatalog() {
-    const [categories, setCategories] = useState<any[]>([]);
+    const [categories, setCategories] = useState<ReadCategoriesData>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [isMobile, setIsMobile] = useState(false);
@@ -18,7 +20,7 @@ export default function useCatalog() {
         const fetchCategories = async () => {
             try {
                 const response = await categoryService.getCategories();
-                setCategories(response.data.data);
+                setCategories(response);
             } catch (err) {
                 setError("Помилка завантаження категорій");
             } finally {
@@ -29,9 +31,9 @@ export default function useCatalog() {
         fetchCategories();
     }, []);
 
-    const mainCategories = categories.filter(cat => cat.parent_id === null);
+    const mainCategories = (categories ?? []).filter(cat => cat.parent_id === null);
     const childCategories = (parentId: number) =>
-        categories.filter(cat => cat.parent_id === parentId);
+        (categories ?? []).filter(cat => cat.parent_id === parentId);
 
     return { isLoading, error, mainCategories, childCategories, isMobile };
 };

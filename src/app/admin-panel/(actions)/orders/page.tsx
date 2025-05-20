@@ -3,16 +3,17 @@
 import Link from 'next/link';
 import { PencilIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { STATUS_OPTIONS, SHIPPING_METHODS, PAYMENT_METHODS, styles } from '@/constants/orders';
-import useOrderManagement from '@/components/modules/admin/hooks/useOrderManagement';
-import { useOrderActions } from '@/components/modules/admin/hooks/useOrderActions';
+import useOrders from '@/components/modules/admin/hooks/orders/useOrders';
+import { useOrderActions } from '@/components/modules/admin/hooks/orders/useOrderActions';
 import OrderHeader from '@/components/modules/admin/components/orders/orderHeader';
 import OrderMetaInfo from '@/components/modules/admin/components/orders/orderMetaInfo';
 import EditControls from '@/components/modules/admin/components/orders/editControls';
 import ProductCharacteristics from '@/components/modules/admin/components/orders/productCharacteristics';
+import BackToPageButton from '@/components/ui/BackToPageButton';
 
 
 export default function OrdersPage() {
-    const { orders, loading, error, setOrders } = useOrderManagement();
+    const { orders, loading, error, setOrders } = useOrders();
     const {
         editingOrderId,
         expandedOrderId,
@@ -33,12 +34,13 @@ export default function OrdersPage() {
 
     return (
         <div className="min-h-screen md:p-6 pt-8 max-w-5xl mx-auto">
+            <BackToPageButton href="/admin-panel" title="Повернутися до панелі адміністратора" />
             <h1 className="text-xl sm:text-4xl font-bold text-center text-gray-900 mb-6">
                 Замовлення клієнтів
             </h1>
 
             <ul className="space-y-4">
-                {orders.map(order => {
+                {(orders ?? []).map(order => {
                     const isExpanded = expandedOrderId === order.id;
                     const isEditing = editingOrderId === order.id;
 
@@ -207,7 +209,7 @@ export default function OrdersPage() {
                 })}
             </ul>
 
-            {!orders.length && (
+            {(!orders || orders.length === 0) && (
                 <div className="text-center py-12">
                     <p className="text-gray-500 text-lg">Немає історії замовлень</p>
                 </div>

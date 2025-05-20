@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/auth.store';
 import { orderService } from '@/api/services/order.service';
-import { Order } from '@/api/types/types';
+import { Order, ReadOrderResponseData } from '@/api/types/types';
 
-export const useOrderActions = (setOrders: React.Dispatch<React.SetStateAction<Order[]>>) => {
+export const useOrderActions = (setOrders: React.Dispatch<React.SetStateAction<ReadOrderResponseData>>) => {
     const router = useRouter();
     const { getValidToken } = useAuthStore();
 
@@ -64,7 +64,7 @@ export const useOrderActions = (setOrders: React.Dispatch<React.SetStateAction<O
                 orderId
             );
 
-            setOrders(prev => prev.map(o =>
+            setOrders(prev => (prev ?? []).map(o =>
                 o.id === orderId ? {
                     ...o,
                     waybill_number: waybillNumber,

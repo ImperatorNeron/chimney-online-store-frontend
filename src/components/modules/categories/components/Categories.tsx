@@ -2,9 +2,10 @@
 
 import Link from 'next/link'
 import useCategoryToggle from '../hooks/useCategoryToggle';
+import { ReadCategoriesData } from '@/api/types/types';
 
 
-export default function Categories({ categories }: { categories: Category[] }) {
+export default function Categories({ categories }: { categories: ReadCategoriesData }) {
     const { expandedSlug, toggleCategory, categoryRefs } = useCategoryToggle();
 
     const mainCategories = (categories || []).filter(({ parent_id }) => parent_id == null);

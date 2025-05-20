@@ -5,4 +5,5 @@ export const endpoints = {
     users: '/users',
     products: '/products',
     likes: '/like',
+    categories: "/categories",
 };
