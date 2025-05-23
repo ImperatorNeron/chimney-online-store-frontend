@@ -1,8 +1,9 @@
 'use client'
 
-import { EyeIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import formatDate from "@/utils/formatDate";
 import { ReadCategoriesData } from "@/api/types/types";
+import Link from "next/link";
 
 interface ProductsTableProps {
   items: any[];
@@ -62,18 +63,12 @@ export default function ProductsTable({ items, onDelete, deletingId, categories 
                 </td>
                 <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                   <div className="flex items-center space-x-4">
-                    <button
-                      className="text-gray-400 hover:text-gray-500"
-                      title="Переглянути"
-                    >
-                      <EyeIcon className="h-5 w-5" />
-                    </button>
-                    <button
+                    <Link
+                      href={`/admin-panel/products/update/${product.slug}`}
                       className="text-blue-600 hover:text-blue-900"
-                      title="Редагувати"
                     >
                       <PencilIcon className="h-5 w-5" />
-                    </button>
+                    </Link>
                     <button
                       onClick={() => onDelete(product.id)}
                       disabled={deletingId === product.id}

@@ -1,11 +1,7 @@
 import { http } from '@/api/http';
 import { endpoints } from '../endpoints';
-import { paths } from '../types/openapi';
+import { CreateUniqueProductResponse, CreateVariationRequest, ReadProductByIdsResponse, ReadProductResponse, ReadUniqueResponse, ReadVariationResponse } from '../types/types';
 
-type ReadProductByIdsResponse = paths["/api/v1/products/by-ids"]["get"]["responses"]["200"]["content"]["application/json"]
-type ReadUniqueResponse = paths["/api/v1/products/unique"]["get"]["responses"]["200"]["content"]["application/json"]
-type CreateUniqueProductRequest = paths["/api/v1/products/unique"]["post"]["requestBody"]["content"]["multipart/form-data"]
-type CreateUniqueProductResponse = paths["/api/v1/products/unique"]["post"]["responses"]["200"]["content"]["application/json"]
 
 export class ProductService {
     private endpoint = endpoints.products;
@@ -64,15 +60,39 @@ export class ProductService {
         return response.data
     }
 
-    async createUniqueProduct(token: string, product: FormData) {
-        const url = `${this.endpoint}/unique`
-        const response = await http.post<CreateUniqueProductResponse>(url, product, token);
+    async getFullProduct(slug: string) {
+        const url = `${this.endpoint}/${encodeURIComponent(slug)}`
+        const response = await http.get<ReadProductResponse>(url)
         return response.data
     }
+
+    async createProduct(token: string, product: FormData) {
+        const url = `${this.endpoint}/`
+        const response = await http.post<ReadProductResponse>(url, product, token)
+        return response.data
+    }
+
+    // async createUniqueProduct(token: string, product: FormData) {
+    //     const url = `${this.endpoint}/unique`
+    //     const response = await http.post<CreateUniqueProductResponse>(url, product, token);
+    //     return response.data
+    // }
 
     async deleteUniqueProduct(token: string, productId: number) {
         const url = `${this.endpoint}/unique/${encodeURIComponent(productId)}`
         await http.delete(url, token);
+    }
+
+    // async createVariations(token: string, productId: number, variation: CreateVariationRequest) {
+    //     const url = `${this.endpoint}/unique/${encodeURIComponent(productId)}/variation`
+    //     const response = await http.post<ReadVariationResponse>(url, variation, token)
+    //     return response.data
+    // }
+
+    async updateProduct(token: string, productId: number, product: FormData){
+        const url = `${this.endpoint}/${encodeURIComponent(productId)}`
+        const response = await http.patch<ReadVariationResponse>(url, product, token)
+        return response.data
     }
 
 }

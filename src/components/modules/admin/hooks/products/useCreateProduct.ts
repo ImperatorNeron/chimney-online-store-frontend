@@ -1,10 +1,11 @@
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth.store";
 import { NotificationService } from "@/services/notification.service";
-import { allowedImageExt, UniqueProductSchema, uniqueProductSchema } from "@/schemas/uniqueProduct";
 import { productService } from "@/api/services/products.service";
+import { createAbsoluteProductSchema, CreateAbsoluteProductSchema } from "@/schemas/products";
+import { allowedImageExt } from "@/schemas/fields";
 
 
 function validateImages(files: FileList): { valid: true } | { valid: false; message: string } {
@@ -21,21 +22,23 @@ function validateImages(files: FileList): { valid: true } | { valid: false; mess
     return { valid: true };
 }
 
-export const useProductForm = () => {
+export const useCreateProduct = () => {
     const router = useRouter();
     const { getValidToken } = useAuthStore.getState();
 
     const {
         register,
         handleSubmit,
+        control,
         formState: { errors, isSubmitting },
         setError,
-        reset,
-    } = useForm<UniqueProductSchema>({
-        resolver: zodResolver(uniqueProductSchema),
+    } = useForm<CreateAbsoluteProductSchema>({
+        resolver: zodResolver(createAbsoluteProductSchema),
     });
 
-    const onSubmit = async (data: UniqueProductSchema) => {
+    const { fields, append, remove } = useFieldArray({ name: "variations", control, keyName: 'rhfId' });
+
+    const onSubmit = async (data: CreateAbsoluteProductSchema) => {
         const token = await getValidToken();
         if (!token) {
             router.push("/auth/login");
@@ -53,12 +56,13 @@ export const useProductForm = () => {
         formData.append("slug", data.slug);
         formData.append("description", data.description || "");
         formData.append("category_id", String(data.category_id));
-        Array.from(data.images).forEach((file) => formData.append("images", file, file.name));
+        Array.from(data.images as FileList).forEach((file) => formData.append("images", file, file.name));
+        formData.append("variations_json", JSON.stringify(data.variations));
 
         try {
-            await productService.createUniqueProduct(token, formData);
+            await productService.createProduct(token, formData);
             NotificationService.success("Продукт успішно створено");
-            router.push("/admin-panel/products");
+            router.push(`/admin-panel/products/update/${data.slug}`);
         } catch (err: any) {
             if (err.response?.status === 401) {
                 NotificationService.error("Токен недійсний або сесія закінчився");
@@ -70,11 +74,6 @@ export const useProductForm = () => {
     };
 
     return {
-        register,
-        handleSubmit,
-        errors,
-        isSubmitting,
-        onSubmit,
-        reset,
+        register, control, handleSubmit, errors, isSubmitting, onSubmit, fields, append, remove
     };
 };

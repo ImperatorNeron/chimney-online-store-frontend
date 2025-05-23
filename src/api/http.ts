@@ -39,7 +39,7 @@ export const http = {
     post: <T>(url: string, body?: unknown | FormData, token?: string) =>
         request<T>(url, { method: 'POST', body: body instanceof FormData ? body : JSON.stringify(body) }, token),
     patch: <T>(url: string, body: unknown, token?: string) =>
-        request<T>(url, { method: 'PATCH', body: JSON.stringify(body) }, token),
+        request<T>(url, { method: 'PATCH', body: body instanceof FormData ? body : JSON.stringify(body) }, token),
     delete: <T>(url: string, token?: string) =>
         request<T>(url, { method: 'DELETE' }, token),
 };

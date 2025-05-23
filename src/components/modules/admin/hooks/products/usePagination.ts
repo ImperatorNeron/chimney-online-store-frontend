@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function usePagination(initialState = { limit: 3, offset: 0 }) {
+export default function usePagination(initialState = { limit: 10, offset: 0 }) {
     const [currentOffset, setCurrentOffset] = useState(initialState.offset);
     const [currentLimit, setCurrentLimit] = useState(initialState.limit);
     const [total, setTotal] = useState(0);

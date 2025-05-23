@@ -12,14 +12,14 @@ export default function ProductCard({ product, className }: ItemCardProps) {
                     href={`/products/${product.slug}/${product.id}`}
                     className="w-full h-full flex items-center"
                 >
-                    <Image
-                        // src="/images/test.png"
-                        src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${product.preview.filename}`}
-                        alt={product.preview.alt}
-                        width={253}
-                        height={253}
-                        className="object-contain p-3 hover:scale-105 transition-transform duration-200 mx-auto"
-                    />
+                    <div className="relative aspect-square w-full max-w-[300px] overflow-hidden">
+                        <Image
+                            src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${product.preview.filename}`}
+                            alt={product.preview.alt}
+                            fill
+                            className="object-cover p-3 hover:scale-105 transition-transform duration-200 mx-auto"
+                        />
+                    </div>
                 </Link>
 
                 {product.discount_percentage > 0 && (

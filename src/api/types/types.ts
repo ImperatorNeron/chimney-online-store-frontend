@@ -1,4 +1,4 @@
-import { paths } from "./openapi";
+import { components, paths } from "./openapi";
 
 // ORDERS
 export type OrderResponse = paths["/api/v1/orders"]["get"]["responses"]["200"]["content"]["application/json"]
@@ -18,3 +18,12 @@ export type ReadCategoriesData = paths["/api/v1/categories"]["get"]["responses"]
 
 // PRODUCTS
 export type ReadUniqueResponseData = paths["/api/v1/products/unique"]["get"]["responses"]["200"]["content"]["application/json"]["data"];
+export type ReadProductByIdsResponse = paths["/api/v1/products/by-ids"]["get"]["responses"]["200"]["content"]["application/json"]
+export type ReadUniqueResponse = paths["/api/v1/products/unique"]["get"]["responses"]["200"]["content"]["application/json"]
+export type CreateUniqueProductResponse = paths["/api/v1/products/unique"]["post"]["responses"]["200"]["content"]["application/json"]
+export type CreateVariationRequest = paths["/api/v1/products/unique/{unique_product_id}/variation"]["post"]["requestBody"]["content"]["application/json"]
+export type ReadVariationResponse = paths["/api/v1/products/unique/{unique_product_id}/variation"]["get"]["responses"]["200"]["content"]["application/json"]
+export type ReadProductResponse = paths["/api/v1/products/"]["post"]["responses"]["200"]["content"]["application/json"]
+export type ReadProduct = ReadProductResponse extends Record<string, never> ? never : NonNullable<ReadProductResponse["data"]>;
+export type ReadImages = ReadProduct["images"]
+export type ReadVariations = ReadProduct["variations"]

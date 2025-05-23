@@ -1,5 +1,8 @@
+'use client'
 import { inputPatterns } from "@/utils/field.patterns";
 import { z } from "zod";
+
+export const allowedImageExt = ["jpg", "jpeg", "png", "webp"];
 
 export function optional<T extends z.ZodTypeAny>(schema: T) {
     return z
@@ -42,3 +45,16 @@ export const passwordField = z
     .regex(inputPatterns.password, {
         message: "Пароль може містити лише латинські літери, цифри та символи @$!%*?&",
     });
+
+export const images = typeof window === "undefined"
+    ? z.any() :
+    z.instanceof(FileList, { message: "Потрібно завантажити файли" })
+        .refine((list) => list.length > 0, "Додайте хоча б одне фото")
+        .refine(
+            (list) =>
+                Array.from(list).every((file) => {
+                    const ext = file.name.split(".").pop()?.toLowerCase();
+                    return ext != null && allowedImageExt.includes(ext);
+                }),
+            `Файли мають бути одного з форматів: ${allowedImageExt.join(", ")}`
+        )
