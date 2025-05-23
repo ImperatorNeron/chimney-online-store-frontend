@@ -10,6 +10,15 @@ class CategoryService {
         const response = await http.get<ReadCategories>(this.endpoint);
         return response.data;
     }
+
+    async getCategoriesBySlugs(slugs: string[]) {
+        const params = new URLSearchParams();
+        slugs.forEach(slug => params.append('slugs', slug));
+        const url = `${this.endpoint}/by-slugs?${params.toString()}`
+        console.log(url)
+        const response = await http.get(url);
+        return response.data;
+    }
 }
 
 export const categoryService = new CategoryService();

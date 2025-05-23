@@ -1,6 +1,6 @@
 import { http } from '@/api/http';
 import { endpoints } from '../endpoints';
-import { CreateUniqueProductResponse, CreateVariationRequest, ReadProductByIdsResponse, ReadProductResponse, ReadUniqueResponse, ReadVariationResponse } from '../types/types';
+import { ReadProductByIdsResponse, ReadProductResponse, ReadUniqueResponse, ReadVariationResponse } from '../types/types';
 
 
 export class ProductService {
@@ -8,7 +8,7 @@ export class ProductService {
 
     async getProduct(id: number, slug: string) {
         const url = `${this.endpoint}/${encodeURIComponent(slug)}/${encodeURIComponent(id)}`;
-        const response = await http.get<ApiResponseOne<ReadFullProductSchema>>(url);
+        const response = await http.get<ApiResponseOne<ReadFullProductWithCategoryHierarchySchema>>(url);
         return response.data;
     }
 
@@ -72,22 +72,10 @@ export class ProductService {
         return response.data
     }
 
-    // async createUniqueProduct(token: string, product: FormData) {
-    //     const url = `${this.endpoint}/unique`
-    //     const response = await http.post<CreateUniqueProductResponse>(url, product, token);
-    //     return response.data
-    // }
-
     async deleteUniqueProduct(token: string, productId: number) {
         const url = `${this.endpoint}/unique/${encodeURIComponent(productId)}`
         await http.delete(url, token);
     }
-
-    // async createVariations(token: string, productId: number, variation: CreateVariationRequest) {
-    //     const url = `${this.endpoint}/unique/${encodeURIComponent(productId)}/variation`
-    //     const response = await http.post<ReadVariationResponse>(url, variation, token)
-    //     return response.data
-    // }
 
     async updateProduct(token: string, productId: number, product: FormData){
         const url = `${this.endpoint}/${encodeURIComponent(productId)}`

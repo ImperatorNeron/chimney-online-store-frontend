@@ -64,6 +64,10 @@ interface ReadFullProductSchema extends ReadProductSchema {
     images: ReadProductImageSchema[];
 }
 
+interface ReadFullProductWithCategoryHierarchySchema extends ReadFullProductSchema{
+    categories: string[][]
+}
+
 interface ReadUniqueProductSchema {
     id: number;
     name: string;

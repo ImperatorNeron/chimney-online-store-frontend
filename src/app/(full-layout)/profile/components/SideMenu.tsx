@@ -19,15 +19,6 @@ export default function SideMenu({ username, isAdmin }: { username: string, isAd
                     <p className="text-xs text-gray-500">{isAdmin ? "Адміністратор" : "Покупець"}</p>
                 </div>
             </div>
-            <div className="mb-8">
-                <Link
-                    href="/admin-panel"
-                    className="flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-sm transition-colors duration-200 shadow-sm"
-                >
-                    <ShieldCheckIcon className="w-6 h-6" />
-                    <span className="font-medium">Панель адміністратора</span>
-                </Link>
-            </div>
             <nav>
                 <ul className="space-y-2">
                     {menuItems.map((item) => {

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import './globals.css';
 import { Bounce, ToastContainer } from "react-toastify";
 import RefreshCheck from "@/components/modules/auth/components/RefreshAuthComponent";
+import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,6 +45,7 @@ export default function RootLayout({
           draggable
           pauseOnHover
         />
+        <ScrollToTopButton />
       </body>
     </html>
   );

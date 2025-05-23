@@ -5,27 +5,70 @@ import { useState } from "react";
 
 export default function AddProductToCartButton({ productId }: { productId: number }) {
     const [addLoading, setAddLoading] = useState(false);
+    const [quantity, setQuantity] = useState(1);
     const { addToCart } = useCartStore();
 
     const handleAdd = async () => {
+        if (quantity < 1 || quantity > 100) {
+            NotificationService.error("Перевищено ліміт додавання в корзину!") 
+            return
+        };
         setAddLoading(true);
         try {
-            await addToCart(productId);
+            await addToCart(productId, quantity);
         } finally {
             setAddLoading(false);
             NotificationService.success("Товар успішно додано в корзину!")
         }
     };
 
+    const handleQuantityChange = (value: string) => {
+        if (value.includes('.') || isNaN(Number(value))) return;
+        let numValue = Math.max(1, parseInt(value) || 1);
+        if (numValue > 100) numValue = 100;
+        setQuantity(numValue);
+    };
+
     return (
-        <button
-            className="flex-1 border-2 border-gray-900 text-sm xs:text-base py-2.5 rounded-lg font-medium hover:bg-gray-50 transition"
-            onClick={handleAdd}
-            disabled={addLoading}
-        >
-            {addLoading ? (
-                <div className="h-6 w-6 mx-auto border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
-            ) : ("Додати в кошик")}
-        </button>
+        <div className="flex gap-2 flex-1">
+            <div className="flex items-center border-2 border-gray-900 rounded-lg">
+                <button
+                    className="px-3 py-2.5 hover:bg-gray-50 disabled:opacity-50 rounded-lg"
+                    onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                    disabled={quantity === 1 || addLoading}
+                >
+                    -
+                </button>
+                <input
+                    type="text"
+                    inputMode="numeric"
+                    className="w-12 text-center outline-none bg-transparent"
+                    value={quantity}
+                    min={1}
+                    max={100}
+                    onChange={(e) => handleQuantityChange(e.target.value)}
+                    onBlur={() => setQuantity(q => q < 1 ? 1 : q)}
+                    onKeyDown={(e) => ['e', 'E', '.', '-'].includes(e.key) && e.preventDefault()}
+                    disabled={addLoading}
+                />
+                <button
+                    className="px-3 py-2.5 hover:bg-gray-50 disabled:opacity-50 rounded-lg"
+                    onClick={() => setQuantity(q => q + 1)}
+                    disabled={addLoading}
+                >
+                    +
+                </button>
+            </div>
+
+            <button
+                className="flex-1 border-2 border-gray-900 text-sm xs:text-base py-2.5 rounded-lg font-medium hover:bg-gray-50 transition disabled:opacity-50"
+                onClick={handleAdd}
+                disabled={addLoading}
+            >
+                {addLoading ? (
+                    <div className="h-6 w-6 mx-auto border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+                ) : "Додати в кошик"}
+            </button>
+        </div>
     );
 };

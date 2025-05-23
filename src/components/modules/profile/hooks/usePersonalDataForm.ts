@@ -24,6 +24,8 @@ export function usePersonalDataForm(user: User) {
             patronymic: user.patronymic ?? "",
             email: user.email ?? "",
             phone_number: user.phone_number ?? "",
+            password: user.password ?? "",
+            confirm_password: user.confirm_password ?? ""
         },
     });
 

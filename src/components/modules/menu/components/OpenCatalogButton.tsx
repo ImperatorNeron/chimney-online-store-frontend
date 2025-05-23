@@ -3,8 +3,15 @@ import { useState } from 'react';
 import Image from 'next/image';
 import CategoriesOverlay from '@/components/modules/categories/components/CategoriesOverlay';
 
-export default function OpenCatalogButton() {
+export default function OpenCatalogButton({ closeCatalog }: { closeCatalog?: () => void }) {
     const [isOpen, setIsOpen] = useState(false);
+
+    const handleClose = () => {
+        setIsOpen(false);
+        if (closeCatalog) {
+            closeCatalog();
+        }
+    };
 
     return (
         <>
@@ -21,8 +28,7 @@ export default function OpenCatalogButton() {
                 />
                 <span>Каталог товарів</span>
             </button>
-            <CategoriesOverlay isOpen={isOpen} onClose={() => setIsOpen(false)} />
+            <CategoriesOverlay isOpen={isOpen} onClose={handleClose} />
         </>
-
     );
 };

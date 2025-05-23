@@ -11,6 +11,8 @@ interface User {
     is_verified: boolean;
     created_at: string;
     updated_at: string;
+    password?: string;
+    confirm_password?: string;
 }
 
 interface PersonalData {

@@ -22,7 +22,7 @@ export default function MobileMenuOverlay({ isOpen, onClose }: {
                 <div className="flex flex-col gap-4">
                     <SearchBar />
 
-                    <OpenCatalogButton />
+                    <OpenCatalogButton closeCatalog={onClose} />
 
                     <nav className="flex flex-col">
                         {isAuthenticated &&

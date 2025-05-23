@@ -14,6 +14,7 @@ interface AuthState {
     checkAuthentication: () => Promise<boolean>;
     initialize: () => Promise<void>;
     getValidToken: () => Promise<string | null>;
+    logout: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => {
@@ -88,6 +89,20 @@ export const useAuthStore = create<AuthState>((set, get) => {
             if (get().isInitialized) return;
             await get().checkAuthentication();
             set({ isInitialized: true });
+        },
+
+        logout: async () => {
+            try {
+                await authService.logout();
+            } catch (e) {
+                console.error("Помилка при виклику logout API:", e);
+            }
+
+            set({
+                accessToken: null,
+                expiresAt: null,
+                isAuthenticated: false
+            });
         },
     };
 });

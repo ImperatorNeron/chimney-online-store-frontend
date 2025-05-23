@@ -23,12 +23,13 @@ export default function LoginPage() {
                 </div>
 
                 <div className="flex flex-col items-center space-y-4">
-                    <Link
-                        href="#"
-                        className="text-sm text-gray-600 hover:text-gray-900 transition-colors duration-200 font-medium"
+                    <a
+                        href="mailto:techsupport@gmail.com"
+                        className="text-sm text-gray-600 text-center hover:text-gray-900 transition-colors duration-200 font-medium"
                     >
-                        Забули пароль?
-                    </Link>
+                        Забули пароль? Зверніться до тех. підтримки techsupport@gmail.com
+                    </a>
+
                     <p className="text-sm text-gray-500">
                         Ще не маєте акаунта?{' '}
                         <Link

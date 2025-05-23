@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useCartStore } from "@/store/cart.store";
 import Image from "next/image";
 import Link from "next/link";
+import ProductCharacteristics from "../../admin/components/orders/productCharacteristics";
 
 export default function CartItem({ item }: { item: CartItem }) {
     const hasDiscount = item.product.discount_percentage > 0;
@@ -77,7 +78,7 @@ export default function CartItem({ item }: { item: CartItem }) {
                             )}
                         </button>
                     </div>
-
+                    <ProductCharacteristics product={item.product} />
                     <div className="flex justify-between items-center mt-auto">
                         <div className="flex justify-between items-center mt-2">
                             <div className="flex items-center rounded-md border border-gray-200 bg-white overflow-hidden">

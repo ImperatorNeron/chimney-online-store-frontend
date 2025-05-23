@@ -27,8 +27,6 @@ export default async function ProductPage({
         item.metal_type && { name: "Метал", value: item.metal_type },
     ].filter((spec): spec is { name: string; value: string } => !!spec);
 
-    console.log(item.images)
-
     const paginationIn = { offset: 0, limit: 5 };
     const { items } = await productService.getProducts(paginationIn);
     return (
@@ -36,8 +34,12 @@ export default async function ProductPage({
             <div>
                 <Breadcrumbs items={[
                     { title: "Головна", href: "/" },
-                    { title: "Каталог", href: "/catalog" },
-                    { title: item.name }
+                    ...(item.categories?.slice().reverse().map(([name, slug]) => ({
+                        title: name,
+                        href: `/catalog/${slug}`
+                    })) || []),
+                    { title: item.name },
+
                 ]} />
             </div>
             <div className="max-w-7xl mx-auto px-1 pb-6">
@@ -121,8 +123,8 @@ export default async function ProductPage({
 
 
 
-                            <div className="flex gap-4">
-                                <button className="flex-1 bg-gray-900 text-sm xs:text-base text-white py-2.5 rounded-lg font-medium hover:bg-gray-800 transition">
+                            <div className="flex flex-col sm:flex-row gap-4">
+                                <button className="px-14 bg-gray-900 text-sm xs:text-base text-white py-2.5 rounded-lg font-medium hover:bg-gray-800 transition">
                                     Замовити
                                 </button>
                                 <AddProductToCartButton productId={item.id} />
