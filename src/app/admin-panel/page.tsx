@@ -13,44 +13,44 @@ export default function AdminPanel() {
             title: 'Повідомлення',
             icon: <ChatBubbleLeftRightIcon className="h-10 w-10" />,
             href: '/admin-panel/messages',
-            description: 'Переглянути повідомлення від клієнтів'
+            description: 'Натисніть сюди, щоб переглянути звернення від клієнтів у зручному вигляді',
         },
         {
             title: 'Статус замовлень',
             icon: <DocumentTextIcon className="h-10 w-10" />,
             href: '/admin-panel/orders',
-            description: 'Оновити статус замовлень, додати номер накладної або додати знижку'
+            description: 'Натисніть сюди, щоб переглянути замовлення, оновіть статуси, додайти номер накладної або знижку',
         },
         {
             title: 'Додати товар',
             icon: <PlusCircleIcon className="h-10 w-10" />,
             href: '/admin-panel/products',
-            description: 'Створення нових карток товарів у каталозі'
+            description: 'Натисніть сюди, щоб переглянути, додавати чи оновити товар до каталогу',
         },
     ];
 
     return (
-        <div className="bg-white py-6 sm:py-8 px-4 sm:px-6">
-            <h1 className="text-xl sm:text-3xl font-bold text-black text-center mb-8 border-b-2 border-gray-200 pb-4">
-                Оберіть дію, яку Ви хочете зробити
+        <div className="py-8 px-4 sm:px-8">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 text-center mb-10 border-b pb-4">
+                Оберіть дію
             </h1>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {menuItems.map((item, index) => (
                     <Link
                         key={index}
                         href={item.href}
-                        className="group flex flex-col items-start p-6 bg-white border-2 border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                        className="group flex flex-col items-start p-6 bg-white border border-gray-300 rounded-xl hover:shadow-md hover:border-gray-400 transition"
                     >
-                        <div className="flex items-center gap-4">
-                            <span className="text-gray-700 group-hover:text-black">
+                        <div className="flex items-center gap-4 mb-2">
+                            <div className="text-gray-700 group-hover:text-black">
                                 {item.icon}
-                            </span>
-                            <h2 className="text-2xl font-semibold text-black">
+                            </div>
+                            <h2 className="text-xl font-semibold text-gray-800">
                                 {item.title}
                             </h2>
                         </div>
-                        <p className="mt-4 text-lg text-gray-600">
+                        <p className="text-base text-gray-600 leading-relaxed">
                             {item.description}
                         </p>
                     </Link>

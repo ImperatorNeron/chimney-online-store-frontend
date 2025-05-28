@@ -1,21 +1,17 @@
 import { http } from '@/api/http';
 import { endpoints } from '../endpoints';
-import { ReadProductByIdsResponse, ReadProductResponse, ReadUniqueResponse, ReadVariationResponse } from '../types/types';
+import { CatalogFiltersSchema, FullProductsSchema, PaginationIn, ProductFiltersSchema, ReadProductByIdsResponse, ReadProductResponse, ReadUniqueResponse, ReadVariationResponse } from '../types/types';
 
 
 export class ProductService {
     private endpoint = endpoints.products;
 
-    async getProduct(id: number, slug: string) {
-        const url = `${this.endpoint}/${encodeURIComponent(slug)}/${encodeURIComponent(id)}`;
-        const response = await http.get<ApiResponseOne<ReadFullProductWithCategoryHierarchySchema>>(url);
-        return response.data;
-    }
-
-    async getProducts(paginationIn: PaginationIn, ordering?: Ordering, filters?: Filters,) {
+    async getProducts(paginationIn?: PaginationIn, ordering?: { field: string, ordering: string }, filters?: ProductFiltersSchema,) {
         const params = new URLSearchParams();
-        params.append("offset", String(paginationIn.offset));
-        params.append("limit", String(paginationIn.limit));
+        if (paginationIn) {
+            params.append("offset", String(paginationIn.offset));
+            params.append("limit", String(paginationIn.limit));
+        }
 
         if (filters) {
             for (const [key, value] of Object.entries(filters)) {
@@ -30,7 +26,7 @@ export class ProductService {
             params.append("ordering", ordering.ordering);
         }
         const url = `${this.endpoint}?${params.toString()}`
-        const response = await http.get<ApiResponseListWithPagination<ReadFullProductSchema>>(url);
+        const response = await http.get<FullProductsSchema>(url);
         return response.data;
     }
 
@@ -42,7 +38,7 @@ export class ProductService {
         if (!slug && sp?.text) params.append("text", String(sp?.text))
 
         const url = `${this.endpoint}/filters?${params.toString()}`
-        const response = await http.get<ApiResponseOne<BaseFilters>>(url);
+        const response = await http.get<CatalogFiltersSchema>(url);
         return response.data;
     }
 
@@ -77,7 +73,7 @@ export class ProductService {
         await http.delete(url, token);
     }
 
-    async updateProduct(token: string, productId: number, product: FormData){
+    async updateProduct(token: string, productId: number, product: FormData) {
         const url = `${this.endpoint}/${encodeURIComponent(productId)}`
         const response = await http.patch<ReadVariationResponse>(url, product, token)
         return response.data

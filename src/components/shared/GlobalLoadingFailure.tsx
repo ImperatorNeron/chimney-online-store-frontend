@@ -9,7 +9,7 @@ export default function GlobalLoadingFailure({ error }: { error: Error }) {
     }, [error]);
 
     return (
-        <div className="min-h-screen-minus-header-footer flex flex-1 flex-col items-center justify-center align-center bg-white px-4 my-16">
+        <div className="min-h-[600px] flex flex-1 flex-col items-center justify-center align-center bg-white px-4 my-16">
             <div className="max-w-md text-center">
                 <div className="animate-pulse mb-8">
                     <svg

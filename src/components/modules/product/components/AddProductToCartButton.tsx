@@ -1,5 +1,5 @@
 'use client';
-import { NotificationService } from "@/services/notification.service";
+import { NotificationService } from "@/api/services/notification.service";
 import { useCartStore } from "@/store/cart.store";
 import { useState } from "react";
 

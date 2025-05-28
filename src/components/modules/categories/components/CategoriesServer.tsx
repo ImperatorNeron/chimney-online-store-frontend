@@ -8,10 +8,10 @@ export default async function CategoriesServer() {
             throw new Error('Invalid categories data structure')
         }
         return <Categories categories={categories} />
-    } catch (error) {
+    } catch {
         return (
             <div className="max-w-7xl mx-auto text-red-500 text-center p-4">
-                Помилка завантаження категорій: {(error as Error).message}
+                Помилка завантаження категорій
             </div>
         )
     }

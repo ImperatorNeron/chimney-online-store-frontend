@@ -1,5 +1,13 @@
 import React from 'react';
 
+interface ConfirmButtonProps {
+    onClick?: () => void;
+    label: string;
+    className?: string;
+    isLoading?: boolean;
+    icon?: React.ReactNode;
+}
+
 export default function ConfirmButton({ onClick, label, icon, isLoading, className }: ConfirmButtonProps) {
     return (
         <button
@@ -9,7 +17,7 @@ export default function ConfirmButton({ onClick, label, icon, isLoading, classNa
             disabled={isLoading}
         >
             {icon && <span className="mr-2 [&>svg]:h-5 [&>svg]:w-5">{icon}</span>}
-            {isLoading ? "Завантаження" : label}
+            {isLoading ? <div className="h-6 w-6 mx-auto border-2 border-gray-400 border-t-transparent rounded-full animate-spin" /> : label}
         </button>
     );
 };

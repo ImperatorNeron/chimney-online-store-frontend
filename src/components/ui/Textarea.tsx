@@ -1,3 +1,11 @@
+interface InputFieldProps {
+    id: string;
+    type?: string;
+    placeholder?: string;
+    className?: string;
+    [key: string]: any;
+}
+
 export default function TextareaField({ id, placeholder, className = "", ...props }: InputFieldProps) {
     return (
         <textarea

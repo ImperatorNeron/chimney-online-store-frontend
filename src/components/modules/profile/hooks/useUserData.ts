@@ -29,7 +29,7 @@ export default function useUserData(redirectIfUnauthorized: boolean = true) {
                             if (redirectIfUnauthorized) router.push('/auth/login');
                             return;
                         }
-                    } catch (e) {
+                    } catch {
                         if (redirectIfUnauthorized) router.push('/auth/login');
                         return;
                     }
@@ -49,8 +49,8 @@ export default function useUserData(redirectIfUnauthorized: boolean = true) {
                 if (!response.ok) throw new Error('Не вдалося отримати дані');
                 setUser(await response.json());
 
-            } catch (err: any) {
-                setError(err.message || 'Помилка завантаження');
+            } catch {
+                setError('Помилка завантаження');
                 if (redirectIfUnauthorized) router.push('/auth/login');
             } finally {
                 setLoading(false);

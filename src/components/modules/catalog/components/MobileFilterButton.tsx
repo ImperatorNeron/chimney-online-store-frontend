@@ -2,8 +2,9 @@
 import { FunnelIcon } from "@heroicons/react/24/solid";
 import FiltersOverlay from "./FiltersOverlay";
 import useMobileFilters from "../hooks/useMobileFilters";
+import { ProductFiltersSchema } from "@/api/types/types";
 
-export default function MobileFilterButton({ filters }: { filters: BaseFilters }) {
+export default function MobileFilterButton({ filters }: { filters: ProductFiltersSchema }) {
     const { isOpen, toggleMenu, closeMenu } = useMobileFilters();
     return (
         <>

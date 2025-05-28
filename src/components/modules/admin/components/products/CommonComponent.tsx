@@ -17,36 +17,49 @@ export default function ProductActionComponent({ categories, form, mode }: { cat
 
     return (
         <div className="px-4 py-8 bg-white min-h-screen">
-            <div className="max-w-5xl mx-auto space-y-8">
+            <div className=" mx-auto space-y-8">
                 <BackToPageButton href="/admin-panel/products" title="Назад до списку" />
 
-                <div className="bg-white p-6 md:p-10 rounded-xl border-2 border-indigo-50 shadow-sm">
-                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center">
+                <div className="bg-white py-6 px-2 md:p-6 md:p-10 rounded-xl border-2 border-indigo-50 shadow-sm">
+                    <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
                         {mode === 'create' ? 'Створення товару' : 'Редагування товару'}
                     </h1>
 
                     <form onSubmit={form.handleSubmit(form.onSubmit)} className="space-y-10">
                         <div className="space-y-6">
-                            <FormField
-                                id="name"
-                                label="Назва товару"
-                                required
-                                placeholder="Наприклад, Труба зі сталі"
-                                errorMessage={form.errors.name?.message}
-                                {...form.register("name")}
-                                icon={IdentificationIcon}
-                                pattern={inputPatterns.message}
-                            />
+                            <div className="flex flex-col lg:flex-row lg:space-x-6">
+                                <div className="flex-1">
+                                    <FormField
+                                        id="name"
+                                        label="Назва товару"
+                                        required
+                                        placeholder="Наприклад, Труба зі сталі"
+                                        errorMessage={form.errors.name?.message}
+                                        {...form.register("name")}
+                                        icon={IdentificationIcon}
+                                        pattern={inputPatterns.message}
+                                    />
+                                </div>
 
-                            <FormField
-                                id="slug"
-                                label="Slug"
-                                required
-                                placeholder="truba-zi-stali"
-                                errorMessage={form.errors.slug?.message}
-                                {...form.register("slug")}
+                                <div className="flex-1 mt-3 lg:mt-0">
+                                    <FormField
+                                        id="slug"
+                                        label="Slug"
+                                        required
+                                        placeholder="truba-zi-stali"
+                                        errorMessage={form.errors.slug?.message}
+                                        {...form.register("slug")}
+                                        icon={IdentificationIcon}
+                                        pattern={inputPatterns.message}
+                                    />
+                                </div>
+                            </div>
+
+                            <FormSelect
+                                id="category_id"
+                                register={form.register("category_id", { valueAsNumber: true })}
                                 icon={IdentificationIcon}
-                                pattern={inputPatterns.message}
+                                options={categoryOptions}
                             />
 
                             <FormField
@@ -60,14 +73,8 @@ export default function ProductActionComponent({ categories, form, mode }: { cat
                                 icon={IdentificationIcon}
                                 pattern={inputPatterns.message}
                             />
-
-                            <FormSelect
-                                id="category_id"
-                                register={form.register("category_id", { valueAsNumber: true })}
-                                icon={IdentificationIcon}
-                                options={categoryOptions}
-                            />
                         </div>
+
 
                         <div className="space-y-6 border-t border-gray-200 pt-8">
                             <div className="flex flex-col gap-2.5">
@@ -122,7 +129,7 @@ export default function ProductActionComponent({ categories, form, mode }: { cat
                             <div className="space-y-5">
                                 {form.fields.map((field: { rhfId: string; id?: number }, idx: number) => (
                                     <div key={field.rhfId} className="bg-white rounded-xl p-5 space-y-4 border-2 border-indigo-50 shadow-sm">
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-2">
                                             <FormField
                                                 id={`variations.${idx}.price`}
                                                 label="Ціна"

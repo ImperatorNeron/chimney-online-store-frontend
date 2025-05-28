@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import useCategoryToggle from '../hooks/useCategoryToggle';
 import { ReadCategoriesData } from '@/api/types/types';
+import Image from 'next/image'
 
 
 export default function Categories({ categories }: { categories: ReadCategoriesData }) {
@@ -18,6 +19,7 @@ export default function Categories({ categories }: { categories: ReadCategoriesD
         );
     }
 
+
     return (
         <div className="max-w-7xl mx-auto">
             <h2 className="text-xl lg:text-3xl font-black mb-6 lg:mb-8 text-center uppercase tracking-tight">
@@ -28,7 +30,7 @@ export default function Categories({ categories }: { categories: ReadCategoriesD
                 {mainCategories.map(main => {
                     const children = categories.filter(child => child.parent_id === main.id);
                     const isExpanded = expandedSlug === main.slug;
-
+                    const fileName = main.file_path ? main.file_path.split('/').pop() : null;
                     return (
                         <div
                             key={main.slug}
@@ -36,15 +38,19 @@ export default function Categories({ categories }: { categories: ReadCategoriesD
                             className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-200 cursor-pointer relative"
                             onClick={() => toggleCategory(main.slug)}
                         >
-                            <div className="p-4">
+                            <div className="p-2 pr-4">
                                 <button className="flex items-center justify-between w-full group">
                                     <div className="flex items-center space-x-3">
-                                        <div className="w-10 h-10 rounded-lg bg-gray-900 flex items-center justify-center">
-                                            <span className="text-white font-medium">
-                                                {main.name[0]}
-                                            </span>
+                                        <div className="w-16 h-16 rounded-lg overflow-hidden flex items-center justify-center relative">
+                                            <Image
+                                                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/categories/${fileName}` || '/images/test.png'}
+                                                alt={main.name}
+                                                fill
+                                                sizes="40px"
+                                                style={{ objectFit: 'cover' }}
+                                            />
                                         </div>
-                                        <h2 className="text-lg font-semibold text-gray-900">
+                                        <h2 className="text-md md:text-lg font-semibold text-gray-900">
                                             <Link href={`/catalog/${main.slug}`} onClick={(e) => e.stopPropagation()}>{main.name}</Link>
                                         </h2>
                                     </div>

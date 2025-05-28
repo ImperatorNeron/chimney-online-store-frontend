@@ -1,4 +1,4 @@
-import { catalogService } from "@/services/catalog.services";
+import { catalogService } from "@/api/services/catalog.services";
 import { productService } from "@/api/services/products.service";
 import MobileFilterButton from "@/components/modules/catalog/components/MobileFilterButton";
 import DesktopFilterBlock from "@/components/modules/catalog/components/DesktopFilterBlock";
@@ -16,7 +16,14 @@ export default async function SearchPage({ searchParams }: {
         searchParams!
     );
 
-    const filters = await productService.getFilters(searchParams!)
+    const rawFilters = await productService.getFilters(searchParams!);
+    const filters = rawFilters
+        ? {
+            ...rawFilters,
+            min_price: rawFilters.min_price !== null && rawFilters.min_price !== undefined ? Number(rawFilters.min_price) : null,
+            max_price: rawFilters.max_price !== null && rawFilters.max_price !== undefined ? Number(rawFilters.max_price) : null,
+        }
+        : rawFilters;
     const breadcrumbItems = [
         { title: "Головна", href: "/" },
         { title: "Пошук" },

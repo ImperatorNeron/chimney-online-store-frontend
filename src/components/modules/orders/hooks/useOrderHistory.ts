@@ -5,12 +5,13 @@ import { orderService } from '@/api/services/order.service';
 import { ProfileContext } from '@/provider/profile.provider';
 import { useAuthStore } from '@/store/auth.store';
 import { useRouter } from 'next/navigation';
+import { ReadExtendedOrderDataSchema } from '@/api/types/types';
 
 export default function useOrderHistory() {
     // TODO: use mutual hook for this and for currentOrders
     const router = useRouter();
     const user = useContext(ProfileContext);
-    const [data, setData] = useState<ReadExtendedOrderSchema[]>([]);
+    const [data, setData] = useState<ReadExtendedOrderDataSchema>();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const { getValidToken } = useAuthStore.getState();
@@ -35,7 +36,7 @@ export default function useOrderHistory() {
         if (user) {
             fetchData();
         }
-    }, [user, getValidToken]);
+    }, [user, getValidToken, router]);
 
     return { data, loading, error };
 };

@@ -1,13 +1,14 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { NotificationService } from "@/services/notification.service";
+import { NotificationService } from "@/api/services/notification.service";
 import { useAuthStore } from "@/store/auth.store";
 import { profileSchema, ProfileSchema } from "@/schemas/profile";
 import { userService } from "@/api/services/user.service";
+import { UpdateUserSchema } from "@/api/types/types";
 
 
-export function usePersonalDataForm(user: User) {
+export function usePersonalDataForm(user: UpdateUserSchema) {
     const router = useRouter();
     const { getValidToken } = useAuthStore.getState();
 

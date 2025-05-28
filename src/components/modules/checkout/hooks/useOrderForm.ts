@@ -7,7 +7,7 @@ import { orderService } from "@/api/services/order.service";
 import { CreateOrderZodSchema, orderSchema } from "@/schemas/order";
 import useUserData from "@/components/modules/profile/hooks/useUserData";
 import { useAuthStore } from "@/store/auth.store";
-import { NotificationService } from "@/services/notification.service";
+import { NotificationService } from "@/api/services/notification.service";
 import { useRouter } from "next/navigation";
 
 export const useOrderForm = () => {

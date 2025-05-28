@@ -1,10 +1,11 @@
 import { endpoints } from "../endpoints";
 import { http } from '@/api/http';
+import { CreateUserDataSchema, LoginSchema, ReadUserDataSchema, TokenInfoSchema } from "../types/types";
 
 class AuthService {
     private endpoint = endpoints.auth;
 
-    async login(credentials: LoginUserSchema) {
+    async login(credentials: LoginSchema) {
         const url = `${this.endpoint}/login`;
         const response = await http.post<TokenInfoSchema>(url, credentials);
         return response;
@@ -16,15 +17,15 @@ class AuthService {
         return response;
     }
 
-    async register(createUserData: RegisterUserSchema) {
+    async register(createUserData: CreateUserDataSchema) {
         const url = `${this.endpoint}/register`;
-        const response = await http.post<ApiResponseOne<ReadUserSchema>>(url, createUserData);
+        const response = await http.post<ReadUserDataSchema>(url, createUserData);
         return response.data;
     }
 
     async checkAuth() {
         const url = `${this.endpoint}/refresh-check`;
-        const response = await http.get<IsAuthenticatedSchema>(url);
+        const response = await http.get<{ is_authenticated: boolean }>(url);
         return response.is_authenticated;
     }
 

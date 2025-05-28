@@ -1,7 +1,17 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Thumbs } from "swiper/modules";
 import Image from 'next/image';
+import { ReadImages } from "@/api/types/types";
 
+
+interface MainSliderProps {
+    thumbsSwiper: any;
+    setSlideIndex?: (value: number) => void;
+    items: ReadImages;
+    setIsOpen?: (value: boolean) => void;
+    initialSlideIndex?: number;
+    className?: string;
+}
 
 export default function MainSlider({
     thumbsSwiper,
@@ -17,7 +27,7 @@ export default function MainSlider({
             spaceBetween={10}
             thumbs={{ swiper: thumbsSwiper }}
             autoplay={{ delay: 6000, disableOnInteraction: false }}
-            loop={true}
+            loop={items.length > 1}
             initialSlide={initialSlideIndex}
             className="w-full h-full rounded-xl"
             onSlideChange={(swiper) => setSlideIndex && setSlideIndex(swiper.realIndex)}
@@ -27,7 +37,7 @@ export default function MainSlider({
                     <div className="relative w-full h-full">
                         <Image
                             src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${slide.filename}`}
-                            alt={slide.alt}
+                            alt={slide.alt ?? ""}
                             fill
                             className={`object-contain rounded-lg ${className}`}
                             priority

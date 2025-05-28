@@ -1,4 +1,5 @@
-import { productService } from "@/services/product.service";
+import { productService } from "@/api/services/products.service";
+import { PaginationIn, ProductFiltersSchema } from "../types/types";
 
 class CatalogService {
     private limitOptions = [12, 24, 36];
@@ -21,7 +22,7 @@ class CatalogService {
         };
     }
 
-    async getOrdering(searchParams: Promise<{ field?: string; ordering?: string }>): Promise<Ordering> {
+    async getOrdering(searchParams: Promise<{ field?: string; ordering?: string }>) {
         const sp = await searchParams;
         return {
             field: sp?.field || "created_at",
@@ -29,9 +30,9 @@ class CatalogService {
         };
     }
 
-    async getFilters(searchParams: Promise<{ text?: string, [key: string]: any }>, slug?: string,): Promise<Filters> {
+    async getFilters(searchParams: Promise<{ text?: string, [key: string]: any }>, slug?: string) {
         const sp = await searchParams;
-        let filters: Filters = {}
+        const filters: ProductFiltersSchema = {}
         if (slug) filters.category_slug = slug;
         if (!slug && sp.text) filters.text = sp.text
 
@@ -44,7 +45,7 @@ class CatalogService {
                 sp[key] !== undefined
             ) {
                 if (this.allowedFilters.includes(key)) {
-                    filters[key as keyof BaseFilters] = sp[key];
+                    (filters as Record<string, any>)[key] = sp[key];
                 }
             }
         }
@@ -53,7 +54,7 @@ class CatalogService {
     }
 
     async getCatalogData(
-        searchParams: Promise<{ text?: string, page?: string, limit?: string, field?: string, ordering?: string, [key: string]: any }>,
+        searchParams: Promise<{ text?: string, page?: string, limit?: string, field?: string, ordering?: string }>,
         slug?: string,
     ) {
         const page = await this.getPage(searchParams);
@@ -64,11 +65,14 @@ class CatalogService {
         if (!filters.category_slug && !filters.text) {
             return { items: [], currentPage: 0, totalPages: 0, limit };
         }
-        const { items, pagination } = await productService.fetchProducts(paginationIn, ordering, filters);
-        const totalPages = Math.max(1, Math.ceil(pagination.total / limit));
+        const data = await productService.getProducts(paginationIn, ordering, filters);
+        if (!data || !data.pagination) {
+            return { items: [], currentPage: 0, totalPages: 0, limit };
+        }
+        const totalPages = Math.max(1, Math.ceil(data.pagination.total / limit));
         const currentPage = Math.min(page, totalPages);
 
-        return { items, currentPage, totalPages, limit };
+        return { items: data.items, currentPage, totalPages, limit };
     }
 }
 

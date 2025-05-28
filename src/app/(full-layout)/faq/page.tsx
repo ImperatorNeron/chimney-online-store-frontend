@@ -1,10 +1,10 @@
 import Breadcrumbs from '@/components/layout/Breadcrumbs';
 import QuestionBlock from '@/app/(full-layout)/faq/components/QuestionBlock';
-import { faqService } from '@/services/faq.service';
+import { faqService } from '@/api/services/faq.service';
 
 export default async function FAQPage() {
 
-    const { items } = await faqService.getFAQS();
+    const items = await faqService.getFAQS();
 
     return (
         <div className="bg-white">
@@ -21,7 +21,7 @@ export default async function FAQPage() {
                     </div>
 
                     <div className="space-y-4 md:space-y-5 lg:space-y-6">
-                        {items.map((item, index) => (
+                        {(items ?? []).map((item, index) => (
                             <QuestionBlock key={index} item={item} index={index} />
                         ))}
                     </div>

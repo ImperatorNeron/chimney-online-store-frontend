@@ -7,18 +7,36 @@ import { usePersonalDataForm } from '../hooks/usePersonalDataForm';
 import { inputPatterns } from '@/utils/field.patterns';
 import { useAuthStore } from '@/store/auth.store';
 import { useRouter } from 'next/navigation';
-import { NotificationService } from '@/services/notification.service';
+import { NotificationService } from '@/api/services/notification.service';
 import Link from 'next/link';
+import { useState } from 'react';
+import { useFavouritesStore } from '@/store/favourite.store';
+import { UserSchema } from '@/api/types/types';
 
-export default function PersonalDataForm({ user }: { user: User }) {
+export default function PersonalDataForm({ user }: { user: UserSchema }) {
+    const { resetLikes } = useFavouritesStore();
     const logout = useAuthStore((state) => state.logout);
     const { register, handleSubmit, formState, onSubmit } = usePersonalDataForm(user);
     const router = useRouter();
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
 
     const handleLogout = async () => {
-        await logout();
-        NotificationService.success('Ви вийшли з профілю!');
-        router.push('/auth/login');
+        if (isLoggingOut) return;
+
+        setIsLoggingOut(true);
+
+        try {
+            await logout();
+            resetLikes();
+            NotificationService.success('Ви вийшли з профілю!');
+            router.push('/auth/login');
+        } catch {
+            NotificationService.error('Сталася помилка при виході');
+        }
+
+        setTimeout(() => {
+            setIsLoggingOut(false);
+        }, 2000);
     };
 
     return (
@@ -39,7 +57,7 @@ export default function PersonalDataForm({ user }: { user: User }) {
                 <div className="mb-4 text-center">
                     <h1 className="text-3xl font-semibold mb-1">Персональні дані</h1>
                     <div className="text-sm text-gray-600">
-                        Створено: {new Date(user.created_at).toLocaleDateString('uk-UA')} | Оновлено: {new Date(user.updated_at).toLocaleDateString('uk-UA')}
+                        Створено: {new Date(user.created_at ?? '').toLocaleDateString('uk-UA')} | Оновлено: {new Date(user.updated_at ?? '').toLocaleDateString('uk-UA')}
                     </div>
                 </div>
 
@@ -130,9 +148,10 @@ export default function PersonalDataForm({ user }: { user: User }) {
                 <div className="mt-2 flex justify-center">
                     <button
                         onClick={handleLogout}
-                        className="px-4 py-3 w-full border-2 border-black hover:bg-gray-200 text-gray-900 rounded-lg transition-colors duration-200"
+                        disabled={isLoggingOut}
+                        className="px-4 py-3 w-full border-2 border-black hover:bg-gray-200 text-gray-900 rounded-lg transition-colors duration-200 disabled:opacity-50"
                     >
-                        Вийти
+                        {isLoggingOut ? <div className="h-6 w-6 mx-auto border-2 border-gray-400 border-t-transparent rounded-full animate-spin" /> : 'Вийти'}
                     </button>
                 </div>
             </div>

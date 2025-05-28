@@ -7,7 +7,11 @@ export const useFilterSelect = (name: string, options: (string | null)[]) => {
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const params = new URLSearchParams(searchParams);
-        e.target.value ? params.set(name, e.target.value) : params.delete(name);
+        if (e.target.value) {
+            params.set(name, e.target.value);
+        } else {
+            params.delete(name);
+        }
         params.delete("page");
         router.replace(`?${params.toString()}`, { scroll: false });
     };

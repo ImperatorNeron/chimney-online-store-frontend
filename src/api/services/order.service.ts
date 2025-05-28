@@ -1,33 +1,31 @@
 import { http } from '@/api/http';
 import { endpoints } from '../endpoints';
-import { paths } from '../types/openapi';
-import { OrderResponse } from '../types/types';
+import { BaseOrderResponse, CreateOrder, OrderResponse, ReadCreatedOrder, ReadExtendedOrder, UpdateOrderInfoRequest } from '../types/types';
 
-type UpdateOrderInfoRequest = paths["/api/v1/orders/{order_id}"]["patch"]["requestBody"]["content"]["application/json"]
-type BaseOrderResponse = paths["/api/v1/orders/{order_id}"]["patch"]["responses"]["200"]["content"]["application/json"]
 
 export class OrderService {
     private endpoint = endpoints.orders;
 
-    async createOrder(order: CreateOrderSchema, token?: string) {
-        const response = await http.post<ApiResponseOne<ReadOrderBaseSchema>>(this.endpoint, order, token);
+    async createOrder(order: CreateOrder, token?: string) {
+        const response = await http.post<ReadCreatedOrder>(this.endpoint, order, token);
         return response.data;
     }
 
     async getUserHistory(token: string) {
         const url = `${this.endpoint}/history`;
-        const response = await http.get<ApiResponseList<ReadExtendedOrderSchema>>(url, token);
+        const response = await http.get<ReadExtendedOrder>(url, token);
         return response.data;
     }
 
     async getUserOrders(token: string) {
         const url = `${this.endpoint}/active`;
-        const response = await http.get<ApiResponseList<ReadExtendedOrderSchema>>(url, token);
+        const response = await http.get<ReadExtendedOrder>(url, token);
         return response.data;
     }
 
-    async getOrders(token: string) {
-        const response = await http.get<OrderResponse>(this.endpoint, token);
+    async getOrders(token: string, limit: number = 20, offset: number = 0) {
+        const url = `${this.endpoint}/?limit=${encodeURIComponent(limit)}&offset=${encodeURIComponent(offset)}`
+        const response = await http.get<OrderResponse>(url, token);
         return response.data;
     }
 

@@ -1,6 +1,16 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+interface SocialLink {
+    href: string;
+    icon: string;
+    alt: string;
+}
+
+interface SocialLinksProps {
+    links: SocialLink[];
+}
+
 export default function SocialLinks({ links }: SocialLinksProps) {
     return (
         <div className="flex space-x-4">

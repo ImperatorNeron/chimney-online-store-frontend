@@ -20,7 +20,7 @@ export default function MobileMenuOverlay({ isOpen, onClose }: {
             <OverlayHeader onClose={onClose} title="Меню" />
             <div className="p-4 h-[calc(100%-64px)] overflow-y-auto">
                 <div className="flex flex-col gap-4">
-                    <SearchBar />
+                    <SearchBar onClose={onClose} />
 
                     <OpenCatalogButton closeCatalog={onClose} />
 

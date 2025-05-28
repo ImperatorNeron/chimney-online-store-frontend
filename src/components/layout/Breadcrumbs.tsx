@@ -1,5 +1,14 @@
 import Link from 'next/link';
 
+interface BreadcrumbItem {
+    title: string;
+    href?: string;
+};
+
+interface BreadcrumbsProps {
+    items: BreadcrumbItem[];
+};
+
 export default function Breadcrumbs({ items }: BreadcrumbsProps) {
     return (
         <nav aria-label="Breadcrumb" className='border-t border-b py-3 -mx-3'>

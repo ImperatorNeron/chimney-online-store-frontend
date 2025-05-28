@@ -17,7 +17,7 @@ export default function OpenCartButton({ hint = true }: { hint?: boolean }) {
                 <Image src="/icons/shopping-cart.png" alt="Кошик" width={24} height={24} />
                 {cart && (
                     <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center translate-x-2 -translate-y-2">
-                        {cart.data.total_quantity ?? 0}
+                        {cart.data?.total_quantity ?? 0}
                     </span>
                 )}
 

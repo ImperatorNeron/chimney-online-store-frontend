@@ -26,8 +26,8 @@ export const useOrderActions = (setOrders: React.Dispatch<React.SetStateAction<R
     const setDiscount = (input: string | number) => {
         let value = typeof input === 'number' ? input.toString() : input;
         value = value
-            .replace(/[^0-9.%\s]/g, '') 
-            .replace(/(\..*)\./g, '$1'); 
+            .replace(/[^0-9.%\s]/g, '')
+            .replace(/(\..*)\./g, '$1');
         if (value.includes('%')) {
             value = value.replace(/%/g, '') + '%';
         }
@@ -64,15 +64,27 @@ export const useOrderActions = (setOrders: React.Dispatch<React.SetStateAction<R
                 orderId
             );
 
-            setOrders(prev => (prev ?? []).map(o =>
-                o.id === orderId ? {
-                    ...o,
-                    waybill_number: waybillNumber,
-                    status: selectedStatus,
-                    price_discount: price_discount,
-                    total_price: total_price,
-                } : o
-            ));
+            setOrders(prev => {
+                if (!prev || !('items' in prev) || !('pagination' in prev)) return prev;
+
+                return {
+                    ...prev,
+                    items: prev.items.map(o =>
+                        o.id === orderId
+                            ? {
+                                ...o,
+                                waybill_number: waybillNumber,
+                                status: selectedStatus,
+                                price_discount: price_discount,
+                                total_price: total_price,
+                            }
+                            : o
+                    ),
+                    pagination: prev.pagination,
+                };
+            });
+
+
             setEditingOrderId(null);
         } catch (err) {
             console.error(err instanceof Error ? err.message : 'Помилка оновлення');

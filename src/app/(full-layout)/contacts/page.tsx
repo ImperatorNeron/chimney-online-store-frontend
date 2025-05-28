@@ -20,7 +20,7 @@ export default function ContactsPage() {
                                 Напишіть нам прямо зараз
                             </h3>
                             <p className="text-gray-600 max-w-xl mx-auto">
-                                Залишіть свої контакти і ми обов'язково зв'яжемося з вами протягом години
+                                Залишіть свої контакти і ми обов&apos;язково зв&apos;яжемося з вами протягом години
                             </p>
                         </div>
                         <ContactForm />

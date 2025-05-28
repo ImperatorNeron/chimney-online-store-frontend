@@ -1,5 +1,6 @@
 'use client';
 
+import ProfileLoading from '@/components/layout/loaders/ProfileLoader';
 import OrderList from '@/components/modules/orders/components/OrderList';
 import useCurrentOrders from '@/components/modules/orders/hooks/useCurrentOrders';
 import EmptyState from '@/components/shared/EmptyState';
@@ -13,7 +14,7 @@ export default function HistoryPage() {
         console.log('Navigate to product catalog');
     };
 
-    if (loading) return <div className="flex justify-center py-8">Завантаження...</div>;
+    if (loading) return <ProfileLoading />;
     if (error) return <div className="text-red-600 text-center py-8">{error}</div>;
     if (!history.length) return <div className="text-gray-500 text-center py-8">Історія порожня</div>;
 
@@ -22,7 +23,7 @@ export default function HistoryPage() {
             <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-6 border-b pb-4 text-center lg:text-left">
                 Поточні замовленя
             </h1>
-            {data?.length ? (
+            {Array.isArray(data) && data?.length ? (
                 <OrderList orders={data} />
             ) : (
                 <EmptyState

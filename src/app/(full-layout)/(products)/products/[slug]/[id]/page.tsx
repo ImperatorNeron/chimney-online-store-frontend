@@ -3,9 +3,11 @@ import ProductList from "@/components/modules/products/components/ProductList";
 import AddProductToCartButton from "@/components/modules/product/components/AddProductToCartButton";
 import ProductSlider from "@/components/modules/product/components/ProductSlider";
 import Tabs from "@/components/modules/product/components/Tabs";
-import { TagIcon, CreditCardIcon, ShieldCheckIcon, TruckIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
+import { TagIcon, CreditCardIcon, ShieldCheckIcon, TruckIcon } from '@heroicons/react/24/outline'
 import { productService } from "@/api/services/products.service";
 import LikeButton from "@/components/modules/product/components/LikeButton";
+import Selectors from "./selectors";
+import NotFound from "@/app/not-found";
 
 
 export default async function ProductPage({
@@ -13,12 +15,44 @@ export default async function ProductPage({
 }: {
     params: Promise<{ slug: string, id: number }>;
 }) {
-    const item = await productService.getProduct((await params).id, (await params).slug);
+    const productSlug = (await params).slug
+    let fullItem;
+    try {
+        fullItem = await productService.getFullProduct(productSlug)
+    } catch {
+        return <NotFound />;
+    }
+    const productId = (await params).id
+    const variation = fullItem?.variations?.find(v => v.id == productId);
+    if (!variation) return <NotFound />;
+
+    const result = {
+        name: fullItem?.name,
+        slug: fullItem?.slug,
+        description: fullItem?.description,
+        price: variation?.price,
+        extra_attrs: null,
+        category_id: fullItem?.category_id,
+        id: variation?.id,
+        created_at: variation?.created_at,
+        updated_at: variation?.updated_at,
+        discount_price: variation?.discount_price,
+        discount_percentage: variation?.discount_percentage,
+        diameter: variation?.diameter,
+        length: variation?.length,
+        thickness: variation?.thickness,
+        angle: variation?.angle,
+        metal_type: variation?.metal_type,
+        images: fullItem?.images,
+        categories: fullItem?.categories,
+    };
+
+    const item = result;
     const hasDiscount = item.discount_percentage;
-    const savings = hasDiscount ? item.price - item.discount_price : 0;
+    const savings = hasDiscount ? (item.price ?? 0) - (item.discount_price ?? 0) : 0;
 
     const specifications = [
-        { name: 'Код товару', value: item.id.toString() },
+        { name: 'Код товару', value: item.id !== undefined ? item.id.toString() : "" },
         { name: 'Найменування', value: item.name },
         item.diameter && { name: "Діаметр", value: item.diameter.toString() },
         item.length && { name: "Довжина", value: item.length.toString() },
@@ -28,24 +62,32 @@ export default async function ProductPage({
     ].filter((spec): spec is { name: string; value: string } => !!spec);
 
     const paginationIn = { offset: 0, limit: 5 };
-    const { items } = await productService.getProducts(paginationIn);
+    const items = await productService.getProducts(paginationIn);
     return (
         <div className="min-h-screen bg-white">
             <div>
-                <Breadcrumbs items={[
-                    { title: "Головна", href: "/" },
-                    ...(item.categories?.slice().reverse().map(([name, slug]) => ({
-                        title: name,
-                        href: `/catalog/${slug}`
-                    })) || []),
-                    { title: item.name },
-
-                ]} />
+                <Breadcrumbs
+                    items={[
+                        { title: "Головна", href: "/" },
+                        ...(item.categories?.slice().reverse().reduce(
+                            (acc: { title: string; href: string }[], [name, slug]) => {
+                                const previousPath = acc.length > 0 ? acc[acc.length - 1].href : "/catalog";
+                                acc.push({
+                                    title: name ?? "",
+                                    href: `${previousPath}/${slug}`,
+                                });
+                                return acc;
+                            },
+                            [] as { title: string; href: string }[]
+                        ) || []),
+                        { title: item.name ?? "" },
+                    ]}
+                />
             </div>
             <div className="max-w-7xl mx-auto px-1 pb-6">
                 <div className="flex flex-col lg:flex-row gap-8 mt-8">
                     <div className="lg:w-1/2 bg-gray-50 rounded-xl">
-                        <ProductSlider images={item.images} />
+                        <ProductSlider images={item.images ?? []} />
                     </div>
 
                     <div className="lg:w-1/2 space-y-4">
@@ -79,55 +121,19 @@ export default async function ProductPage({
                                 )}
                             </div>
 
-                            <LikeButton productId={item.id} />
+                            {item.id !== undefined && <LikeButton productId={item.id} />}
                         </div>
 
                         <div className="space-y-4">
-                            <div className="flex gap-2">
-                                <div className="flex flex-col space-y-2">
-                                    <label htmlFor="diameter" className="text-sm font-medium text-gray-700 ml-1">
-                                        Діаметр:
-                                    </label>
-                                    <div className="relative w-[100px]">
-                                        <select
-                                            id="diameter"
-                                            name="diameter"
-                                            className="peer w-full appearance-none rounded-lg border border-gray-300 bg-white px-4 py-2 pr-10 text-sm text-gray-700 shadow-sm transition-all"
-                                        >
-                                            <option value="20">20 мм</option>
-                                            <option value="25">25 мм</option>
-                                            <option value="30">30 мм</option>
-                                        </select>
-                                        <ChevronDownIcon className="pointer-events-none absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
-                                    </div>
-                                </div>
+                            <Selectors fullItem={fullItem} variation={variation} slug={productSlug} />
 
-                                <div className="flex flex-col space-y-2">
-                                    <label htmlFor="length" className="text-sm font-medium text-gray-700 ml-1">
-                                        Довжина:
-                                    </label>
-                                    <div className="relative w-[100px]">
-                                        <select
-                                            id="length"
-                                            name="length"
-                                            className="peer w-full appearance-none rounded-lg border border-gray-300 bg-white px-4 py-2 pr-10 text-sm text-gray-700 shadow-sm transition-all"
-                                        >
-                                            <option value="1">1 м</option>
-                                            <option value="2">2 м</option>
-                                            <option value="3">3 м</option>
-                                        </select>
-                                        <ChevronDownIcon className="pointer-events-none absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
-                                    </div>
-                                </div>
-                            </div>
-
-
-
-                            <div className="flex flex-col sm:flex-row gap-4">
-                                <button className="px-14 bg-gray-900 text-sm xs:text-base text-white py-2.5 rounded-lg font-medium hover:bg-gray-800 transition">
+                            <div className="flex flex-col sm:flex-row gap-2">
+                                <button className="px-14 bg-gray-900 text-sm xs:text-base text-white py-3 rounded-lg font-medium hover:bg-gray-800 transition">
                                     Замовити
                                 </button>
-                                <AddProductToCartButton productId={item.id} />
+                                {item.id !== undefined && (
+                                    <AddProductToCartButton productId={item.id} />
+                                )}
                             </div>
 
                             <div className="grid grid-cols-1 gap-4 pt-4 border-t border-gray-200">
@@ -136,7 +142,7 @@ export default async function ProductPage({
                                     <div>
                                         <p className="text-sm font-medium text-gray-900">Швидка доставка по Україні</p>
                                         <p className="text-xs text-gray-600 mt-1">
-                                            Доставка за 1-3 робочих дні через Нову Пошту, Укрпошту або кур'єром. Доступний самовивоз.
+                                            Доставка за 1-3 робочих дні через Нову Пошту, Укрпошту або кур&apos;єром. Доступний самовивоз.
                                         </p>
                                     </div>
                                 </div>
@@ -175,7 +181,7 @@ export default async function ProductPage({
                 </h2>
                 <div className="col-start-1 col-end-2 md:col-start-1 md:col-end-3 overflow-x-auto lg:overflow-x-visible -mx-4 px-4">
                     <ProductList
-                        items={items}
+                        items={items?.items}
                         className="flex gap-2 pb-8"
                         itemClassName="flex-1 min-w-[188px]"
                     />

@@ -4,21 +4,14 @@ import FormField from "@/components/shared/FormField";
 import SectionContainer from "./SectionContainer";
 import { EnvelopeIcon, IdentificationIcon, PhoneIcon } from "@heroicons/react/24/outline";
 import { inputPatterns } from "@/utils/field.patterns";
+import ContactInfoSectionSkeleton from "@/components/layout/loaders/ContactInfoSectionLoader";
 
-export default function ContactInfoSection({ errors, register, user, loading, error }: { errors: any; register: any; user: any; loading: any; error: any }) {
+export default function ContactInfoSection({ errors, register, loading }: { errors: any; register: any; user: any; loading: any; error: any }) {
 
     if (loading) {
         return (
             <SectionContainer>
-                <div>loading</div>
-            </SectionContainer>
-        )
-    }
-
-    if (error) {
-        return (
-            <SectionContainer>
-                <div className="text-red-500">{error}</div>
+                <ContactInfoSectionSkeleton />
             </SectionContainer>
         )
     }

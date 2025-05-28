@@ -11,6 +11,7 @@ interface FavouritesState {
     toggleLike: (productId: number, token: string) => Promise<void>;
     isLiked: (productId: number) => boolean;
     getLikedCount: () => number;
+    resetLikes: () => void;
 }
 
 export const useFavouritesStore = create<FavouritesState>((set, get) => ({
@@ -59,4 +60,5 @@ export const useFavouritesStore = create<FavouritesState>((set, get) => ({
 
     isLiked: (productId) => get().likedProductIds.includes(productId),
     getLikedCount: () => get().likedProductIds.length,
+    resetLikes: () => set({ likedProductIds: [] }),
 }));

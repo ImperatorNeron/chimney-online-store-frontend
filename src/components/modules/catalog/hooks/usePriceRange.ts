@@ -9,6 +9,7 @@ export const usePriceRange = (minPrice: number, maxPrice: number) => {
     const [low, setLow] = useState(minPrice);
     const [high, setHigh] = useState(maxPrice);
     const [activeThumb, setActiveThumb] = useState<'low' | 'high' | null>(null);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const minFromUrl = parseFloat(searchParams.get('min_price') || '');
@@ -25,6 +26,10 @@ export const usePriceRange = (minPrice: number, maxPrice: number) => {
                 params.set('max_price', h.toString());
                 params.delete("page");
                 router.replace(`?${params.toString()}`, { scroll: false });
+
+                setLoading(true);
+                router.replace(`?${params.toString()}`, { scroll: false });
+                setTimeout(() => setLoading(false), 1000);
             }, 500),
         [searchParams, router]
     );
@@ -62,6 +67,7 @@ export const usePriceRange = (minPrice: number, maxPrice: number) => {
     return {
         low,
         high,
+        loading,
         activeThumb,
         handleLowChange,
         handleHighChange,

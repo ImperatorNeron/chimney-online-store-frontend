@@ -1,10 +1,6 @@
 import { endpoints } from "../endpoints";
 import { http } from '@/api/http';
-import { paths } from "../types/openapi";
-
-type CreateLikeRequest = paths["/api/v1/like"]["post"]["parameters"]["query"]
-type CreateLikeResponse = paths["/api/v1/like"]["post"]["responses"]["200"]["content"]["application/json"]
-type ReadLikedProductIds = paths["/api/v1/like"]["get"]["responses"]["200"]["content"]["application/json"]
+import { CreateLikeRequest, CreateLikeResponse, ReadLikedProductIds } from "../types/types";
 
 class LikeService {
     private endpoint = endpoints.likes;

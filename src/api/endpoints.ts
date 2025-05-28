@@ -6,4 +6,6 @@ export const endpoints = {
     products: '/products',
     likes: '/like',
     categories: "/categories",
+    faqs: "/faq",
+    cart: "/cart"
 };

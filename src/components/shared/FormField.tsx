@@ -4,6 +4,20 @@ import InputField from '../ui/Input';
 import Label from '../ui/Label';
 import useInputHandlers from '@/hooks/forms/useInputHandlers';
 
+interface FormFieldProps {
+    component?: React.ElementType;
+    id: string;
+    type?: string;
+    label: string;
+    required?: boolean;
+    placeholder?: string;
+    errorMessage?: string;
+    className?: string;
+    pattern?: RegExp;
+    icon: React.ElementType,
+    [key: string]: any;
+}
+
 export default function FormField({
     component: Component = InputField,
     id,

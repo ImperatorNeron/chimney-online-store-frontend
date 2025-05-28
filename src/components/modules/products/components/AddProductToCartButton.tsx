@@ -1,5 +1,5 @@
 'use client';
-import { NotificationService } from '@/services/notification.service';
+import { NotificationService } from '@/api/services/notification.service';
 import { useCartStore } from '@/store/cart.store';
 import { useState } from 'react';
 
@@ -11,9 +11,9 @@ export default function AddProductToCartButton({ productId }: { productId: numbe
         setAddLoading(true);
         try {
             await addToCart(productId);
+            NotificationService.success("Товар успішно додано в корзину!")
         } finally {
             setAddLoading(false);
-            NotificationService.success("Товар успішно додано в корзину!")
         }
     };
 

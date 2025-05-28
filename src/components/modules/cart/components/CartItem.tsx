@@ -5,8 +5,9 @@ import { useCartStore } from "@/store/cart.store";
 import Image from "next/image";
 import Link from "next/link";
 import ProductCharacteristics from "../../admin/components/orders/productCharacteristics";
+import { ReadCartItemSchema } from "@/api/types/types";
 
-export default function CartItem({ item }: { item: CartItem }) {
+export default function CartItem({ item }: { item: ReadCartItemSchema }) {
     const hasDiscount = item.product.discount_percentage > 0;
     const [updateLoading, setUpdateLoading] = useState(false);
     const [removeLoading, setRemoveLoading] = useState(false);
@@ -41,13 +42,19 @@ export default function CartItem({ item }: { item: CartItem }) {
 
             <div className="flex gap-4">
                 <div className="relative w-16 h-16 flex-shrink-0">
-                    <Image
-                        src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${item.product.preview.filename}`}
-                        alt={item.product.preview.alt}
-                        width={100}
-                        height={100}
-                        className="w-full h-full object-cover rounded-lg"
-                    />
+                    {item.product.preview ? (
+                        <Image
+                            src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${item.product.preview.filename}`}
+                            alt={item.product.preview.alt || ""}
+                            width={100}
+                            height={100}
+                            className="w-full h-full object-cover rounded-lg"
+                        />
+                    ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gray-100 rounded-lg text-gray-400 text-xs">
+                            No Image
+                        </div>
+                    )}
                 </div>
 
                 <div className="flex-1 flex flex-col">

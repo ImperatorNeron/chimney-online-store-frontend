@@ -3,12 +3,13 @@ import useUserData from '@/components/modules/profile/hooks/useUserData';
 import SideMenu from './components/SideMenu';
 import { ProfileContext } from '@/provider/profile.provider';
 import { useMemo } from 'react';
+import ProfileSkeleton from './loading';
 
 export default function ProfileLayout({ children }: { children: React.ReactNode }) {
     const { user, loading, error } = useUserData();
     const userValue = useMemo(() => user, [user]);
 
-    if (loading) return <div>Завантаження...</div>;
+    if (loading) return <ProfileSkeleton />;
     if (error) return <div>Помилка: {error}</div>;
     if (!user) return <div>Користувач не знайдений</div>;
 

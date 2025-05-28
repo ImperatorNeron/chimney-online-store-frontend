@@ -3,6 +3,13 @@ import { Thumbs } from "swiper/modules";
 import Image from 'next/image';
 import 'swiper/css';
 import 'swiper/css/thumbs';
+import { ReadImages } from "@/api/types/types";
+
+interface MainThumbnailSliderProps {
+    setThumbsSwiper: (value: any) => void;
+    items: ReadImages;
+    className?: string;
+}
 
 export default function MainThumbnailSlider({
     setThumbsSwiper,
@@ -17,6 +24,7 @@ export default function MainThumbnailSlider({
                 direction="vertical"
                 spaceBetween={4}
                 slidesPerView={4.05}
+                loop={items.length > 1}
                 watchSlidesProgress={true}
                 className={`${className} h-full !flex !flex-col`}
                 style={{ height: '100%' }}
@@ -27,8 +35,9 @@ export default function MainThumbnailSlider({
                             <div className="w-[56px] h-[56px] relative overflow-hidden">
                                 <Image
                                     src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${slide.filename}`}
-                                    alt={slide.alt}
+                                    alt={slide.alt ?? ""}
                                     fill
+                                    sizes="56px"
                                     className="object-cover rounded-lg border border-gray-500"
                                 />
                             </div>

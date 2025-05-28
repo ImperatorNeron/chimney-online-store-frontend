@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ShieldCheckIcon, UserIcon } from "@heroicons/react/24/outline";
+import { UserIcon } from "@heroicons/react/24/outline";
 import { menuItems } from "../constants";
 
 export default function SideMenu({ username, isAdmin }: { username: string, isAdmin: boolean }) {

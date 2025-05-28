@@ -1,6 +1,15 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+interface NavIconProps {
+    href: string;
+    iconSrc: string;
+    alt: string;
+    count?: number;
+    countColor?: string;
+    label: string;
+}
+
 export default function NavigationIcon({ href, iconSrc, alt, count, countColor, label }: NavIconProps) {
     return (
         <Link href={href} className="text-gray-600 flex flex-col items-center p-2 rounded transition duration-300 transform hover:scale-110 relative group">

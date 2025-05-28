@@ -12,7 +12,7 @@ export default function CartInitializer() {
         if (isInitialized) {
             fetchCart();
         }
-    }, [isInitialized]);
+    }, [fetchCart, isInitialized]);
 
     return null;
 }

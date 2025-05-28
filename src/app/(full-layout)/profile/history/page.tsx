@@ -1,5 +1,6 @@
 'use client';
 
+import ProfileLoading from '@/components/layout/loaders/ProfileLoader';
 import OrderList from '@/components/modules/orders/components/OrderList';
 import useOrderHistory from '@/components/modules/orders/hooks/useOrderHistory';
 import EmptyState from '@/components/shared/EmptyState';
@@ -8,15 +9,14 @@ import { ClockIcon } from '@heroicons/react/24/outline';
 
 
 export default function HistoryPage() {
-    const { data, loading, error } = useOrderHistory();
+    const { data, loading } = useOrderHistory();
 
     const handleExploreProducts = () => {
         // Навігація до каталогу продуктів
         console.log('Navigate to product catalog');
     };
-    
-    if (loading) return <div className="flex justify-center py-8">Завантаження...</div>;
-    if (error) return <div className="text-red-600 text-center py-8">{error}</div>;
+
+    if (loading) return <ProfileLoading />;
     if (!history.length) return <div className="text-gray-500 text-center py-8">Історія порожня</div>;
 
     return (
@@ -24,7 +24,7 @@ export default function HistoryPage() {
             <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-6 border-b pb-4 text-center lg:text-left">
                 Історія замовлень
             </h1>
-            {data?.length ? (
+            {Array.isArray(data) && data?.length ? (
                 <OrderList orders={data} />
             ) : (
                 <EmptyState

@@ -1,4 +1,4 @@
-import { catalogService } from "@/services/catalog.services";
+import { catalogService } from "@/api/services/catalog.services";
 import DesktopFilterBlock from "@/components/modules/catalog/components/DesktopFilterBlock";
 import MobileFilterButton from "@/components/modules/catalog/components/MobileFilterButton";
 import { productService } from "@/api/services/products.service";
@@ -19,8 +19,20 @@ export default async function CatalogPage({ params, searchParams }: {
         (await params).slug.at(-1),
     );
 
-    const filters = await productService.getFilters(searchParams!, (await params).slug.at(-1))
-    const categoryNames: [string, string][] = await categoryService.getCategoriesBySlugs((await params).slug);
+    const rawFilters = await productService.getFilters(searchParams!, (await params).slug.at(-1))
+    const filters = rawFilters
+        ? {
+            ...rawFilters,
+            min_price: rawFilters.min_price !== null && rawFilters.min_price !== undefined
+                ? Number(rawFilters.min_price)
+                : null,
+            max_price: rawFilters.max_price !== null && rawFilters.max_price !== undefined
+                ? Number(rawFilters.max_price)
+                : null,
+        }
+        : undefined;
+    const rawCategoryNames = await categoryService.getCategoriesBySlugs((await params).slug);
+    const categoryNames: [string, string][] = Array.isArray(rawCategoryNames) ? rawCategoryNames as [string, string][] : [];
     const breadcrumbsFromCategories = categoryNames.slice(0, -1).map(([name, slug]: [string, string]) => ({
         title: name,
         href: `/catalog/${slug}`

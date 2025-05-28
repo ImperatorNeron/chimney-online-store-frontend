@@ -3,6 +3,13 @@ import MainSlider from "./MainSlider"
 import MainThumbnailSlider from "./MainThumbnailSlider"
 import CloseButton from "@/components/ui/CloseButton";
 
+interface ModalItemProps {
+    setIsOpen: (isOpen: boolean) => void;
+    slideIndex: number;
+    items: any[];
+    thumbsSwiperModal: any;
+    setThumbsSwiper: (value: any) => void;
+}
 
 export default function SliderZoomView({ setIsOpen, slideIndex, items, thumbsSwiperModal, setThumbsSwiper }: ModalItemProps) {
 

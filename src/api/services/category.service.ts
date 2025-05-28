@@ -1,6 +1,6 @@
 import { endpoints } from "../endpoints";
 import { http } from '@/api/http';
-import { ReadCategories } from "../types/types";
+import { ReadCategories, ReadCategoriesBySlug } from "../types/types";
 
 
 class CategoryService {
@@ -16,7 +16,7 @@ class CategoryService {
         slugs.forEach(slug => params.append('slugs', slug));
         const url = `${this.endpoint}/by-slugs?${params.toString()}`
         console.log(url)
-        const response = await http.get(url);
+        const response = await http.get<ReadCategoriesBySlug>(url);
         return response.data;
     }
 }

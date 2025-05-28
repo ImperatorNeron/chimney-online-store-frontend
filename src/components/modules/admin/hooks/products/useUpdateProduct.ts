@@ -3,7 +3,7 @@ import { useForm, useFieldArray, SubmitHandler } from 'react-hook-form';
 import { useRouter, useParams } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { productService } from '@/api/services/products.service';
-import { NotificationService } from '@/services/notification.service';
+import { NotificationService } from '@/api/services/notification.service';
 import { ReadImages } from '@/api/types/types';
 import { useAuthStore } from '@/store/auth.store';
 import { updateAbsoluteProductSchema, UpdateAbsoluteProductSchema } from '@/schemas/products';
@@ -130,8 +130,8 @@ export function useUpdateProduct() {
             if (!updated) throw new Error();
             resetForm(updated);
             router.push(`/admin-panel/products/update/${data.slug}`);
-        } catch (err: any) {
-            NotificationService.error(err.message || 'Помилка оновлення');
+        } catch {
+            NotificationService.error('Помилка оновлення');
         }
     };
 

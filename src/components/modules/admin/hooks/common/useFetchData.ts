@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useContext } from 'react';
 import { useAuthStore } from "@/store/auth.store";
 import { useRouter } from "next/navigation";

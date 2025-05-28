@@ -2,7 +2,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth.store";
-import { NotificationService } from "@/services/notification.service";
+import { NotificationService } from "@/api/services/notification.service";
 import { productService } from "@/api/services/products.service";
 import { createAbsoluteProductSchema, CreateAbsoluteProductSchema } from "@/schemas/products";
 import { allowedImageExt } from "@/schemas/fields";
@@ -68,7 +68,7 @@ export const useCreateProduct = () => {
                 NotificationService.error("Токен недійсний або сесія закінчився");
                 router.push("/auth/login");
             } else {
-                NotificationService.error(err.message || "Помилка при створенні продукту");
+                NotificationService.error("Помилка при створенні продукту");
             }
         }
     };

@@ -1,5 +1,15 @@
 import Image from 'next/image';
 
+interface ContactItem {
+    icon: string;
+    text: string;
+    alt: string;
+}
+
+interface ContactInfoProps {
+    items: ContactItem[];
+}
+
 export default function ContactInfo({ items }: ContactInfoProps) {
     return (
         <ul className="space-y-3">

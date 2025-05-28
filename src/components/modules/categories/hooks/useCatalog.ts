@@ -21,7 +21,7 @@ export default function useCatalog() {
             try {
                 const response = await categoryService.getCategories();
                 setCategories(response);
-            } catch (err) {
+            } catch {
                 setError("Помилка завантаження категорій");
             } finally {
                 setIsLoading(false);

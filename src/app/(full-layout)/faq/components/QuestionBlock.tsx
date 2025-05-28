@@ -1,10 +1,13 @@
 'use client'
 
+import { ReadFAQSSchema } from "@/api/types/types";
 import useToggleListItem from "@/hooks/useToggleFAQItem";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 
-export default function QuestionBlock({ index, item }: QuestionBlockProps) {
+export default function QuestionBlock({ index, item }: { index: number, item: ReadFAQSSchema }) {
     const { activeIndices, toggleItem } = useToggleListItem();
+
+    if (!item) return null
 
     return (
         <div className="border-b border-gray-200 last:border-0 transition-colors">

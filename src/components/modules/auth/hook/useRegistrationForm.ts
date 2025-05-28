@@ -1,8 +1,7 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { NotificationService } from "@/services/notification.service";
+import { NotificationService } from "@/api/services/notification.service";
 import { registrationSchema, RegistrationSchema } from "@/schemas/registration";
 import { useAuthStore } from "@/store/auth.store";
 import { useRouter } from "next/navigation";

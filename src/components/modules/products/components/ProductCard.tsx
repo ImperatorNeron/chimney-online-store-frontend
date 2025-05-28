@@ -3,8 +3,12 @@ import Link from 'next/link';
 import AddProductToCartButton from './AddProductToCartButton';
 import AddProductToLikeButton from './AddProductToLikeButton';
 import ProductCharacteristics from '../../admin/components/orders/productCharacteristics';
+import { ProductSchema } from '@/api/types/types';
 
-export default function ProductCard({ product, className }: ItemCardProps) {
+export default function ProductCard({ product, className }: {
+    product: ProductSchema;
+    className?: string;
+}) {
     return (
         <article className={`${className} group bg-white rounded-lg shadow hover:shadow-md transition-all duration-200 border border-gray-200 flex flex-col`}>
             <div className="relative aspect-square flex items-center">
@@ -13,12 +17,19 @@ export default function ProductCard({ product, className }: ItemCardProps) {
                     className="w-full h-full flex items-center"
                 >
                     <div className="relative aspect-square w-full max-w-[400px] overflow-hidden">
-                        <Image
-                            src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${product.preview.filename}`}
-                            alt={product.preview.alt}
-                            fill
-                            className="object-cover p-3 hover:scale-105 transition-transform duration-200 mx-auto"
-                        />
+                        {product.preview ? (
+                            <Image
+                                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${product.preview.filename}`}
+                                alt={product.preview.alt ?? 'Product image'}
+                                fill
+                                sizes="(max-width: 640px) 90vw, (max-width: 1024px) 50vw, 400px"
+                                className="object-cover p-3 hover:scale-105 transition-transform duration-200 mx-auto"
+                            />
+                        ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">
+                                No Image
+                            </div>
+                        )}
                     </div>
                 </Link>
 
@@ -31,15 +42,16 @@ export default function ProductCard({ product, className }: ItemCardProps) {
                 <AddProductToLikeButton productId={product.id} />
             </div>
 
-            {/* Контейнер з інформацією про продукт */}
             <div className="p-3 flex flex-col justify-between h-full flex-1">
-                {/* Верхній блок — назва, характеристики, наявність */}
                 <div className="flex flex-col gap-2">
                     <Link
                         href={`/products/${product.slug}/${product.id}`}
                         className="hover:text-gray-900 transition-colors"
                     >
-                        <h3 className="text-xs sm:text-sm font-medium text-gray-800 line-clamp-3 h-[48px] sm:h-[60px]">
+                        {/* <h3 className="text-xs sm:text-sm font-medium text-gray-800 line-clamp-3 h-[48px] sm:h-[60px]">
+                            {product.name}
+                        </h3> */}
+                        <h3 className="text-xs sm:text-sm font-medium text-gray-800">
                             {product.name}
                         </h3>
                     </Link>

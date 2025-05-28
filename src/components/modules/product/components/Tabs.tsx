@@ -2,6 +2,10 @@
 
 import { useState } from "react";
 
+interface TabsProps {
+    description: string;
+    specifications: { name: string; value: string }[];
+}
 
 export default function Tabs({ description, specifications }: TabsProps) {
     const [activeTab, setActiveTab] = useState<'description' | 'specs'>('description');

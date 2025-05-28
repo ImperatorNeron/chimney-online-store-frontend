@@ -1,6 +1,13 @@
 import useOverlay from "@/hooks/ui/useOverlay";
 import { createPortal } from "react-dom";
 
+interface OverlayProps {
+    isOpen: boolean;
+    onClose: () => void;
+    className?: string;
+    children?: React.ReactNode;
+};
+
 export default function Overlay({ isOpen, onClose, className, children }: OverlayProps) {
     const { mounted, isVisible } = useOverlay(isOpen);
 

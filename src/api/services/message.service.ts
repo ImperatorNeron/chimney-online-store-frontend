@@ -1,14 +1,12 @@
 import { endpoints } from "../endpoints";
 import { http } from '@/api/http';
-import { paths } from "../types/openapi";
-
-type ReadMessages = paths["/api/v1/messages/"]["get"]["responses"]["200"]["content"]["application/json"]
+import { CreateMessageSchema, ReadCreatedMessageSchema, ReadMessages } from "../types/types";
 
 class MessageService {
     private endpoint = endpoints.messages;
 
     async createMessage(message: CreateMessageSchema) {
-        const response = await http.post<ApiResponseOne<ReadMessageSchema>>(this.endpoint, message);
+        const response = await http.post<ReadCreatedMessageSchema>(this.endpoint, message);
         return response.data;
     };
 
@@ -18,9 +16,9 @@ class MessageService {
         return response.data
     }
 
-    async deleteMessage(token: string, messageId: number){
+    async deleteMessage(token: string, messageId: number) {
         const url = `${this.endpoint}/${messageId}`
-        await http.delete(url, token)
+        await http.delete<null>(url, token)
     }
 }
 

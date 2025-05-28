@@ -18,7 +18,7 @@ export default function BannerSlider() {
                 navigation
                 pagination={{ clickable: true }}
                 autoplay={{ delay: 6000, disableOnInteraction: false }}
-                loop
+                loop={slides.length > 1}
                 className="h-[250px] sm:h-[300px] md:h-[400px] lg:h-[500px] rounded-md"
             >
                 {slides.map((slide) => (
@@ -28,6 +28,7 @@ export default function BannerSlider() {
                                 src={slide.src}
                                 alt={slide.alt}
                                 fill
+                                sizes="100vw"
                                 className="object-cover rounded-md"
                                 priority
                             />

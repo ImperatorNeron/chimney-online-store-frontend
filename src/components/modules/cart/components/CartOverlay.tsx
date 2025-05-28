@@ -1,13 +1,14 @@
 'use client'
 
-import OrderSummary from "@/components/modules/cart/components/OrderSummary";
 import EmptyCart from "@/components/modules/cart/components/EmptyCart";
 import CartItemList from "@/components/modules/cart/components/CartItemList";
 import Overlay from "@/components/ui/Overlay";
 import OverlayHeader from "@/components/shared/OverlayHeader";
+import { ReadFullCartSchema } from "@/api/types/types";
+import OrderSummary from "./OrderSummary";
 
 export default function CartOverlay({ cart, isOpen, onClose }: {
-    cart?: CartData;
+    cart?: ReadFullCartSchema;
     isOpen: boolean;
     onClose: () => void;
 }) {

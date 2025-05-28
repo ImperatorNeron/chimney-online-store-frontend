@@ -8,14 +8,6 @@ export default function FeedBackFormOverlay({ isOpen, onClose }: { isOpen: boole
     return (
         <Overlay isOpen={isOpen} onClose={onClose} className='w-full sm:w-full lg:w-full'>
             <div className="flex flex-col md:flex-row h-full bg-white overflow-hidden">
-                <div className="hidden md:block md:w-1/3 lg:w-1/2 bg-gray-100">
-                    <img
-                        src="https://stalar.ua/image/catalog/news/0011.jpg"
-                        alt="Customer Support"
-                        className="w-full h-full object-cover"
-                    />
-                </div>
-
                 <div className="md:w-2/3 lg:w-1/2 h-full">
                     <OverlayHeader title="" onClose={onClose} className="bg-white" />
                     <div className="h-[calc(100%-64px)] overflow-y-auto">

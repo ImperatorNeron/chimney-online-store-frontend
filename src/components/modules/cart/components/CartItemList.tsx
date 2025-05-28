@@ -1,6 +1,7 @@
+import { ReadFullCartSchema } from "@/api/types/types";
 import CartItem from "./CartItem";
 
-export default function CartItemList({ cart }: { cart: CartData | null }) {
+export default function CartItemList({ cart }: { cart: ReadFullCartSchema | null }) {
     return (
         <div>
             {cart?.items

@@ -1,5 +1,11 @@
 import Link from "next/link";
 
+type OrderSummaryProps = {
+    totalQuantity: number;
+    totalPrice: number;
+    onClose?: () => void;
+};
+
 export default function OrderSummary({ totalQuantity, totalPrice, onClose }: OrderSummaryProps) {
     return (
         <div>

@@ -1,11 +1,10 @@
 import { messageService } from "@/api/services/message.service";
-import { paths } from '@/api/types/openapi';
 import useFetchData from "../common/useFetchData";
+import { ReadDataMessages } from "@/api/types/types";
 
-type ReadMessages = paths["/api/v1/messages/"]["get"]["responses"]["200"]["content"]["application/json"]["data"]
 
 export default function useFetchMessages(limit: number = 20, offset: number = 0) {
-    const { data: messages, ...rest } = useFetchData<ReadMessages>(
+    const { data: messages, ...rest } = useFetchData<ReadDataMessages>(
         (token) => messageService.getMessages(token, limit, offset),
         [limit, offset]
     );

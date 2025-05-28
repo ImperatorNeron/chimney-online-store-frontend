@@ -1,3 +1,11 @@
+interface RadioOptionProps {
+    value: string;
+    label: string;
+    checked: boolean;
+    onChange: (value: string) => void;
+    name: string;
+}
+
 export default function RadioOption({ value, label, checked, onChange, name }: RadioOptionProps) {
     return (
         <label

@@ -12,7 +12,7 @@ export default function LikeInitializer() {
         if (isInitialized) {
             fetchLikes();
         }
-    }, [isInitialized]);
+    }, [isInitialized, fetchLikes]);
 
     return null;
 }

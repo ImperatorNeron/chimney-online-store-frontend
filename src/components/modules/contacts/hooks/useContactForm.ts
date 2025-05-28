@@ -1,5 +1,5 @@
 "use client";
-import { NotificationService } from "@/services/notification.service";
+import { NotificationService } from "@/api/services/notification.service";
 import { useForm } from "react-hook-form";
 import { messageSchema, MessageSchema } from "@/schemas/message";
 import { zodResolver } from "@hookform/resolvers/zod";

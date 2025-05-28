@@ -1,5 +1,14 @@
 import Link from 'next/link';
 
+interface QuickLinkProps {
+    href: string;
+    label: string;
+}
+
+interface QuickLinksProps {
+    links: Array<QuickLinkProps>;
+}
+
 export default function QuickLinks({ links }: QuickLinksProps) {
     return (
         <div className="space-y-1 flex flex-col">

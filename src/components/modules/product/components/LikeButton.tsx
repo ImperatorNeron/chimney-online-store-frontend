@@ -1,6 +1,6 @@
 'use client';
 
-import { NotificationService } from "@/services/notification.service";
+import { NotificationService } from "@/api/services/notification.service";
 import { useAuthStore } from "@/store/auth.store";
 import { useFavouritesStore } from "@/store/favourite.store";
 import { useState, useEffect } from "react";
@@ -31,7 +31,7 @@ export default function LikeButton({ productId }: { productId: number }) {
             NotificationService.success(
                 isLiked(productId)
                     ? "Товар додано до обраного!"
-                    : "Товар видалено з обраного."
+                    : "Товар видалено з обраного!"
             );
         } catch {
             NotificationService.error("Помилка. Спробуйте пізніше.");
