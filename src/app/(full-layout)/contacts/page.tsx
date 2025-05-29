@@ -2,6 +2,22 @@ import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import ContactBlock from "@/app/(full-layout)/contacts/components/ContactBlock";
 import ContactForm from "@/components/modules/contacts/components/ContactForm";
 import TitleBlock from "@/app/(full-layout)/contacts/components/TitleBlock";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Контакти | Магазин димоходів та комплектуючих",
+    description: "Зв'яжіться з нами для консультації з димоходів. Телефон, email, соцмережі та форма зворотного зв'язку. Швидка відповідь!",
+    keywords: ["контакти димоходи", "зв'язок з магазином", "телефон для замовлення димоходу", "форма зворотного зв'язку"],
+    openGraph: {
+        title: "Контакти магазину димоходів | Зв'язок з фахівцями",
+        description: "Питання щодо димоходів? Зв'яжіться з нами зараз!",
+        url: "",
+        siteName: "",
+        locale: "uk_UA",
+        type: "website",
+    },
+
+};
 
 export default function ContactsPage() {
     return (

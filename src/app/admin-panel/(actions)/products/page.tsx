@@ -28,6 +28,10 @@ export default function ProductPage() {
     });
 
     useEffect(() => {
+        document.title = "Продукти на сайті";
+    }, []);
+
+    useEffect(() => {
         if (data?.pagination?.total) {
             setTotal(data.pagination.total);
         }

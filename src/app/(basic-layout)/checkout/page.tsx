@@ -5,9 +5,14 @@ import ContactInfoSection from "@/components/modules/checkout/components/Contact
 import DeliveryMethodSection from "@/components/modules/checkout/components/DeliveryMethodSection";
 import PaymentMethodSectionSelect from "@/components/modules/checkout/components/PaymentMethodSection";
 import { useOrderForm } from "@/components/modules/checkout/hooks/useOrderForm";
+import { useEffect } from "react";
 
 export default function OrderPage() {
     const { formState, register, handleSubmit, onSubmit, user, loading, error } = useOrderForm();
+
+    useEffect(() => {
+        document.title = "Оформлення замовлення";
+    }, []);
 
     return (
         <div className="space-y-8 flex-1">

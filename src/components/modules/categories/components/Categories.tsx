@@ -21,7 +21,7 @@ export default function Categories({ categories }: { categories: ReadCategoriesD
 
 
     return (
-        <div className="max-w-7xl mx-auto">
+        <section className="max-w-7xl mx-auto" aria-label="Категорії товарів">
             <h2 className="text-xl lg:text-3xl font-black mb-6 lg:mb-8 text-center uppercase tracking-tight">
                 Категорії
             </h2>
@@ -37,21 +37,25 @@ export default function Categories({ categories }: { categories: ReadCategoriesD
                             ref={el => { categoryRefs.current[main.slug] = el }}
                             className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-200 cursor-pointer relative"
                             onClick={() => toggleCategory(main.slug)}
+                            itemScope
+                            itemType="https://schema.org/CollectionPage"
                         >
-                            <div className="p-2 pr-4">
+                            <article className="p-2 pr-4" itemScope itemType="https://schema.org/CategoryCode">
                                 <button className="flex items-center justify-between w-full group">
                                     <div className="flex items-center space-x-3">
                                         <div className="w-16 h-16 rounded-lg overflow-hidden flex items-center justify-center relative">
                                             <Image
                                                 src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/categories/${fileName}` || '/images/test.png'}
-                                                alt={main.name}
+                                                alt={main.name || 'Категорія'}
+                                                title={main.name}
                                                 fill
                                                 sizes="40px"
                                                 style={{ objectFit: 'cover' }}
+                                                itemProp="image"
                                             />
                                         </div>
                                         <h2 className="text-md md:text-lg font-semibold text-gray-900">
-                                            <Link href={`/catalog/${main.slug}`} onClick={(e) => e.stopPropagation()}>{main.name}</Link>
+                                            <Link href={`/catalog/${main.slug}`} onClick={(e) => e.stopPropagation()} title={`Перейти до категорії ${main.name}`} itemProp="url">{main.name}</Link>
                                         </h2>
                                     </div>
                                     {children.length > 0 && (
@@ -70,7 +74,7 @@ export default function Categories({ categories }: { categories: ReadCategoriesD
                                         </svg>
                                     )}
                                 </button>
-                            </div>
+                            </article>
 
                             {children.length > 0 && (
                                 <div
@@ -97,6 +101,6 @@ export default function Categories({ categories }: { categories: ReadCategoriesD
                     );
                 })}
             </div>
-        </div>
+        </section>
     );
 }

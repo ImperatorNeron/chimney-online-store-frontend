@@ -2,12 +2,27 @@ import Breadcrumbs from '@/components/layout/Breadcrumbs';
 import QuestionBlock from '@/app/(full-layout)/faq/components/QuestionBlock';
 import { faqService } from '@/api/services/faq.service';
 
+export const metadata = {
+  title: "Поширені запитання – Назва сайту",
+  description: "Детальні відповіді на найпопулярніші питання щодо наших послуг.",
+  keywords: ["поширені питання", "faq", "відповіді", "підтримка", "допомога"],
+  openGraph: {
+    title: "Поширені запитання – Назва сайту",
+    description: "Ознайомтесь з відповідями на найпопулярніші питання щодо наших послуг.",
+    url: "",
+    siteName: "",
+    locale: "uk_UA",
+    type: "website",
+  },
+
+};
+
 export default async function FAQPage() {
 
     const items = await faqService.getFAQS();
 
     return (
-        <div className="bg-white">
+        <div className="bg-white" itemScope itemType="https://schema.org/FAQPage">
             <Breadcrumbs items={[{ title: "Головна", href: "/" }, { title: "Питання та відповіді" }]} />
             <div className="py-12 md:py-16 lg:py-20 xl:py-24 2xl:py-28">
                 <div className="mx-auto sm:px-6 lg:px-8 max-w-4xl lg:max-w-5xl xl:max-w-6xl">

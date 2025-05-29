@@ -1,6 +1,10 @@
 import RegistrationForm from '@/components/modules/auth/components/RegistrationForm'
 import Link from 'next/link';
 
+export const metadata = {
+    title: 'Реєстрація',
+}
+
 export default function RegistrationPage() {
     return (
         <div className="w-full px-2 py-6 sm:p-10 space-y-8 max-w-3xl">

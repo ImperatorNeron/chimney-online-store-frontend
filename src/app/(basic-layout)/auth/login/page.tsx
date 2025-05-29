@@ -1,9 +1,12 @@
 import LoginForm from '@/components/modules/auth/components/LoginForm'
 import Link from 'next/link';
 
+export const metadata = {
+    title: 'Вхід до акаунту',
+}
+
 export default function LoginPage() {
     return (
-
         <div className="w-full max-w-md bg-white rounded-xl px-2 py-6 sm:p-10 space-y-8">
             <div className="text-center space-y-2">
                 <div className="text-2xl font-semibold text-gray-900">Ласкаво просимо!</div>

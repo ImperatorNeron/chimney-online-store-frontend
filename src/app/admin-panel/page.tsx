@@ -1,5 +1,3 @@
-'use client'
-
 import Link from 'next/link';
 import {
     ChatBubbleLeftRightIcon,
@@ -7,7 +5,12 @@ import {
     PlusCircleIcon,
 } from '@heroicons/react/24/outline';
 
+export const metadata = {
+    title: 'Адмін-панель',
+}
+
 export default function AdminPanel() {
+
     const menuItems = [
         {
             title: 'Повідомлення',

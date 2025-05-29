@@ -9,6 +9,19 @@ import Pagination from "@/components/modules/catalog/components/Pagination";
 import EmptySearch from "@/components/shared/EmptySearch";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 
+export const metadata = {
+    title: 'Пошук в каталозі',
+    openGraph: {
+        title: 'Купити димохід від виробника | Інтернет-магазин димоходів',
+        description:
+            'Димоходи та комплектуючі за вигідними цінами. Власне виробництво. Доставка по всій Україні.',
+        url: '', // замінити на домен
+        siteName: '', // замінити на домен
+        locale: 'uk_UA',
+        type: 'website',
+    },
+}
+
 export default async function SearchPage({ searchParams }: {
     searchParams?: Promise<{ text: string, page?: string; limit?: string; field?: string; ordering?: string; }>;
 }) {

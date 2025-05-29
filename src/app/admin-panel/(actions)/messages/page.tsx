@@ -7,6 +7,7 @@ import useDeleteMessage from "@/components/modules/admin/hooks/messages/useDelet
 import useFetchMessages from "@/components/modules/admin/hooks/messages/useMessages";
 import usePagination from "@/components/modules/admin/hooks/products/usePagination";
 import BackToPageButton from "@/components/ui/BackToPageButton";
+import { useEffect } from "react";
 
 
 export default function AdminMessagesPage() {
@@ -20,6 +21,10 @@ export default function AdminMessagesPage() {
             }
         }
     });
+
+    useEffect(() => {
+        document.title = "Повідомлення користувачів";
+    }, []);
 
     if (loading) {
         return <MessageSkeleton />;

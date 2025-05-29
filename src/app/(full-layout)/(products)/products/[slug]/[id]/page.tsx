@@ -9,6 +9,56 @@ import LikeButton from "@/components/modules/product/components/LikeButton";
 import Selectors from "./selectors";
 import NotFound from "@/app/not-found";
 
+export async function generateMetadata({
+    params
+}: {
+    params: Promise<{ slug: string, id: number }>;
+}) {
+    const productSlug = (await params).slug;
+    const productId = (await params).id;
+
+    try {
+        const fullItem = await productService.getFullProduct(productSlug);
+        const variation = fullItem?.variations?.find(v => v.id == productId);
+
+        if (!variation || !fullItem) {
+            return {
+                title: "Товар не знайдено | Магазин димоходів",
+                description: "На жаль, цей товар більше не доступний. Перегляньте інші димохідні системи в нашому каталозі."
+            };
+        }
+
+        const productName = fullItem.name;
+        const categoryNames = fullItem.categories?.map(c => c[0]).join(", ") || "";
+        const price = variation.discount_price ?? variation.price;
+        const description = `Купити ${productName} за ${price}₴. ${variation.diameter ? `Діаметр: ${variation.diameter} мм. ` : ''}${variation.length ? `Довжина: ${variation.length} см. ` : ''}Гарантія якості, швидка доставка по Україні.`;
+
+        return {
+            title: `${productName} - купити в інтернет-магазині | Магазин димоходів`,
+            description: description,
+            keywords: [
+                productName,
+                "димохід",
+                "купити димохід",
+                "комплектуючі для димоходу",
+                ...(categoryNames ? categoryNames.split(", ") : []),
+                ...(variation.metal_type ? [variation.metal_type] : []),
+                ...(variation.diameter ? [`димохід ${variation.diameter} мм`] : [])
+            ],
+            openGraph: {
+                title: `${productName} | Магазин димоходів`,
+                description: description,
+                url: ``,
+                type: 'website',
+            },
+        };
+    } catch {
+        return {
+            title: "Товар | Магазин димоходів",
+            description: "Якісні димохідні системи та комплектуючі. Великий вибір, гарантія якості, професійна консультація."
+        };
+    }
+}
 
 export default async function ProductPage({
     params
@@ -64,7 +114,11 @@ export default async function ProductPage({
     const paginationIn = { offset: 0, limit: 5 };
     const items = await productService.getProducts(paginationIn);
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-white" itemScope itemType="https://schema.org/Product">
+            <meta itemProp="brand" content="Ваш бренд" />
+            <meta itemProp="mpn" content={item.id?.toString() || ""} />
+            <meta itemProp="sku" content={item.id?.toString() || ""} />
+            <link itemProp="url" href={`/${item.slug}/${item.id}`} />
             <div>
                 <Breadcrumbs
                     items={[
@@ -86,7 +140,7 @@ export default async function ProductPage({
             </div>
             <div className="max-w-7xl mx-auto px-1 pb-6">
                 <div className="flex flex-col lg:flex-row gap-8 mt-8">
-                    <div className="lg:w-1/2 bg-gray-50 rounded-xl">
+                    <div className="lg:w-1/2 bg-gray-50 rounded-xl" itemProp="image" itemScope itemType="https://schema.org/ImageGallery">
                         <ProductSlider images={item.images ?? []} />
                     </div>
 
@@ -99,17 +153,21 @@ export default async function ProductPage({
                                 <p className="text-sm text-gray-500 text-bold">Код товару: {item.id}</p>
                                 <div className="flex items-center gap-2 text-sm text-green-500">
                                     <TagIcon className="w-5 h-5 text-green-500" />
-                                    <span>В наявності</span>
+                                    <span itemProp="availability" itemType="https://schema.org/InStock">В наявності</span>
                                 </div>
                             </div>
                         </div>
 
                         <div className="flex justify-between items-center">
-                            <div>
+                            <div itemProp="offers" itemScope itemType="https://schema.org/Offer">
+                                <meta itemProp="priceCurrency" content="UAH" />
+                                <meta itemProp="availability" content="https://schema.org/InStock" />
+                                <link itemProp="url" href={`${item.slug}/${item.id}`} />
+                                <meta itemProp="itemCondition" content="https://schema.org/NewCondition" />
                                 {hasDiscount ? (
                                     <>
                                         <div className="flex gap-2 mb-1">
-                                            <span className="text-2xl font-bold text-red-500">{item.discount_price}₴</span>
+                                            <span className="text-2xl font-bold text-red-500" itemProp="price">{item.discount_price}₴</span>
                                             <span className="line-through text-gray-400">{item.price}₴</span>
                                         </div>
                                         <span className="inline-block bg-gray-50 text-green-600 px-2 py-1 rounded text-sm">
@@ -117,7 +175,7 @@ export default async function ProductPage({
                                         </span>
                                     </>
                                 ) : (
-                                    <span className="text-2xl font-bold text-gray-900">{item.price}₴</span>
+                                    <span className="text-2xl font-bold text-gray-900" itemProp="price">{item.price}₴</span>
                                 )}
                             </div>
 
@@ -128,7 +186,7 @@ export default async function ProductPage({
                             <Selectors fullItem={fullItem} variation={variation} slug={productSlug} />
 
                             <div className="flex flex-col sm:flex-row gap-2">
-                                <button className="px-14 bg-gray-900 text-sm xs:text-base text-white py-3 rounded-lg font-medium hover:bg-gray-800 transition">
+                                <button className="px-14 bg-gray-900 text-sm xs:text-base text-white py-3 rounded-lg font-medium hover:bg-gray-800 transition" aria-label={`Замовити ${item.name}`}>
                                     Замовити
                                 </button>
                                 {item.id !== undefined && (

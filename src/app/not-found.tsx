@@ -1,6 +1,10 @@
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
+export const metadata = {
+    title: 'Сторінку не знайдено',
+}
+
 export default function NotFound() {
     return (
         <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4">

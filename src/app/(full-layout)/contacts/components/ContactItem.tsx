@@ -4,7 +4,7 @@ export default function ContactItem({ icon, title, content }: {
     content: React.ReactNode;
 }) {
     return (
-        <div className="flex items-center rounded-xl py-3 px-2 sm:p-6 gap-5 w-full max-w-sm lg:max-w-md">
+        <div className="flex items-center rounded-xl py-3 px-2 sm:p-6 gap-5 w-full max-w-sm lg:max-w-md" itemProp="contactPoint" itemScope itemType="https://schema.org/ContactPoint">
             <div className="flex-shrink-0 p-3 bg-gray-100 rounded-lg">
                 {icon}
             </div>

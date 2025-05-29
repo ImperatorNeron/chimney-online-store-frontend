@@ -10,11 +10,16 @@ export default function ProductCard({ product, className }: {
     className?: string;
 }) {
     return (
-        <article className={`${className} group bg-white rounded-lg shadow hover:shadow-md transition-all duration-200 border border-gray-200 flex flex-col`}>
+        <article
+            className={`${className} group bg-white rounded-lg shadow hover:shadow-md transition-all duration-200 border border-gray-200 flex flex-col`}
+            itemScope
+            itemType="https://schema.org/Product"
+        >
             <div className="relative aspect-square flex items-center">
                 <Link
                     href={`/products/${product.slug}/${product.id}`}
                     className="w-full h-full flex items-center"
+                    itemProp="url"
                 >
                     <div className="relative aspect-square w-full max-w-[400px] overflow-hidden">
                         {product.preview ? (
@@ -24,6 +29,7 @@ export default function ProductCard({ product, className }: {
                                 fill
                                 sizes="(max-width: 640px) 90vw, (max-width: 1024px) 50vw, 400px"
                                 className="object-cover p-3 hover:scale-105 transition-transform duration-200 mx-auto"
+                                itemProp="image"
                             />
                         ) : (
                             <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">
@@ -47,6 +53,7 @@ export default function ProductCard({ product, className }: {
                     <Link
                         href={`/products/${product.slug}/${product.id}`}
                         className="hover:text-gray-900 transition-colors"
+                        itemProp="url"
                     >
                         {/* <h3 className="text-xs sm:text-sm font-medium text-gray-800 line-clamp-3 h-[48px] sm:h-[60px]">
                             {product.name}
@@ -59,7 +66,9 @@ export default function ProductCard({ product, className }: {
                     <ProductCharacteristics product={product} />
                 </div>
 
-                <div className='flex flex-col mt-1'>
+                <div className='flex flex-col mt-1' itemScope itemProp="offers" itemType="https://schema.org/Offer">
+                    <meta itemProp="priceCurrency" content="UAH" />
+                    <meta itemProp="availability" content="https://schema.org/InStock" />
                     <div className="flex items-center gap-1.5 mt-2">
                         <span className="relative flex h-2 w-2">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-75"></span>
@@ -76,7 +85,7 @@ export default function ProductCard({ product, className }: {
                                     ₴{product.price.toFixed(2)}
                                 </div>
                             )}
-                            <div className={`text-base font-bold leading-none ${product.discount_percentage > 0 ? "text-red-600" : "text-gray-900"}`}>
+                            <div className={`text-base font-bold leading-none ${product.discount_percentage > 0 ? "text-red-600" : "text-gray-900"}`} itemProp="price">
                                 ₴{(product.discount_percentage > 0
                                     ? product.price - (product.price * product.discount_percentage / 100)
                                     : product.price).toFixed(2)}
@@ -85,7 +94,6 @@ export default function ProductCard({ product, className }: {
                         <AddProductToCartButton productId={product.id} />
                     </div>
                 </div>
-
             </div>
         </article>
     );

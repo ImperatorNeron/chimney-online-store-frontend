@@ -2,11 +2,28 @@ import Breadcrumbs from '@/components/layout/Breadcrumbs';
 import { TruckIcon, EnvelopeIcon, UserIcon, MapPinIcon, CreditCardIcon, CurrencyDollarIcon, DevicePhoneMobileIcon } from '@heroicons/react/24/outline'
 import ModernOption from './components/ModerOption';
 
+export const metadata = {
+    title: 'Оплата та доставка',
+    description:
+        'Інформація про способи оплати і доставки: Нова Пошта, Укр Пошта, самовивіз та інші. Зручні умови та швидка обробка замовлень.',
+    keywords:
+        'оплата, доставка, Нова Пошта, Укр Пошта, самовивіз, LiqPay, накладений платіж, ПриватБанк, Monobank',
+    openGraph: {
+        title: 'Оплата та доставка',
+        description:
+            'Інформація про способи оплати і доставки: Нова Пошта, Укр Пошта, самовивіз та інші. Зручні умови та швидка обробка замовлень.',
+        url: '', // замінити на домен
+        siteName: '', // замінити на домен
+        locale: 'uk_UA',
+        type: 'website',
+    },
+}
+
 export default function PaymentDeliveryPage() {
     return (
         <div>
             <Breadcrumbs items={[{ title: "Головна", href: "/" }, { title: "Доставка та оплата" }]} />
-            <div className="py-12 md:py-16 lg:py-20 xl:py-24 2xl:py-28">
+            <div className="py-12 md:py-16 lg:py-20 xl:py-24 2xl:py-28" itemScope itemType="https://schema.org/WebPage" itemProp="mainEntityOfPage">
                 <div className="max-w-6xl mx-auto">
                     <div className="text-center mb-12 md:mb-16 lg:mb-20 xl:mb-24">
                         <h1 className="text-4xl font-medium text-gray-900 tracking-tight">Оплата & Доставка</h1>

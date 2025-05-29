@@ -13,6 +13,7 @@ import BackToPageButton from '@/components/ui/BackToPageButton';
 import MessageSkeleton from '@/components/layout/loaders/MessageSkeleton';
 import usePagination from '@/components/modules/admin/hooks/products/usePagination';
 import PaginationControls from '@/components/modules/admin/components/messages/pagination';
+import { useEffect } from 'react';
 
 export default function OrdersPage() {
   const { currentOffset, currentLimit, handleNextPage, handlePrevPage } = usePagination();
@@ -31,6 +32,10 @@ export default function OrdersPage() {
     handleCancel,
     toggleExpand
   } = useOrderActions(setOrders);
+
+  useEffect(() => {
+    document.title = "Замовлення користувачів";
+  }, []);
 
   if (loading) return <MessageSkeleton />;
 

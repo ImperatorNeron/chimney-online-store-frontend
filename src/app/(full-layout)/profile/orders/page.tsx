@@ -5,14 +5,21 @@ import OrderList from '@/components/modules/orders/components/OrderList';
 import useCurrentOrders from '@/components/modules/orders/hooks/useCurrentOrders';
 import EmptyState from '@/components/shared/EmptyState';
 import { ShoppingBagIcon } from '@heroicons/react/24/outline';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+
 
 export default function HistoryPage() {
     const { data, loading, error } = useCurrentOrders();
 
+    const router = useRouter()
     const handleExploreProducts = () => {
-        // Навігація до каталогу продуктів
-        console.log('Navigate to product catalog');
+        router.push("/")
     };
+
+    useEffect(() => {
+        document.title = "Поточні замовлення";
+    }, []);
 
     if (loading) return <ProfileLoading />;
     if (error) return <div className="text-red-600 text-center py-8">{error}</div>;

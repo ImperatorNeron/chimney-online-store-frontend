@@ -10,6 +10,29 @@ import EmptySearch from "@/components/shared/EmptySearch";
 import { categoryService } from "@/api/services/category.service";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 
+type Params = Promise<{ slug: string[] }>;
+
+export async function generateMetadata({ params }: { params: Params }) {
+    const rawCategoryNames = await categoryService.getCategoriesBySlugs((await params).slug);
+    const categoryNames = Array.isArray(rawCategoryNames) ? rawCategoryNames as [string, string][] : [];
+
+    const lastCategory = categoryNames[categoryNames.length - 1];
+    const title = lastCategory ? `Каталог - ${lastCategory[0]}` : "Каталог";
+
+    return {
+        title,
+        description: `Огляд категорії ${lastCategory ? lastCategory[0] : "каталог"} - знайдіть товари, що вас цікавлять.`,
+        openGraph: {
+            title,
+            description: `Огляд категорії ${lastCategory ? lastCategory[0] : "каталог"}`,
+            url: `.../${(await params).slug.join("/")}`,
+            siteName: "",
+            locale: "uk_UA",
+            type: "website",
+        },
+    };
+}
+
 export default async function CatalogPage({ params, searchParams }: {
     params: Promise<{ slug: string[] }>;
     searchParams?: Promise<{ page?: string; limit?: string; field?: string; ordering?: string; }>;
@@ -54,7 +77,7 @@ export default async function CatalogPage({ params, searchParams }: {
     return (
         <>
             <Breadcrumbs items={breadcrumbItems} />
-            <div className="flex gap-4 mt-5">
+            <div className="flex gap-4 mt-5" itemScope itemType="https://schema.org/CollectionPage">
                 <DesktopFilterBlock filters={filters} />
                 <MobileFilterButton filters={filters} />
                 <div className="w-full lg:w-3/4">

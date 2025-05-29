@@ -5,16 +5,21 @@ import OrderList from '@/components/modules/orders/components/OrderList';
 import useOrderHistory from '@/components/modules/orders/hooks/useOrderHistory';
 import EmptyState from '@/components/shared/EmptyState';
 import { ClockIcon } from '@heroicons/react/24/outline';
-
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 
 export default function HistoryPage() {
     const { data, loading } = useOrderHistory();
 
+    const router = useRouter()
     const handleExploreProducts = () => {
-        // Навігація до каталогу продуктів
-        console.log('Navigate to product catalog');
+        router.push("/")
     };
+
+    useEffect(() => {
+        document.title = "Історія покупок";
+    }, []);
 
     if (loading) return <ProfileLoading />;
     if (!history.length) return <div className="text-gray-500 text-center py-8">Історія порожня</div>;

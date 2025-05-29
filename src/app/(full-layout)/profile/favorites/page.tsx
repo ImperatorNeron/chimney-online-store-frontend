@@ -5,13 +5,19 @@ import useFavourites from "@/components/modules/orders/hooks/useFavourites";
 import ProductList from "@/components/modules/products/components/ProductList";
 import EmptyState from "@/components/shared/EmptyState";
 import { HeartIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function FavoritesPage() {
   const { data, loading } = useFavourites();
+  const router = useRouter()
   const handleExploreProducts = () => {
-    // Навігація до каталогу продуктів
-    console.log('Navigate to product catalog');
+    router.push("/")
   };
+
+  useEffect(() => {
+    document.title = "Улюблене";
+  }, []);
 
   if (loading) return <ProfileLoading />;
 

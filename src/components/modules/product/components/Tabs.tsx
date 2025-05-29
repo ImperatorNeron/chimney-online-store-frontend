@@ -41,6 +41,7 @@ export default function Tabs({ description, specifications }: TabsProps) {
                         </h3>
                         <div
                             className="text-gray-600"
+                            itemProp="description"
                             dangerouslySetInnerHTML={{ __html: description }}
                         />
                     </div>
