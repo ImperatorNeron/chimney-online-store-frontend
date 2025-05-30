@@ -15,10 +15,10 @@ export default function Filters({ filters }: { filters: ProductFiltersSchema }) 
                     <FilterSelect
                         key={key}
                         label={{
-                            diameter: 'Діаметр',
-                            length: 'Довжина',
-                            thickness: 'Товщина',
-                            angle: 'Кут',
+                            diameter: 'Діаметр, мм',
+                            length: 'Довжина, м',
+                            thickness: 'Товщина, мм',
+                            angle: 'Кут, °',
                             metal_type: 'Тип металу'
                         }[key] || ''}
                         name={key}

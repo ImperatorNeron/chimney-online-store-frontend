@@ -40,10 +40,10 @@ export default function PersonalDataForm({ user }: { user: UserSchema }) {
     };
 
     return (
-        <div className="min-h-screen text-gray-900 p-4 flex flex-col">
+        <div className="min-h-screen text-gray-900 flex flex-col">
             <div className="w-full max-w-2xl mx-auto">
                 {user.is_superuser && (
-                    <div className="mb-6">
+                    <div className="mb-6 text-center sm:text-right">
                         <Link
                             href="/admin-panel"
                             className="inline-flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg transition-colors duration-200"
@@ -61,8 +61,8 @@ export default function PersonalDataForm({ user }: { user: UserSchema }) {
                     </div>
                 </div>
 
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 sm:space-y-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6">
                         <FormField
                             id="first_name"
                             label="Ім'я"
@@ -111,12 +111,12 @@ export default function PersonalDataForm({ user }: { user: UserSchema }) {
                         label="Телефон"
                         {...register('phone_number')}
                         errorMessage={formState.errors.phone_number?.message}
-                        placeholder="+380123456789"
+                        placeholder="0964578562"
                         pattern={inputPatterns.phone}
                         icon={PhoneIcon}
                     />
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6">
                         <FormField
                             id="password"
                             type="password"

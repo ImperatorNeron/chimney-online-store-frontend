@@ -15,7 +15,6 @@ class CategoryService {
         const params = new URLSearchParams();
         slugs.forEach(slug => params.append('slugs', slug));
         const url = `${this.endpoint}/by-slugs?${params.toString()}`
-        console.log(url)
         const response = await http.get<ReadCategoriesBySlug>(url);
         return response.data;
     }

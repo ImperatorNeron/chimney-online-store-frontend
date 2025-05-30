@@ -3,7 +3,7 @@ import { Product } from '@/api/types/types';
 export default function ProductCharacteristics({ product }: { product: Product }) {
     const characteristics = [
         product.diameter && `Діаметр: ${product.diameter} мм`,
-        product.length && `Довжина: ${product.length} мм`,
+        product.length && `Довжина: ${product.length} м`,
         product.thickness && `Товщина: ${product.thickness} мм`,
         product.angle && product.angle !== "0" && `Кут: ${product.angle}°`,
         product.metal_type && `Метал: ${product.metal_type}`

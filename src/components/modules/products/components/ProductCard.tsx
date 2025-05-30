@@ -11,7 +11,7 @@ export default function ProductCard({ product, className }: {
 }) {
     return (
         <article
-            className={`${className} group bg-white rounded-lg shadow hover:shadow-md transition-all duration-200 border border-gray-200 flex flex-col`}
+            className={`${className} group bg-white rounded-lg shadow hover:shadow-md transition-all duration-200 border border-gray-200 flex flex-col max-w-[280px] max-h-[470px]`}
             itemScope
             itemType="https://schema.org/Product"
         >
@@ -55,9 +55,6 @@ export default function ProductCard({ product, className }: {
                         className="hover:text-gray-900 transition-colors"
                         itemProp="url"
                     >
-                        {/* <h3 className="text-xs sm:text-sm font-medium text-gray-800 line-clamp-3 h-[48px] sm:h-[60px]">
-                            {product.name}
-                        </h3> */}
                         <h3 className="text-xs sm:text-sm font-medium text-gray-800">
                             {product.name}
                         </h3>

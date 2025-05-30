@@ -55,7 +55,7 @@ export default function ContactInfoSection({ errors, register, loading }: { erro
                     label="Номер телефону"
                     type="tel"
                     required
-                    placeholder="+380 XX XXX XX XX"
+                    placeholder="0964578562"
                     errorMessage={errors.phone_number?.message}
                     icon={PhoneIcon}
                     pattern={inputPatterns.phone}

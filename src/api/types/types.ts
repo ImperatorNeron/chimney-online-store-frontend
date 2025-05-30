@@ -31,6 +31,7 @@ export type ReadVariationResponse = paths["/api/v1/products/{product_slug}"]["ge
 export type ThroughtVariationSchema = ReadVariationResponse["data"] extends Record<string, never> ? never : NonNullable<ReadVariationResponse["data"]>;
 export type ReadVariationSchema = ThroughtVariationSchema["variations"][number];
 export type ReadProductResponse = paths["/api/v1/products/"]["post"]["responses"]["200"]["content"]["application/json"]
+export type ReadDataProductResponse = paths["/api/v1/products/"]["post"]["responses"]["200"]["content"]["application/json"]["data"]
 export type ReadProduct = ReadProductResponse extends Record<string, never> ? never : NonNullable<ReadProductResponse["data"]>;
 export type ReadImages = ReadProduct["images"]
 export type ReadVariations = ReadProduct["variations"]

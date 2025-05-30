@@ -112,7 +112,7 @@ export default function CartItem({ item }: { item: ReadCartItemSchema }) {
                                 </button>
                             </div>
                         </div>
-                        <div className="flex flex-col sm:flex-row items-baseline gap-0 sm:gap-2 mt-1.5">
+                        <div className="flex flex-col lg:flex-row items-baseline gap-0 lg:gap-2 mt-1.5">
                             <span className={`text-sm sm:text-base font-bold ${hasDiscount ? 'text-red-600' : 'text-gray-900'}`}>
                                 {item.total_price.toFixed(2)} ₴
                             </span>

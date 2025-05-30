@@ -8,7 +8,7 @@ export default function FeedBackFormOverlay({ isOpen, onClose }: { isOpen: boole
     return (
         <Overlay isOpen={isOpen} onClose={onClose} className='w-full sm:w-full lg:w-full'>
             <div className="flex flex-col md:flex-row h-full bg-white overflow-hidden">
-                <div className="md:w-2/3 lg:w-1/2 h-full">
+                <div className="md:w-2/3 lg:w-1/2 mx-auto h-full">
                     <OverlayHeader title="" onClose={onClose} className="bg-white" />
                     <div className="h-[calc(100%-64px)] overflow-y-auto">
                         <div className="flex flex-col gap-4 justify-center px-6 lg:px-16">

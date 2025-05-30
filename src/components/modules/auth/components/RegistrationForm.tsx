@@ -79,7 +79,7 @@ export default function RegistrationForm() {
                             label="Телефон"
                             {...register('phone_number')}
                             errorMessage={formState.errors.phone_number?.message}
-                            placeholder="+380123456789"
+                            placeholder="0964578562"
                             pattern={inputPatterns.phone}
                             icon={PhoneIcon}
                         />

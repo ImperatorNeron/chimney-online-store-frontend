@@ -18,7 +18,19 @@ export const useFilterSelect = (name: string, options: (string | null)[]) => {
 
     const sortedOptions = options
         .filter((opt): opt is string => Boolean(opt))
-        .sort((a, b) => a.localeCompare(b));
+        .sort((a, b) => {
+            const aNum = Number(a);
+            const bNum = Number(b);
+
+            const aIsNum = !isNaN(aNum);
+            const bIsNum = !isNaN(bNum);
+
+            if (aIsNum && bIsNum) {
+                return aNum - bNum;
+            }
+
+            return a.localeCompare(b, undefined, { sensitivity: 'base' });
+        });
 
     return {
         currentValue,

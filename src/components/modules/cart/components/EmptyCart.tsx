@@ -49,7 +49,7 @@ export default function EmptyCart({ onClose }: { onClose: () => void }) {
 
                 <div className="pt-6">
                     <Link
-                        href="/catalog"
+                        href="/"
                         className="px-6 py-3 bg-black text-white rounded-lg font-medium hover:bg-gray-800 transition-colors duration-200 inline-flex items-center justify-center gap-2"
                         onClick={onClose}
                     >

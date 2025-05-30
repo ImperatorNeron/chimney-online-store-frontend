@@ -48,7 +48,7 @@ export default function Tabs({ description, specifications }: TabsProps) {
                 )}
 
                 {activeTab === 'specs' && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 gap-x-16">
                         {specifications.map((spec) => (
                             <div key={spec.name} className="flex gap-4 justify-between py-2 border-b border-gray-100">
                                 <span className="text-gray-600">{spec.name}</span>

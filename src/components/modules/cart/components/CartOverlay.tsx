@@ -13,7 +13,7 @@ export default function CartOverlay({ cart, isOpen, onClose }: {
     onClose: () => void;
 }) {
     return (
-        <Overlay isOpen={isOpen} onClose={onClose} className="w-full">
+        <Overlay isOpen={isOpen} onClose={onClose} className="w-full sm:w-4/6">
             <OverlayHeader onClose={onClose} title={"Корзина"} />
             {
                 cart?.items.length ? (

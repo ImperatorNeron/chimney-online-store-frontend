@@ -44,6 +44,7 @@ export default function FormField({
                     onKeyPress={handlers.onKeyPress}
                     onPaste={handlers.onPaste}
                     required={required}
+                    autoCapitalize="none"
                     {...props}
                 />
                 <Icon className="w-10 h-5 text-gray-400 absolute top-4 left-1 border-r-2" />

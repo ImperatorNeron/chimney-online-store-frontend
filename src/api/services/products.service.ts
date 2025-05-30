@@ -62,6 +62,17 @@ export class ProductService {
         return response.data
     }
 
+    async getPopularProducts(paginationIn?: PaginationIn) {
+        const params = new URLSearchParams();
+        if (paginationIn) {
+            params.append("offset", String(paginationIn.offset));
+            params.append("limit", String(paginationIn.limit));
+        }
+        const url = `${this.endpoint}/popular/?${params.toString()}`
+        const response = await http.get<FullProductsSchema>(url)
+        return response.data
+    }
+
     async createProduct(token: string, product: FormData) {
         const url = `${this.endpoint}/`
         const response = await http.post<ReadProductResponse>(url, product, token)

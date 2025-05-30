@@ -20,8 +20,8 @@ export default function OrderSelector() {
                 >
                     <option value="final_price:asc">Від дешевих</option>
                     <option value="final_price:desc">Від дорогих</option>
-                    <option value="created_at:asc">Спочатку нові</option>
                     <option value="created_at:desc">Спочатку старі</option>
+                    <option value="created_at:asc">Спочатку нові</option>
                 </select>
                 <ChevronDownIcon className="pointer-events-none absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
             </div>

@@ -104,15 +104,16 @@ export default async function ProductPage({
     const specifications = [
         { name: 'Код товару', value: item.id !== undefined ? item.id.toString() : "" },
         { name: 'Найменування', value: item.name },
-        item.diameter && { name: "Діаметр", value: item.diameter.toString() },
-        item.length && { name: "Довжина", value: item.length.toString() },
-        item.thickness && { name: "Товщина", value: item.thickness.toString() },
-        item.angle && { name: "Кут", value: item.angle.toString() },
+        item.diameter && { name: "Діаметр, мм", value: item.diameter.toString() },
+        item.length && { name: "Довжина, м", value: item.length.toString() },
+        item.thickness && { name: "Товщина, мм", value: item.thickness.toString() },
+        item.angle && { name: "Кут, °", value: item.angle.toString() },
         item.metal_type && { name: "Метал", value: item.metal_type },
     ].filter((spec): spec is { name: string; value: string } => !!spec);
 
     const paginationIn = { offset: 0, limit: 5 };
-    const items = await productService.getProducts(paginationIn);
+    const filters = { category_slug: item.categories?.[0]?.[1] }
+    const items = await productService.getProducts(paginationIn, undefined, filters);
     return (
         <div className="min-h-screen bg-white" itemScope itemType="https://schema.org/Product">
             <meta itemProp="brand" content="Ваш бренд" />
@@ -171,7 +172,7 @@ export default async function ProductPage({
                                             <span className="line-through text-gray-400">{item.price}₴</span>
                                         </div>
                                         <span className="inline-block bg-gray-50 text-green-600 px-2 py-1 rounded text-sm">
-                                            Економія {savings}₴
+                                            Економія {Math.round(savings)}₴
                                         </span>
                                     </>
                                 ) : (

@@ -31,7 +31,7 @@ export default function ProductsTable({ items, onDelete, deletingId, categories 
               Зображень
             </th>
             <th scope="col" className="py-3 px-4 text-left text-sm font-semibold text-gray-700">
-              Оновлено
+              Створено
             </th>
             <th scope="col" className="relative py-3 px-4">
               <span className="sr-only">Дії</span>
@@ -65,7 +65,7 @@ export default function ProductsTable({ items, onDelete, deletingId, categories 
                 {product.images?.length || 0}
               </td>
               <td className="py-4 px-4 whitespace-nowrap text-sm text-gray-600">
-                {formatDate(product.updated_at)}
+                {formatDate(product.created_at)}
               </td>
               <td className="py-4 px-4 whitespace-nowrap text-right text-sm font-medium">
                 <div className="flex items-center justify-end space-x-4">

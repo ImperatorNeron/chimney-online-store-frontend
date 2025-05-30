@@ -1,3 +1,4 @@
+import { productService } from "@/api/services/products.service";
 import CategoriesServer from "@/components/modules/categories/components/CategoriesServer";
 import ProductsGrid from "@/components/modules/products/components/ProductGrid";
 
@@ -18,12 +19,15 @@ export const metadata = {
     },
 }
 
-export default function Home() {
+export default async function Home() {
+    const newItems = await productService.getProducts({ offset: 0, limit: 10 });
+    const popularItems = await productService.getPopularProducts({ offset: 0, limit: 10 });
+
     return (
         <div className="space-y-16 sm:space-y-24 mt-8 sm:my-16">
             <CategoriesServer />
-            <ProductsGrid title={"Найпопулярніші товари"} />
-            <ProductsGrid title={"Нові надходження"} />
+            <ProductsGrid title={"Найпопулярніші товари"} items={popularItems?.items}/>
+            <ProductsGrid title={"Нові надходження"} items={newItems?.items} />
         </div>
     );
 };
