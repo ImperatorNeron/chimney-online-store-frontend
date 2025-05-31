@@ -11,13 +11,13 @@ class MessageService {
     };
 
     async getMessages(token: string, limit: number = 20, offset: number = 0) {
-        const url = `${this.endpoint}/?limit=${encodeURIComponent(limit)}&offset=${encodeURIComponent(offset)}`
+        const url = `${this.endpoint}?limit=${encodeURIComponent(limit)}&offset=${encodeURIComponent(offset)}`
         const response = await http.get<ReadMessages>(url, token)
         return response.data
     }
 
     async deleteMessage(token: string, messageId: number) {
-        const url = `${this.endpoint}/${messageId}`
+        const url = `${this.endpoint}${messageId}`
         await http.delete<null>(url, token)
     }
 }

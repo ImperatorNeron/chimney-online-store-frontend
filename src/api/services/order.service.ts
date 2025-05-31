@@ -24,7 +24,7 @@ export class OrderService {
     }
 
     async getOrders(token: string, limit: number = 20, offset: number = 0) {
-        const url = `${this.endpoint}/?limit=${encodeURIComponent(limit)}&offset=${encodeURIComponent(offset)}`
+        const url = `${this.endpoint}?limit=${encodeURIComponent(limit)}&offset=${encodeURIComponent(offset)}`
         const response = await http.get<OrderResponse>(url, token);
         return response.data;
     }
