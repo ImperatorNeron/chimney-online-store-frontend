@@ -3,7 +3,7 @@ const Urls = {
     contacts: "/contacts",
     login: "/auth/login",
     delivery: "/order-info",
-    faq: "faq",
+    faq: "/faq",
 };
 
 export default Urls;
