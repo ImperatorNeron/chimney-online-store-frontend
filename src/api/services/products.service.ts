@@ -51,7 +51,7 @@ export class ProductService {
     }
 
     async getUniqueProducts(token: string, limit: number = 20, offset: number = 0) {
-        const url = `${this.endpoint}/unique/?limit=${encodeURIComponent(limit)}&offset=${encodeURIComponent(offset)}`
+        const url = `${this.endpoint}/unique?limit=${encodeURIComponent(limit)}&offset=${encodeURIComponent(offset)}`
         const response = await http.get<ReadUniqueResponse>(url, token);
         return response.data
     }
@@ -68,7 +68,7 @@ export class ProductService {
             params.append("offset", String(paginationIn.offset));
             params.append("limit", String(paginationIn.limit));
         }
-        const url = `${this.endpoint}/popular/?${params.toString()}`
+        const url = `${this.endpoint}/popular?${params.toString()}`
         const response = await http.get<FullProductsSchema>(url)
         return response.data
     }
