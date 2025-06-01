@@ -25,7 +25,7 @@ export class ProductService {
             params.append("field", ordering.field);
             params.append("ordering", ordering.ordering);
         }
-        const url = `${this.endpoint}?${params.toString()}`
+        const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}?${params.toString()}`
         const response = await http.get<FullProductsSchema>(url);
         return response.data;
     }
@@ -37,7 +37,7 @@ export class ProductService {
         if (slug) params.append("slug", String(slug));
         if (!slug && sp?.text) params.append("text", String(sp?.text))
 
-        const url = `${this.endpoint}/filters?${params.toString()}`
+        const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}/filters?${params.toString()}`
         const response = await http.get<CatalogFiltersSchema>(url);
         return response.data;
     }
@@ -57,7 +57,7 @@ export class ProductService {
     }
 
     async getFullProduct(slug: string) {
-        const url = `${this.endpoint}/${encodeURIComponent(slug)}`
+        const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}/${encodeURIComponent(slug)}`
         const response = await http.get<ReadProductResponse>(url)
         return response.data
     }
@@ -68,7 +68,7 @@ export class ProductService {
             params.append("offset", String(paginationIn.offset));
             params.append("limit", String(paginationIn.limit));
         }
-        const url = `${this.endpoint}/popular?${params.toString()}`
+        const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}/popular?${params.toString()}`
         const response = await http.get<FullProductsSchema>(url)
         return response.data
     }

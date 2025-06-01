@@ -1,4 +1,4 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
+const BASE_URL = '/backend';
 
 async function request<T>(
     url: string,
@@ -17,7 +17,10 @@ async function request<T>(
         (headers as Record<string, string>)['Authorization'] = `Bearer ${bearerToken}`;
     }
 
-    const response = await fetch(BASE_URL + url, {
+    const isFullUrl = /^https?:\/\//.test(url) || url.includes('//');
+    const finalUrl = isFullUrl ? url : BASE_URL + url;
+
+    const response = await fetch(finalUrl, {
         ...options,
         headers,
         credentials: 'include',

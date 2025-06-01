@@ -60,7 +60,7 @@ export default function CartItem({ item }: { item: ReadCartItemSchema }) {
                 <div className="flex-1 flex flex-col">
                     <div className="flex justify-between items-start">
                         <Link
-                            href={`/products/${item.product.slug}`}
+                            href={`/products/${item.product.slug}/${item.product.id}`}
                             className="text-sm sm:text-base font-medium text-gray-900 line-clamp-2 pr-2">
                             {item.product.name}
                         </Link>
