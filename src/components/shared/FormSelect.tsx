@@ -8,6 +8,7 @@ export default function FormSelect({ id, register, options, icon: Icon, }: { id:
             <select
                 id={id}
                 {...register}
+                defaultValue={options[0]?.value}
                 className="appearance-none bg-gray-50 w-full p-3 pl-[55px] border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 transition"
             >
                 {options.map((option) => (

@@ -42,6 +42,15 @@ export default function MobileMenuOverlay({ isOpen, onClose }: {
                             label={isAuthenticated ? "Профіль" : "Увійти"}
                             onClose={onClose}
                         />
+                        {!isAuthenticated &&
+                            (<NavigationLink
+                                href="/auth/registration"
+                                heroIcon={UserIcon}
+                                alt="Реєстрація"
+                                label="Реєстрація"
+                                onClose={onClose}
+                            />)
+                        }
                         {isAuthenticated &&
                             (<NavigationLink
                                 href="/profile/history"
