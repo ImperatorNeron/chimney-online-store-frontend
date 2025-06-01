@@ -15,7 +15,7 @@ export default function useContactForm() {
             await messageService.createMessage(message);
             reset();
             NotificationService.success('Повідомлення успішно відправлено!')
-        } catch (error: any) {
+        } catch {
             NotificationService.error('Не вдалося надіслати повідомлення!')
         }
     };
