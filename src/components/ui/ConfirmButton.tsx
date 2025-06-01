@@ -16,8 +16,15 @@ export default function ConfirmButton({ onClick, label, icon, isLoading, classNa
             onClick={onClick}
             disabled={isLoading}
         >
-            {icon && <span className="mr-2 [&>svg]:h-5 [&>svg]:w-5">{icon}</span>}
-            {isLoading ? <div className="h-6 w-6 mx-auto border-2 border-gray-400 border-t-transparent rounded-full animate-spin" /> : label}
+            {isLoading ? (
+                <div className="h-6 w-6 mx-auto border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+            ) : (
+                <>
+                    {icon && <span className="mr-2 [&>svg]:h-5 [&>svg]:w-5">{icon}</span>}
+                    {label}
+                </>
+            )}
+
         </button>
     );
 };

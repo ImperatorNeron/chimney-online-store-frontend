@@ -11,10 +11,12 @@ interface MainSliderProps {
     setIsOpen?: (value: boolean) => void;
     initialSlideIndex?: number;
     className?: string;
+    uniqueSlug: string;
 }
 
 export default function MainSlider({
     thumbsSwiper,
+    uniqueSlug,
     setSlideIndex = () => { },
     items,
     setIsOpen = () => { },
@@ -36,7 +38,7 @@ export default function MainSlider({
                 <SwiperSlide key={slide.id}>
                     <div className="relative w-full h-full">
                         <Image
-                            src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${slide.filename}`}
+                            src={`${process.env.NEXT_PUBLIC_SUPABASE_IMAGES}uploads/${uniqueSlug}/${slide.filename}`}
                             alt={slide.alt ?? ""}
                             fill
                             className={`object-contain rounded-lg ${className}`}

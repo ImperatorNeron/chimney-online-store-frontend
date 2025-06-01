@@ -37,6 +37,7 @@ export default function LoginForm() {
             <ConfirmButton
                 label='Увійти'
                 icon={<ArrowLeftEndOnRectangleIcon className='h-5 w-5' />}
+                isLoading={formState.isSubmitting}
             />
         </form>
     );

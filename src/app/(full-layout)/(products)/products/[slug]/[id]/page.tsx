@@ -142,7 +142,7 @@ export default async function ProductPage({
             <div className="max-w-7xl mx-auto px-1 pb-6">
                 <div className="flex flex-col lg:flex-row gap-8 mt-8">
                     <div className="lg:w-1/2 bg-gray-50 rounded-xl" itemProp="image" itemScope itemType="https://schema.org/ImageGallery">
-                        <ProductSlider images={item.images ?? []} />
+                        <ProductSlider images={item.images ?? []} uniqueSlug={fullItem?.slug ?? ""} />
                     </div>
 
                     <div className="lg:w-1/2 space-y-4">

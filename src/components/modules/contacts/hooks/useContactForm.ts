@@ -16,7 +16,7 @@ export default function useContactForm() {
             reset();
             NotificationService.success('Повідомлення успішно відправлено!')
         } catch (error: any) {
-            NotificationService.error(error.message)
+            NotificationService.error('Не вдалося надіслати повідомлення!')
         }
     };
 

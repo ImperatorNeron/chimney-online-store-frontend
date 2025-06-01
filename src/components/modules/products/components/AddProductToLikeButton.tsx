@@ -10,8 +10,9 @@ export default function AddProductToLikeButton({ productId }: { productId: numbe
     const [mounted, setMounted] = useState(false);
 
     const { getValidToken } = useAuthStore.getState();
-    const isLiked = useFavouritesStore(state => state.isLiked);
+    const isLiked = useFavouritesStore(state => state.isLiked(productId));
     const toggleLike = useFavouritesStore(state => state.toggleLike);
+    const likeLoading = useFavouritesStore(state => state.loading)
 
     useEffect(() => {
         setMounted(true);
@@ -27,11 +28,10 @@ export default function AddProductToLikeButton({ productId }: { productId: numbe
             }
 
             await toggleLike(productId, token);
-
             NotificationService.success(
-                isLiked(productId)
-                    ? "Товар додано до обраного!"
-                    : "Товар видалено з обраного!"
+                isLiked
+                    ? "Товар видалено з обраного!"
+                    : "Товар додано до обраного!"
             );
         } catch {
             NotificationService.error("Помилка. Спробуйте пізніше.");
@@ -48,12 +48,12 @@ export default function AddProductToLikeButton({ productId }: { productId: numbe
             onClick={handleClick}
             disabled={loading}
         >
-            {loading ? (
+            {likeLoading && loading ? (
                 <div className="h-6 w-6 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
             ) : (
                 <svg
-                    className={`w-6 h-6 ${isLiked(productId) ? 'text-red-500' : 'text-gray-500'}`}
-                    fill={isLiked(productId) ? 'currentColor' : 'none'}
+                    className={`w-6 h-6 ${isLiked ? 'text-red-500' : 'text-gray-500'}`}
+                    fill={isLiked ? 'currentColor' : 'none'}
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                 >

@@ -9,11 +9,13 @@ interface MainThumbnailSliderProps {
     setThumbsSwiper: (value: any) => void;
     items: ReadImages;
     className?: string;
+    uniqueSlug: string;
 }
 
 export default function MainThumbnailSlider({
     setThumbsSwiper,
     items,
+    uniqueSlug,
     className = "thumbnail-slider"
 }: MainThumbnailSliderProps) {
     return (
@@ -34,7 +36,7 @@ export default function MainThumbnailSlider({
                         <div className="w-[56px] h-14 relative cursor-pointer transition-opacity opacity-40 hover:opacity-100">
                             <div className="w-[56px] h-[56px] relative overflow-hidden">
                                 <Image
-                                    src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/${slide.filename}`}
+                                    src={`${process.env.NEXT_PUBLIC_SUPABASE_IMAGES}uploads/${uniqueSlug}/${slide.filename}`}
                                     alt={slide.alt ?? ""}
                                     fill
                                     sizes="56px"

@@ -11,7 +11,7 @@ import MainThumbnailSlider from "./MainThumbnailSlider";
 import SliderZoomView from "./SliderZoomView";
 import { ReadImages } from "@/api/types/types";
 
-export default function ProductSlider({ images }: { images: ReadImages }) {
+export default function ProductSlider({ images, uniqueSlug }: { images: ReadImages, uniqueSlug: string }) {
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
     const [thumbsSwiperModal, setThumbsSwiperModal] = useState<SwiperType | null>(null);
     const [slideIndex, setSlideIndex] = useState(0);
@@ -19,8 +19,8 @@ export default function ProductSlider({ images }: { images: ReadImages }) {
 
     return (
         <div className="relative h-96 lg:h-full">
-            <MainSlider thumbsSwiper={thumbsSwiper} setSlideIndex={setSlideIndex} items={images} setIsOpen={setIsOpen} />
-            <MainThumbnailSlider setThumbsSwiper={setThumbsSwiper} items={images} />
+            <MainSlider thumbsSwiper={thumbsSwiper} setSlideIndex={setSlideIndex} items={images} setIsOpen={setIsOpen} uniqueSlug={uniqueSlug} />
+            <MainThumbnailSlider setThumbsSwiper={setThumbsSwiper} items={images} uniqueSlug={uniqueSlug} />
 
             {isOpen &&
                 <SliderZoomView
@@ -29,6 +29,7 @@ export default function ProductSlider({ images }: { images: ReadImages }) {
                     items={images}
                     thumbsSwiperModal={thumbsSwiperModal}
                     setThumbsSwiper={setThumbsSwiperModal}
+                    uniqueSlug={uniqueSlug}
                 />
             }
         </div>

@@ -9,9 +9,10 @@ interface ModalItemProps {
     items: any[];
     thumbsSwiperModal: any;
     setThumbsSwiper: (value: any) => void;
+    uniqueSlug: string
 }
 
-export default function SliderZoomView({ setIsOpen, slideIndex, items, thumbsSwiperModal, setThumbsSwiper }: ModalItemProps) {
+export default function SliderZoomView({ setIsOpen, slideIndex, items, thumbsSwiperModal, setThumbsSwiper, uniqueSlug }: ModalItemProps) {
 
     useEffect(() => {
         document.body.style.overflow = 'hidden';
@@ -31,8 +32,9 @@ export default function SliderZoomView({ setIsOpen, slideIndex, items, thumbsSwi
                     initialSlideIndex={slideIndex}
                     items={items}
                     className=" rounded-xl"
+                    uniqueSlug={uniqueSlug}
                 />
-                <MainThumbnailSlider setThumbsSwiper={setThumbsSwiper} items={items} />
+                <MainThumbnailSlider setThumbsSwiper={setThumbsSwiper} items={items} uniqueSlug={uniqueSlug} />
             </div>
         </div>
     )
