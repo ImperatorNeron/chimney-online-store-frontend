@@ -9,10 +9,7 @@ import useDeleteProduct from "@/components/modules/admin/hooks/products/useDelet
 import LoadingState from "@/components/modules/admin/components/products/LoadingState";
 import ErrorState from "@/components/modules/admin/components/products/ErrorState";
 import EmptyState from "@/components/modules/admin/components/products/EmptyState";
-import Link from "next/link";
-import { PlusIcon } from "@heroicons/react/24/outline";
 import useCategories from "@/components/modules/admin/hooks/products/useCategories";
-import BackToPageButton from "@/components/ui/BackToPageButton";
 import ProductNavigation from "@/components/modules/admin/components/products/ProductNavigation";
 
 export default function ProductPage() {
