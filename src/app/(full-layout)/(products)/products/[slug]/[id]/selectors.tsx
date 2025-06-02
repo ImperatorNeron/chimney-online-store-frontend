@@ -45,8 +45,24 @@ export default function Selectors({ fullItem, variation, slug }: SelectorsProps)
   const handleClick = async (attr: keyof typeof variation, value: string) => {
     if (variation[attr] === value || isLocked) return;
 
-    const variationId = findVariationIdByAttribute(fullItem.variations, attr, value);
-    if (!variationId) return;
+    const currentAttributes: Record<string, string> = {};
+    availableSelectors.forEach(selector => {
+      const attrName = selector.attr;
+      currentAttributes[attrName] = variation[attrName as keyof typeof variation]?.toString() || '';
+    });
+
+    currentAttributes[attr] = value;
+    const variationId = findVariationByAttributes(fullItem.variations, currentAttributes);
+
+    if (!variationId) {
+      const fallbackVariation = fullItem.variations.find(
+        (v: any) => v[attr]?.toString() === value
+      );
+      if (!fallbackVariation) return;
+      setIsLocked(true);
+      router.push(`/products/${slug}/${fallbackVariation.id}`);
+      return;
+    }
 
     setIsLocked(true);
     router.push(`/products/${slug}/${variationId}`);
@@ -68,13 +84,12 @@ export default function Selectors({ fullItem, variation, slug }: SelectorsProps)
                   key={value}
                   onClick={() => handleClick(attr as keyof typeof variation, value)}
                   disabled={isActive || isLocked}
-                  className={`px-3 py-1.5 text-sm border rounded transition-all duration-200 flex items-center justify-center min-w-[40px] ${
-                    isActive
+                  className={`px-3 py-1.5 text-sm border rounded transition-all duration-200 flex items-center justify-center min-w-[40px] ${isActive
                       ? 'bg-black text-white border-black'
                       : isLocked
-                      ? 'bg-gray-200 text-gray-400 border-gray-300 cursor-not-allowed'
-                      : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
-                  }`}
+                        ? 'bg-gray-200 text-gray-400 border-gray-300 cursor-not-allowed'
+                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
+                    }`}
                 >
                   {value}
                 </button>
@@ -137,11 +152,14 @@ function getUniqueValuesForAttribute(variations: ReadVariations, attr: string): 
   return sortedValues.sort();
 }
 
-function findVariationIdByAttribute(
+function findVariationByAttributes(
   variations: ReadVariations,
-  attr: keyof (typeof variations)[number],
-  value: string
+  attributes: Record<string, string>
 ): number | undefined {
-  const variation = variations.find((v) => (v[attr] as unknown)?.toString() === value);
+  const variation = variations.find(v => {
+    return Object.keys(attributes).every(attr => {
+      return v[attr as keyof typeof v]?.toString() === attributes[attr];
+    });
+  });
   return variation?.id;
 }

@@ -25,7 +25,6 @@ export const useFavouritesStore = create<FavouritesState>((set, get) => ({
             const token = await getValidToken();
             if (!token) return;
             const ids = await likeService.getLikedProductIds(token);
-            console.log(ids)
             set({ likedProductIds: Array.isArray(ids) ? ids : [] });
         } catch {
             set({ likedProductIds: [] });

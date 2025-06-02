@@ -11,7 +11,7 @@ export default function ProductCard({ product, className }: {
 }) {
     return (
         <article
-            className={`${className} group bg-white rounded-lg shadow hover:shadow-md transition-all duration-200 border border-gray-200 flex flex-col max-w-[280px] max-h-[470px]`}
+            className={`${className} group bg-white rounded-lg shadow hover:shadow-md transition-all duration-200 border border-gray-200 flex flex-col `}
             itemScope
             itemType="https://schema.org/Product"
         >

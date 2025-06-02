@@ -1,7 +1,6 @@
-"use client";
+'use client';
 
-import { ChevronDownIcon } from "@heroicons/react/24/solid";
-
+import { ChevronDownIcon } from '@heroicons/react/24/solid';
 
 export default function Selector({
     label,
@@ -12,14 +11,20 @@ export default function Selector({
     width,
     emptyValue = false
 }: {
-    label: string,
-    name: string,
-    options: (string | number)[],
-    currentValue: string,
-    handleChange: (e: React.ChangeEvent<HTMLSelectElement>) => void,
-    width: string,
-    emptyValue?: boolean
+    label: string;
+    name: string;
+    options: (string | number)[];
+    currentValue: string;
+    handleChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+    width: string;
+    emptyValue?: boolean;
 }) {
+    const totalOptions = options.length + (emptyValue ? 1 : 0);
+    
+    if (options.length === 0 || totalOptions < 2) {
+        return null;
+    }
+
     return (
         <div className="flex flex-col space-y-2">
             <label htmlFor={name} className="text-sm font-medium text-gray-700 ml-1">
