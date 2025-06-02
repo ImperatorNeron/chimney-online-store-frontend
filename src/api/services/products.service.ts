@@ -74,8 +74,7 @@ export class ProductService {
     }
 
     async createProduct(token: string, product: FormData) {
-        const url = `${this.endpoint}/`
-        const response = await http.post<ReadProductResponse>(url, product, token)
+        const response = await http.post<ReadProductResponse>(this.endpoint, product, token)
         return response.data
     }
 
