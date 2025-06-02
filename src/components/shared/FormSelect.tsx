@@ -7,7 +7,7 @@ export default function FormSelect({ id, register, options, icon: Icon, }: { id:
             <Icon className="w-10 h-5 text-gray-400 absolute top-4 left-1 border-r-2" />
             <select
                 id={id}
-                {...register(id, { value: options[0]?.value })}
+                {...register}
                 className="appearance-none bg-gray-50 w-full p-3 pl-[55px] border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 transition"
             >
                 {options.map((option) => (
