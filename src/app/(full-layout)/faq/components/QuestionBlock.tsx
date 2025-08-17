@@ -1,7 +1,7 @@
 'use client'
 
 import { ReadFAQSSchema } from "@/api/types/types";
-import useToggleListItem from "@/hooks/useToggleFAQItem";
+import useToggleListItem from "@/hooks/ui/useToggleFAQItem";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 
 export default function QuestionBlock({ index, item }: { index: number, item: ReadFAQSSchema }) {
