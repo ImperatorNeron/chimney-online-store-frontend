@@ -1,6 +1,8 @@
 import { endpoints } from "../endpoints";
 import { http } from '@/api/http';
-import { CreateMessageSchema, ReadCreatedMessageSchema, ReadMessages } from "../types/types";
+import { ChangeMessageStatusSchema, CreateMessageSchema, ReadCreatedMessageSchema, ReadMessages } from "../types/types";
+
+export type MessageStatus = 'new' | 'progress' | 'read';
 
 class MessageService {
     private endpoint = endpoints.messages;
@@ -10,8 +12,32 @@ class MessageService {
         return response.data;
     };
 
-    async getMessages(token: string, limit: number = 20, offset: number = 0) {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}?limit=${encodeURIComponent(limit)}&offset=${encodeURIComponent(offset)}`
+    async getMessages(
+        token: string,
+        limit: number = 20,
+        offset: number = 0,
+        params?: {
+            text?: string;
+            status?: string;
+            field?: string;
+            ordering?: string;
+        },
+    ) {
+        const query = new URLSearchParams({
+            limit: String(limit),
+            offset: String(offset),
+        });
+        if (params?.text) {
+            query.append("text", params.text);
+        }
+        if (params?.status) {
+            query.append("status", params.status);
+        }
+        if (params?.field && params?.ordering) {
+            query.append("field", params.field);
+            query.append("ordering", params.ordering);
+        }
+        const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}?${query.toString()}`
         const response = await http.get<ReadMessages>(url, token)
         return response.data
     }
@@ -19,6 +45,13 @@ class MessageService {
     async deleteMessage(token: string, messageId: number) {
         const url = `${this.endpoint}${messageId}`
         await http.delete<null>(url, token)
+    }
+
+    async changeMessageStatus(token: string, messageId: number, messageIn: ChangeMessageStatusSchema) {
+        console.log(token, messageId, messageIn)
+        const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}change-status/${messageId}`
+        const response = await http.patch<ReadCreatedMessageSchema>(url, messageIn, token)
+        return response.data
     }
 }
 

@@ -159,6 +159,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/messages/change-status/{message_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Change Message Status */
+        patch: operations["change_message_status_api_v1_messages_change_status__message_id__patch"];
+        trace?: never;
+    };
     "/api/v1/categories": {
         parameters: {
             query?: never;
@@ -222,7 +239,8 @@ export interface paths {
         /** Get Products List */
         get: operations["get_products_list_api_v1_products_get"];
         put?: never;
-        post?: never;
+        /** Create Product */
+        post: operations["create_product_api_v1_products_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -308,23 +326,6 @@ export interface paths {
         get: operations["fetch_absolute_product_api_v1_products__product_slug__get"];
         put?: never;
         post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/products/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Create Product */
-        post: operations["create_product_api_v1_products__post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -759,8 +760,8 @@ export interface components {
             /** Errors */
             errors?: components["schemas"]["ErrorDetail"][];
         };
-        /** Body_create_product_api_v1_products__post */
-        Body_create_product_api_v1_products__post: {
+        /** Body_create_product_api_v1_products_post */
+        Body_create_product_api_v1_products_post: {
             /** Name */
             name: string;
             /** Slug */
@@ -790,6 +791,14 @@ export interface components {
             delete_image_ids?: string | null;
             /** Variations Json */
             variations_json?: string | null;
+        };
+        /** ChangeMessageStatusSchema */
+        ChangeMessageStatusSchema: {
+            /**
+             * Поточний статус
+             * @default new
+             */
+            status: string;
         };
         /** CreateCartItemWithoutCartIdSchema */
         CreateCartItemWithoutCartIdSchema: {
@@ -1220,6 +1229,11 @@ export interface components {
              * Format: date-time
              */
             created_at: string;
+            /**
+             * Поточний статус
+             * @default new
+             */
+            status: string;
         };
         /** ReadOrderBaseSchema */
         ReadOrderBaseSchema: {
@@ -1838,6 +1852,10 @@ export interface operations {
     get_messages_list_api_v1_messages__get: {
         parameters: {
             query?: {
+                status?: string | null;
+                text?: string | null;
+                field?: string;
+                ordering?: string;
                 offset?: number;
                 limit?: number;
             };
@@ -1949,6 +1967,41 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    change_message_status_api_v1_messages_change_status__message_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                message_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChangeMessageStatusSchema"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponseSchema_ReadMessageSchema_"];
                 };
             };
             /** @description Validation Error */
@@ -2155,6 +2208,39 @@ export interface operations {
             };
         };
     };
+    create_product_api_v1_products_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_create_product_api_v1_products_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponseSchema_ReadAbsoluteProductSchema_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_products_by_likes_list_api_v1_products_by_ids_get: {
         parameters: {
             query?: {
@@ -2292,39 +2378,6 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ApiResponseSchema_ReadAbsoluteProductSchema_"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    create_product_api_v1_products__post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "multipart/form-data": components["schemas"]["Body_create_product_api_v1_products__post"];
-            };
-        };
         responses: {
             /** @description Successful Response */
             200: {
