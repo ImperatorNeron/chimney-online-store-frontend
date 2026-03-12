@@ -18,6 +18,7 @@ export default function usePagination(initialState = { limit: 10, offset: 0 }) {
         currentLimit,
         total,
         setTotal,
+        setCurrentOffset,
         setCurrentLimit,
         handleNextPage,
         handlePrevPage,

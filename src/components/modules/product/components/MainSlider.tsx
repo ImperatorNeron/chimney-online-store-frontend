@@ -38,7 +38,7 @@ export default function MainSlider({
                 <SwiperSlide key={slide.id}>
                     <div className="relative w-full h-full">
                         <Image
-                            src={`${process.env.NEXT_PUBLIC_SUPABASE_IMAGES}uploads/${uniqueSlug}/${slide.filename}`}
+                            src={`${process.env.NEXT_PUBLIC_MEDIA_PATH}/${uniqueSlug}/${slide.filename}`}
                             alt={slide.alt ?? ""}
                             fill
                             className={`object-contain rounded-lg ${className}`}

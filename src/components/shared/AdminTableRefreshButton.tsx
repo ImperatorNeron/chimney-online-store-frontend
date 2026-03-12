@@ -10,10 +10,10 @@ export default function RefreshButton({
     return (
         <button
             onClick={onClick}
-            className="flex items-center gap-2 bg-white border border-gray-300 rounded-lg px-4 py-2 h-[41px] hover:bg-gray-50"
+            className="flex items-center gap-2 bg-white border border-gray-300 rounded-lg px-4 py-2 h-[35px] hover:bg-gray-50 text-sm"
             disabled={loading}
         >
-            <ArrowPathIcon className={`h-5 w-5 ${loading ? "animate-spin" : ""}`} />
+            <ArrowPathIcon className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
             Оновити
         </button>
     );

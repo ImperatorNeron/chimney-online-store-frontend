@@ -1161,6 +1161,7 @@ export interface components {
         };
         /** ReadFullUniqueProductSchema */
         ReadFullUniqueProductSchema: {
+            variations: never[];
             /** Id */
             id: number;
             /**

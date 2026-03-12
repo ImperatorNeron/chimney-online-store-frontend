@@ -28,7 +28,7 @@ export default function CatalogLayout({
         <ProfileContext.Provider value={userValue}>
             <div>
                 <AdminHeader />
-                <div className="max-w-8xl mx-auto">
+                <div className="mx-auto min-h-screen px-4 md:px-8">
                     {children}
                 </div>
             </div>

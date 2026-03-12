@@ -1,3 +1,10 @@
+// export const STATUS_OPTIONS = {
+//     pending: 'Нове замовлення',
+//     processing: 'Обробляється',
+//     shipped: 'Відправлено',
+//     delivered: 'Доставлено',
+//     cancelled: 'Скасовано',
+// } as const;
 export const STATUS_OPTIONS = [
     { value: 'pending', label: 'Нове замовлення' },
     { value: 'processing', label: 'Обробляється' },

@@ -24,7 +24,7 @@ export default function ProductCard({ product, className }: {
                     <div className="relative aspect-square w-full max-w-[400px] overflow-hidden">
                         {product.preview ? (
                             <Image
-                                src={`${process.env.NEXT_PUBLIC_SUPABASE_IMAGES}uploads/${product.slug}/${product.preview.filename}`}
+                                src={`${process.env.NEXT_PUBLIC_MEDIA_PATH}/${product.slug}/${product.preview.filename}`}
                                 alt={product.preview.alt ?? 'Product image'}
                                 fill
                                 sizes="(max-width: 640px) 90vw, (max-width: 1024px) 50vw, 400px"

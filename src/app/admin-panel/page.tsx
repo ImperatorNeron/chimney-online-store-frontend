@@ -1,64 +1,45 @@
-import Link from 'next/link';
+"use client"
+
 import {
-    ChatBubbleLeftRightIcon,
-    DocumentTextIcon,
+    InboxIcon,
+    ClipboardDocumentListIcon,
     PlusCircleIcon,
-} from '@heroicons/react/24/outline';
+    MegaphoneIcon,
+} from "@heroicons/react/24/outline";
+import CardLink from "@/components/modules/admin/components/common/AdminCardLink";
 
-export const metadata = {
-    title: 'Адмін-панель',
-}
-
-export default function AdminPanel() {
-
-    const menuItems = [
-        {
-            title: 'Повідомлення',
-            icon: <ChatBubbleLeftRightIcon className="h-10 w-10" />,
-            href: '/admin-panel/messages',
-            description: 'Натисніть сюди, щоб переглянути звернення від клієнтів у зручному вигляді',
-        },
-        {
-            title: 'Статус замовлень',
-            icon: <DocumentTextIcon className="h-10 w-10" />,
-            href: '/admin-panel/orders',
-            description: 'Натисніть сюди, щоб переглянути замовлення, оновіть статуси, додайти номер накладної або знижку',
-        },
-        {
-            title: 'Додати товар',
-            icon: <PlusCircleIcon className="h-10 w-10" />,
-            href: '/admin-panel/products',
-            description: 'Натисніть сюди, щоб переглянути, додавати чи оновити товар до каталогу',
-        },
-    ];
-
+export default function AdminDashboard() {
     return (
-        <div className="py-8 px-4 sm:px-8">
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 text-center mb-10 border-b pb-4">
-                Оберіть дію
-            </h1>
+        <main className="flex-1 flex items-start justify-center px-4 py-16">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl w-full">
+                <CardLink
+                    href="/admin-panel/messages"
+                    title="Повідомлення"
+                    desc="Перегляньте вхідні повідомлення та відповідайте клієнтам"
+                    icon={<InboxIcon className="h-6 w-6" />}
+                />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {menuItems.map((item, index) => (
-                    <Link
-                        key={index}
-                        href={item.href}
-                        className="group flex flex-col items-start p-6 bg-white border border-gray-300 rounded-xl hover:shadow-md hover:border-gray-400 transition"
-                    >
-                        <div className="flex items-center gap-4 mb-2">
-                            <div className="text-gray-700 group-hover:text-black">
-                                {item.icon}
-                            </div>
-                            <h2 className="text-xl font-semibold text-gray-800">
-                                {item.title}
-                            </h2>
-                        </div>
-                        <p className="text-base text-gray-600 leading-relaxed">
-                            {item.description}
-                        </p>
-                    </Link>
-                ))}
+                <CardLink
+                    href="/admin-panel/orders"
+                    title="Статус замовлень"
+                    desc="Оновіть статуси замовлень, перегляньте деталі та фільтри"
+                    icon={<ClipboardDocumentListIcon className="h-6 w-6" />}
+                />
+
+                <CardLink
+                    href="/admin-panel/products"
+                    title="Додати товар"
+                    desc="Швидко додайте новий товар у каталог"
+                    icon={<PlusCircleIcon className="h-6 w-6" />}
+                />
+
+                <CardLink
+                    href="/admin/promotions"
+                    title="Акції"
+                    desc="Керуйте акційними блоками та банерами"
+                    icon={<MegaphoneIcon className="h-6 w-6" />}
+                />
             </div>
-        </div>
+        </main>
     );
 }

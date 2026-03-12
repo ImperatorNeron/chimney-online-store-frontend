@@ -50,8 +50,25 @@ export class ProductService {
         return response.data;
     }
 
-    async getUniqueProducts(token: string, limit: number = 20, offset: number = 0) {
-        const url = `${this.endpoint}/unique?limit=${encodeURIComponent(limit)}&offset=${encodeURIComponent(offset)}`
+    async getUniqueProducts(
+        token: string,
+        limit: number = 20,
+        offset: number = 0,
+        params?: {
+            text?: string;
+            field?: string;
+            category?: string;
+            ordering?: string;
+        },
+    ) {
+        const query = new URLSearchParams({ limit: String(limit), offset: String(offset) });
+        if (params?.text) query.append("text", params.text);
+        if (params?.category) query.append("category_id", params.category);
+        if (params?.field && params?.ordering) {
+            query.append("field", params.field);
+            query.append("ordering", params.ordering);
+        }
+        const url = `${this.endpoint}/unique?${query.toString()}`
         const response = await http.get<ReadUniqueResponse>(url, token);
         return response.data
     }

@@ -8,24 +8,25 @@ export default function GenericTable<T>({
     data,
     columns,
     rowKey,
+    columnTemplate,
 }: {
     data: T[];
     columns: Column<T>[];
     rowKey: (row: T) => string;
+    columnTemplate?: string;
 }) {
     return (
-        <div className="bg-white rounded-xl shadow-sm overflow-x-auto">
+        <div className="bg-white rounded-lg shadow-sm overflow-x-auto border border-gray-200">
             {/* Header */}
             <div
-                className="hidden md:grid gap-4 bg-gray-50 text-gray-500 font-medium px-4 md:px-6 py-3 border-b items-center"
+                className="hidden md:grid text-sm text-gray-600 font-semibold bg-gray-100 px-3 py-2 border-b gap-2"
                 style={{
-                    gridTemplateColumns: `repeat(${columns.length - 1}, minmax(100px, 1fr)) 50px`,
+                    gridTemplateColumns: columnTemplate || `repeat(${columns.length - 1}, minmax(80px, 1fr)) 40px`,
                 }}
             >
                 {columns.map((col, i) => (
                     <div
                         key={i}
-                        className={col.className + (i === columns.length - 1 ? " text-center" : "")}
                     >
                         {col.header}
                     </div>
@@ -33,19 +34,21 @@ export default function GenericTable<T>({
             </div>
 
             {/* Rows */}
-            <div>
+            <div className="divide-y divide-gray-200 text-xs">
                 {data.map((row) => (
                     <div
                         key={rowKey(row)}
-                        className="grid gap-4 px-4 py-5 md:px-6 hover:bg-gray-50 transition-colors items-center"
+                        className="grid items-center gap-2 px-3 py-3 hover:bg-gray-50 transition-colors"
                         style={{
-                            gridTemplateColumns: `${'minmax(0, 1fr) '.repeat(columns.length - 1)}50px`,
+                            gridTemplateColumns: columnTemplate || `${"minmax(0, 1fr) ".repeat(
+                                columns.length - 1
+                            )} 40px`,
                         }}
                     >
                         {columns.map((col, i) => (
                             <div
                                 key={i}
-                                className={`${i === columns.length - 1 ? 'text-center' : 'break-words'} min-w-0 ${col.className || ''}`}
+                                className={` ${col.className || ""}`}
                             >
                                 {col.render(row)}
                             </div>

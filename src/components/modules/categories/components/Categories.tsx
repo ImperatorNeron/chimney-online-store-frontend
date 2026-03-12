@@ -45,7 +45,7 @@ export default function Categories({ categories }: { categories: ReadCategoriesD
                                     <div className="flex items-center space-x-3">
                                         <div className="w-16 h-16 rounded-lg overflow-hidden flex items-center justify-center relative">
                                             <Image
-                                                src={`${process.env.NEXT_PUBLIC_SUPABASE_IMAGES}uploads/categories/${fileName}` || '/images/test.png'}
+                                                src={fileName ? `${process.env.NEXT_PUBLIC_MEDIA_PATH}/categories/${fileName}` : '/images/test.png'}
                                                 alt={main.name || 'Категорія'}
                                                 title={main.name}
                                                 fill
