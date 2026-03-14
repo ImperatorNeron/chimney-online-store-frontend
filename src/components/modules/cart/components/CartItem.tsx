@@ -5,9 +5,9 @@ import { useCartStore } from "@/store/cart.store";
 import Image from "next/image";
 import Link from "next/link";
 import ProductCharacteristics from "../../admin/components/orders/productCharacteristics";
-import { ReadCartItemSchema } from "@/api/types/types";
+import { ReadCartItemWithTotalPriceSchema } from "@/api/types/types";
 
-export default function CartItem({ item }: { item: ReadCartItemSchema }) {
+export default function CartItem({ item }: { item: ReadCartItemWithTotalPriceSchema }) {
     const hasDiscount = item.product.discount_percentage > 0;
     const [updateLoading, setUpdateLoading] = useState(false);
     const [removeLoading, setRemoveLoading] = useState(false);

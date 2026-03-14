@@ -3,11 +3,11 @@ import { Thumbs } from "swiper/modules";
 import Image from 'next/image';
 import 'swiper/css';
 import 'swiper/css/thumbs';
-import { ReadImages } from "@/api/types/types";
+import { listReadProductImageSchema } from "@/api/types/types";
 
 interface MainThumbnailSliderProps {
     setThumbsSwiper: (value: any) => void;
-    items: ReadImages;
+    items: listReadProductImageSchema;
     className?: string;
     uniqueSlug: string;
 }

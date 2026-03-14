@@ -1,10 +1,10 @@
 import { cartService } from '@/api/services/cart.service';
-import { ReadCartSchema } from '@/api/types/types';
+import { AReadFullCartSchema } from '@/api/types/types';
 import { create } from 'zustand';
 
 
 interface CartState {
-    cart: ReadCartSchema | null;
+    cart: AReadFullCartSchema | null;
     error: string;
     loading: boolean;
     fetchCart: () => Promise<void>;

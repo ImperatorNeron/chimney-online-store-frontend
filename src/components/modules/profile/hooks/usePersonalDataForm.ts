@@ -5,10 +5,10 @@ import { NotificationService } from "@/api/services/notification.service";
 import { useAuthStore } from "@/store/auth.store";
 import { profileSchema, ProfileSchema } from "@/schemas/profile";
 import { userService } from "@/api/services/user.service";
-import { UpdateUserSchema } from "@/api/types/types";
+import { UserUpdateWithPasswordSchema } from "@/api/types/types";
 
 
-export function usePersonalDataForm(user: UpdateUserSchema) {
+export function usePersonalDataForm(user: UserUpdateWithPasswordSchema) {
     const router = useRouter();
     const { getValidToken } = useAuthStore.getState();
 

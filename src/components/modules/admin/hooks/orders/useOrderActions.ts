@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/auth.store';
 import { orderService } from '@/api/services/order.service';
-import { Order, ReadOrderResponseData } from '@/api/types/types';
+import { ReadExtendedOrderSchema, LReadExtendedOrderSchema } from '@/api/types/types';
 
-export const useOrderActions = (setOrders: React.Dispatch<React.SetStateAction<ReadOrderResponseData>>) => {
+export const useOrderActions = (setOrders: React.Dispatch<React.SetStateAction<LReadExtendedOrderSchema>>) => {
     const router = useRouter();
     const { getValidToken } = useAuthStore();
 
@@ -16,7 +16,7 @@ export const useOrderActions = (setOrders: React.Dispatch<React.SetStateAction<R
     const [selectedStatus, setSelectedStatus] = useState('');
     const [discount, _setDiscount] = useState("0")
 
-    const handleEdit = (order: Order) => {
+    const handleEdit = (order: ReadExtendedOrderSchema) => {
         setEditingOrderId(order.id);
         setWaybillNumber(order.waybill_number || '');
         setDiscount(order.price_discount)

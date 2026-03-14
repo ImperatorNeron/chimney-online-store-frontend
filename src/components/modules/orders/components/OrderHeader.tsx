@@ -1,8 +1,8 @@
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { Order } from "@/api/types/types";
+import { ReadExtendedOrderSchema } from "@/api/types/types";
 import StatusBadge from "@/components/shared/StatusBadge";
 
-export default function OrderHeader({ order, isOpen }: { order: Order; isOpen: boolean }) {
+export default function OrderHeader({ order, isOpen }: { order: ReadExtendedOrderSchema; isOpen: boolean }) {
     return (
         <div className="flex justify-between items-center w-full flex-wrap gap-2">
             <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4 flex-1 min-w-0">

@@ -1,4 +1,4 @@
-import { ReadCategoriesData } from "@/api/types/types";
+import { listReadCategorySchema } from "@/api/types/types";
 import FormField from "@/components/shared/FormField";
 import FormSelect from "@/components/shared/FormSelect";
 import BackToPageButton from "@/components/ui/BackToPageButton";
@@ -10,7 +10,7 @@ import ConfirmButton from "@/components/ui/ConfirmButton";
 
 type Mode = 'edit' | 'create';
 
-export default function ProductActionComponent({ categories, form, mode }: { categories: ReadCategoriesData, form: any, mode: Mode }) {
+export default function ProductActionComponent({ categories, form, mode }: { categories: listReadCategorySchema, form: any, mode: Mode }) {
     const categoryOptions = (categories || [])
         .filter(c => c.parent_id !== null)
         .map(c => ({ value: String(c.id), label: c.name }));
@@ -103,7 +103,7 @@ export default function ProductActionComponent({ categories, form, mode }: { cat
                                         <div key={img.id} className="relative group">
                                             <div className="aspect-square overflow-hidden rounded-lg bg-gray-50">
                                                 <Image
-                                                    src={`${process.env.NEXT_PUBLIC_MEDIA_PATH}${form.productSlug}/${img.filename}`}
+                                                    src={`${process.env.NEXT_PUBLIC_MEDIA_PATH}/${form.productSlug}/${img.filename}`}
                                                     alt={img.alt}
                                                     className="object-cover w-full h-full transition-opacity group-hover:opacity-75"
                                                     height={200}

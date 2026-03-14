@@ -3,9 +3,9 @@
 import { useState } from "react";
 import OrderHeader from "./OrderHeader";
 import OrderDetails from "./OrderDetails";
-import { Order } from "@/api/types/types";
+import { ReadExtendedOrderSchema } from "@/api/types/types";
 
-export default function OrderItem({ order }: { order: Order }) {
+export default function OrderItem({ order }: { order: ReadExtendedOrderSchema }) {
     const [isOpen, setIsOpen] = useState(false);
     return (
         <div className="border border-gray-200 rounded-lg bg-white hover:border-gray-300 transition-all duration-200">

@@ -1,6 +1,6 @@
 import { http } from '@/api/http';
 import { endpoints } from '../endpoints';
-import { CatalogFiltersSchema, FullProductsSchema, PaginationIn, ProductFiltersSchema, ReadProductByIdsResponse, ReadProductResponse, ReadUniqueResponse, ReadVariationResponse } from '../types/types';
+import { AReadFiltersSchema, ALReadPreviewProductSchema, PaginationIn, ProductFiltersSchema, AlistReadPreviewProductSchema, Create_AReadAbsoluteProductSchema, ALReadFullUniqueProductSchema, Get_AReadAbsoluteProductSchema } from '../types/types';
 
 
 export class ProductService {
@@ -26,7 +26,7 @@ export class ProductService {
             params.append("ordering", ordering.ordering);
         }
         const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}?${params.toString()}`
-        const response = await http.get<FullProductsSchema>(url);
+        const response = await http.get<ALReadPreviewProductSchema>(url);
         return response.data;
     }
 
@@ -38,7 +38,7 @@ export class ProductService {
         if (!slug && sp?.text) params.append("text", String(sp?.text))
 
         const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}/filters?${params.toString()}`
-        const response = await http.get<CatalogFiltersSchema>(url);
+        const response = await http.get<AReadFiltersSchema>(url);
         return response.data;
     }
 
@@ -46,7 +46,7 @@ export class ProductService {
         const params = new URLSearchParams();
         ids.forEach(id => params.append("product_ids", id.toString()));
         const url = `${this.endpoint}/by-ids?${params.toString()}`
-        const response = await http.get<ReadProductByIdsResponse>(url);
+        const response = await http.get<AlistReadPreviewProductSchema>(url);
         return response.data;
     }
 
@@ -69,13 +69,13 @@ export class ProductService {
             query.append("ordering", params.ordering);
         }
         const url = `${this.endpoint}/unique?${query.toString()}`
-        const response = await http.get<ReadUniqueResponse>(url, token);
+        const response = await http.get<ALReadFullUniqueProductSchema>(url, token);
         return response.data
     }
 
     async getFullProduct(slug: string) {
         const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}/${encodeURIComponent(slug)}`
-        const response = await http.get<ReadProductResponse>(url)
+        const response = await http.get<Create_AReadAbsoluteProductSchema>(url)
         return response.data
     }
 
@@ -86,12 +86,12 @@ export class ProductService {
             params.append("limit", String(paginationIn.limit));
         }
         const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}/popular?${params.toString()}`
-        const response = await http.get<FullProductsSchema>(url)
+        const response = await http.get<ALReadPreviewProductSchema>(url)
         return response.data
     }
 
     async createProduct(token: string, product: FormData) {
-        const response = await http.post<ReadProductResponse>(this.endpoint, product, token)
+        const response = await http.post<Create_AReadAbsoluteProductSchema>(this.endpoint, product, token)
         return response.data
     }
 
@@ -102,7 +102,7 @@ export class ProductService {
 
     async updateProduct(token: string, productId: number, product: FormData) {
         const url = `${this.endpoint}/${encodeURIComponent(productId)}`
-        const response = await http.patch<ReadVariationResponse>(url, product, token)
+        const response = await http.patch<Get_AReadAbsoluteProductSchema>(url, product, token)
         return response.data
     }
 

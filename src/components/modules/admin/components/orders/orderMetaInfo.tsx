@@ -1,7 +1,7 @@
-import { Order } from '@/api/types/types';
+import { ReadExtendedOrderSchema } from '@/api/types/types';
 import Link from 'next/link';
 
-export default function OrderMetaInfo({ order }: { order: Order }) {
+export default function OrderMetaInfo({ order }: { order: ReadExtendedOrderSchema }) {
     return (
         <>
             {order.phone_number && (

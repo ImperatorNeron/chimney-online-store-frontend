@@ -11,9 +11,9 @@ import { NotificationService } from '@/api/services/notification.service';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useFavouritesStore } from '@/store/favourite.store';
-import { UserSchema } from '@/api/types/types';
+import { ReadUserSchema } from '@/api/types/types';
 
-export default function PersonalDataForm({ user }: { user: UserSchema }) {
+export default function PersonalDataForm({ user }: { user: ReadUserSchema }) {
     const { resetLikes } = useFavouritesStore();
     const logout = useAuthStore((state) => state.logout);
     const { register, handleSubmit, formState, onSubmit } = usePersonalDataForm(user);

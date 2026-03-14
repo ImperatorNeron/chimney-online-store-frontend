@@ -1,10 +1,10 @@
 import { categoryService } from "@/api/services/category.service";
-import { ReadCategoriesData } from "@/api/types/types";
+import { listReadCategorySchema } from "@/api/types/types";
 import { useEffect, useState } from "react";
 
 
 export default function useCatalog() {
-    const [categories, setCategories] = useState<ReadCategoriesData>([]);
+    const [categories, setCategories] = useState<listReadCategorySchema>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [isMobile, setIsMobile] = useState(false);

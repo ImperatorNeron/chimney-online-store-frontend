@@ -1,6 +1,6 @@
 'use client'
 
-import { Order } from "@/api/types/types";
+import { ReadExtendedOrderSchema } from "@/api/types/types";
 import PaginationControls from "@/components/modules/admin/components/messages/pagination";
 import useOrders from "@/components/modules/admin/hooks/orders/useOrders";
 import usePagination from "@/components/modules/admin/hooks/products/usePagination";
@@ -18,7 +18,7 @@ export default function OrdersPage() {
     const shippingOptions = Object.entries(SHIPPING_METHODS).map(([value, label]) => ({ value, label }));
     const paymentOptions = Object.entries(PAYMENT_METHODS).map(([value, label]) => ({ value, label }));
 
-    const columns: Column<Order>[] = [
+    const columns: Column<ReadExtendedOrderSchema>[] = [
         { header: "№", render: (m) => <b>{m.id}</b> },
         { header: "Клієнт", render: (m) => <b>{m.last_name} {m.first_name}</b> },
         { header: "Телефон", render: (m) => m.phone_number },

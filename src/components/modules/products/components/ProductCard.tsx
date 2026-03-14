@@ -3,10 +3,10 @@ import Link from 'next/link';
 import AddProductToCartButton from './AddProductToCartButton';
 import AddProductToLikeButton from './AddProductToLikeButton';
 import ProductCharacteristics from '../../admin/components/orders/productCharacteristics';
-import { ProductSchema } from '@/api/types/types';
+import { ReadPreviewProductSchema } from '@/api/types/types';
 
 export default function ProductCard({ product, className }: {
-    product: ProductSchema;
+    product: ReadPreviewProductSchema;
     className?: string;
 }) {
     return (

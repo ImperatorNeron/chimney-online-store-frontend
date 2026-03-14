@@ -1,11 +1,11 @@
 'use client';
-import { ReadVariations } from '@/api/types/types';
+import { listReadProductVariationSchema } from '@/api/types/types';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 interface SelectorsProps {
   fullItem: any;
-  variation: ReadVariations[number];
+  variation: listReadProductVariationSchema[number];
   slug: string;
 }
 
@@ -102,7 +102,7 @@ export default function Selectors({ fullItem, variation, slug }: SelectorsProps)
   );
 }
 
-function getAvailableSelectors(variations: ReadVariations) {
+function getAvailableSelectors(variations: listReadProductVariationSchema) {
   const varyingAttributes = getVaryingAttributes(variations);
 
   return varyingAttributes
@@ -117,7 +117,7 @@ function getAvailableSelectors(variations: ReadVariations) {
     .filter((selector) => selector.values.length > 1);
 }
 
-function getVaryingAttributes(variations: ReadVariations): string[] {
+function getVaryingAttributes(variations: listReadProductVariationSchema): string[] {
   if (!variations || variations.length <= 1) return [];
 
   const attributes = new Set<string>();
@@ -136,7 +136,7 @@ function getVaryingAttributes(variations: ReadVariations): string[] {
   return Array.from(attributes);
 }
 
-function getUniqueValuesForAttribute(variations: ReadVariations, attr: string): string[] {
+function getUniqueValuesForAttribute(variations: listReadProductVariationSchema, attr: string): string[] {
   const values = new Set<string>();
   variations.forEach((v) => {
     const value = v[attr as keyof typeof v];
@@ -153,7 +153,7 @@ function getUniqueValuesForAttribute(variations: ReadVariations, attr: string): 
 }
 
 function findVariationByAttributes(
-  variations: ReadVariations,
+  variations: listReadProductVariationSchema,
   attributes: Record<string, string>
 ): number | undefined {
   const variation = variations.find(v => {

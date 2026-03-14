@@ -4,7 +4,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { productService } from '@/api/services/products.service';
 import { NotificationService } from '@/api/services/notification.service';
-import { ReadImages } from '@/api/types/types';
+import { listReadProductImageSchema } from '@/api/types/types';
 import { useAuthStore } from '@/store/auth.store';
 import { updateAbsoluteProductSchema, UpdateAbsoluteProductSchema } from '@/schemas/products';
 
@@ -18,7 +18,7 @@ export function useUpdateProduct() {
     const { getValidToken } = useAuthStore.getState();
     const { slug: productSlug } = useParams() as { slug: string };
 
-    const [existingImages, setExistingImages] = useState<ReadImages>([]);
+    const [existingImages, setExistingImages] = useState<listReadProductImageSchema>([]);
     const [imagesToDelete, setImagesToDelete] = useState<number[]>([]);
     const [productId, setProductId] = useState<number>();
     const removedVariationIds = useRef<number[]>([]);

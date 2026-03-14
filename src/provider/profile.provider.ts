@@ -1,4 +1,4 @@
-import { UserSchema } from "@/api/types/types";
+import { ReadUserSchema } from "@/api/types/types";
 import { createContext } from "react";
 
-export const ProfileContext = createContext<UserSchema | null>(null);
+export const ProfileContext = createContext<ReadUserSchema | null>(null);

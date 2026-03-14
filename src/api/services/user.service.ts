@@ -1,13 +1,13 @@
 import { endpoints } from "../endpoints";
 import { http } from "../http";
-import { ReadUserDataSchema, UpdateUserSchema } from "../types/types";
+import { AReadUserSchema, UserUpdateWithPasswordSchema } from "../types/types";
 
 class UserService {
     private endpoint = endpoints.users;
 
-    async update(updateUser: UpdateUserSchema, token: string) {
+    async update(updateUser: UserUpdateWithPasswordSchema, token: string) {
         const url = `${this.endpoint}/me/update`;
-        const response = await http.patch<ReadUserDataSchema>(url, updateUser, token);
+        const response = await http.patch<AReadUserSchema>(url, updateUser, token);
         return response.data;
     }
 }

@@ -1,13 +1,13 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Thumbs } from "swiper/modules";
 import Image from 'next/image';
-import { ReadImages } from "@/api/types/types";
+import { listReadProductImageSchema } from "@/api/types/types";
 
 
 interface MainSliderProps {
     thumbsSwiper: any;
     setSlideIndex?: (value: number) => void;
-    items: ReadImages;
+    items: listReadProductImageSchema;
     setIsOpen?: (value: boolean) => void;
     initialSlideIndex?: number;
     className?: string;

@@ -5,12 +5,12 @@ import { orderService } from '@/api/services/order.service';
 import { ProfileContext } from '@/provider/profile.provider';
 import { useAuthStore } from '@/store/auth.store';
 import { useRouter } from 'next/navigation';
-import { ReadExtendedOrderDataSchema } from '@/api/types/types';
+import { listReadExtendedOrderSchemaData } from '@/api/types/types';
 
 export default function useCurrentOrders() {
     const router = useRouter();
     const user = useContext(ProfileContext);
-    const [data, setData] = useState<ReadExtendedOrderDataSchema>([]);
+    const [data, setData] = useState<listReadExtendedOrderSchemaData>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const { getValidToken } = useAuthStore.getState();

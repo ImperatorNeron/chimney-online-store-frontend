@@ -2,11 +2,11 @@
 
 import Link from 'next/link'
 import useCategoryToggle from '../hooks/useCategoryToggle';
-import { ReadCategoriesData } from '@/api/types/types';
+import { listReadCategorySchema } from '@/api/types/types';
 import Image from 'next/image'
 
 
-export default function Categories({ categories }: { categories: ReadCategoriesData }) {
+export default function Categories({ categories }: { categories: listReadCategorySchema }) {
     const { expandedSlug, toggleCategory, categoryRefs } = useCategoryToggle();
 
     const mainCategories = (categories || []).filter(({ parent_id }) => parent_id == null);
@@ -45,7 +45,7 @@ export default function Categories({ categories }: { categories: ReadCategoriesD
                                     <div className="flex items-center space-x-3">
                                         <div className="w-16 h-16 rounded-lg overflow-hidden flex items-center justify-center relative">
                                             <Image
-                                                src={fileName ? `${process.env.NEXT_PUBLIC_MEDIA_PATH}/categories/${fileName}` : '/images/test.png'}
+                                                src={`${process.env.NEXT_PUBLIC_MEDIA_PATH}/categories/${fileName}`}
                                                 alt={main.name || 'Категорія'}
                                                 title={main.name}
                                                 fill

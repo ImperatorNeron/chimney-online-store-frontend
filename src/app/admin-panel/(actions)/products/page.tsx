@@ -18,7 +18,7 @@ import usePagination from "@/components/modules/admin/hooks/products/usePaginati
 import useDeleteProduct from "@/components/modules/admin/hooks/products/useDeleteProduct";
 import useCategories from "@/components/modules/admin/hooks/products/useCategories";
 
-import { ReadCategories, ReadProduct } from "@/api/types/types";
+import { AlistReadCategorySchema, Create_ReadAbsoluteProductSchema } from "@/api/types/types";
 import formatDate from "@/utils/formatDate";
 import AddProductButton from "@/components/modules/admin/components/products/AddProductButton";
 import useDebounce from "@/hooks/forms/useDebounce";
@@ -33,7 +33,7 @@ function useCategoryMap(categories: any) {
     }, [categories]);
 }
 
-function buildCategoryOptions(categories: ReadCategories): { value: string; label: string }[] {
+function buildCategoryOptions(categories: AlistReadCategorySchema): { value: string; label: string }[] {
     const options = [{ value: "all", label: "Всі" }];
 
     if (Array.isArray(categories.data)) {
@@ -50,7 +50,7 @@ function buildCategoryOptions(categories: ReadCategories): { value: string; labe
     return options;
 }
 
-function useProductColumns(categoryMap: Record<number, string>, handleDelete: (id: number) => void): Column<ReadProduct>[] {
+function useProductColumns(categoryMap: Record<number, string>, handleDelete: (id: number) => void): Column<Create_ReadAbsoluteProductSchema>[] {
     return [
         { header: "Назва товару", render: (m) => <b>{m.name}</b>, className: "break-words break-all" },
         { header: "Slug", render: (m) => m.slug },
@@ -99,7 +99,7 @@ function Filters({
     search: string;
     setSearch: (v: string) => void;
     category: string;
-    categories: ReadCategories;
+    categories: AlistReadCategorySchema;
     setCategory: (v: string) => void;
     order: "newest" | "oldest";
     setOrder: (v: "newest" | "oldest") => void;

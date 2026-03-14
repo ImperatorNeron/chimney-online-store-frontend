@@ -1,9 +1,9 @@
-import { ReadCategoriesData } from '@/api/types/types';
+import { listReadCategorySchema } from '@/api/types/types';
 import useFetchData from "../common/useFetchData";
 import { categoryService } from "@/api/services/category.service";
 
 export default function useCategories() {
-  return useFetchData<ReadCategoriesData>(
+  return useFetchData<listReadCategorySchema>(
     () => categoryService.getCategories(),
     []
   );

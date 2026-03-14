@@ -1,11 +1,11 @@
 import { endpoints } from "../endpoints";
 import { http } from '@/api/http';
-import { CreateUserDataSchema, LoginSchema, ReadUserDataSchema, TokenInfoSchema } from "../types/types";
+import { RegisterUserSchema, LoginUserSchema, AReadUserSchema, TokenInfoSchema } from "../types/types";
 
 class AuthService {
     private endpoint = endpoints.auth;
 
-    async login(credentials: LoginSchema) {
+    async login(credentials: LoginUserSchema) {
         const url = `${this.endpoint}/login`;
         const response = await http.post<TokenInfoSchema>(url, credentials);
         return response;
@@ -17,9 +17,9 @@ class AuthService {
         return response;
     }
 
-    async register(createUserData: CreateUserDataSchema) {
+    async register(createUserData: RegisterUserSchema) {
         const url = `${this.endpoint}/register`;
-        const response = await http.post<ReadUserDataSchema>(url, createUserData);
+        const response = await http.post<AReadUserSchema>(url, createUserData);
         return response.data;
     }
 

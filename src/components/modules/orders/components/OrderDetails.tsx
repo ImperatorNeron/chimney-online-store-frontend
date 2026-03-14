@@ -1,10 +1,10 @@
-import { Order } from "@/api/types/types";
+import { ReadExtendedOrderSchema } from "@/api/types/types";
 import { PAYMENT_METHODS, SHIPPING_METHODS } from "@/constants/orders";
 import { CreditCardIcon, TruckIcon, DocumentTextIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import ProductCharacteristics from "../../admin/components/orders/productCharacteristics";
 
-export default function OrderDetails({ order }: { order: Order }) {
+export default function OrderDetails({ order }: { order: ReadExtendedOrderSchema }) {
     return (
         <div className="border-t border-gray-100 p-5">
             <div className="flex flex-wrap gap-2 mb-4 text-sm">

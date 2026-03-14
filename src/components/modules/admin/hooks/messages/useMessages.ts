@@ -1,6 +1,6 @@
 import { messageService } from "@/api/services/message.service";
 import useFetchData from "../common/useFetchData";
-import { ReadDataMessages } from "@/api/types/types";
+import { LReadMessageSchema } from "@/api/types/types";
 
 
 export default function useFetchMessages(
@@ -12,7 +12,7 @@ export default function useFetchMessages(
         field?: string;
         ordering?: string;
     },) {
-    const { data: messages, ...rest } = useFetchData<ReadDataMessages>(
+    const { data: messages, ...rest } = useFetchData<LReadMessageSchema>(
         (token) => messageService.getMessages(token, limit, offset, params),
         [limit, offset, params]
     );

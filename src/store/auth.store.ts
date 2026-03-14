@@ -1,5 +1,5 @@
 import { authService } from '@/api/services/auth.service';
-import { CreateUserDataSchema, TokenInfoSchema } from '@/api/types/types';
+import { RegisterUserSchema, TokenInfoSchema } from '@/api/types/types';
 import { create } from 'zustand';
 
 interface AuthState {
@@ -8,7 +8,7 @@ interface AuthState {
     isAuthenticated: boolean;
     isInitialized: boolean;
 
-    register: (data: CreateUserDataSchema) => Promise<void>;
+    register: (data: RegisterUserSchema) => Promise<void>;
     login: (username: string, password: string) => Promise<void>;
     refresh: () => Promise<void>;
     isTokenValid: () => boolean;
@@ -30,7 +30,7 @@ export const useAuthStore = create<AuthState>((set, get) => {
         isAuthenticated: false,
         isInitialized: false,
 
-        register: async (data: CreateUserDataSchema) => {
+        register: async (data: RegisterUserSchema) => {
             await authService.register(data);
             await get().login(data.username, data.password);
         },

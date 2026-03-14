@@ -1,13 +1,13 @@
 import { endpoints } from "../endpoints";
 import { http } from '@/api/http';
-import { ReadCategories, ReadCategoriesBySlug } from "../types/types";
+import { AlistReadCategorySchema, ReadCategoriesBySlug } from "../types/types";
 
 
 class CategoryService {
     private endpoint = endpoints.categories;
 
     async getCategories() {
-        const response = await http.get<ReadCategories>(`${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}`);
+        const response = await http.get<AlistReadCategorySchema>(`${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}`);
         return response.data;
     }
 

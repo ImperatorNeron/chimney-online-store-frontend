@@ -1,7 +1,7 @@
-import { Order } from "@/api/types/types";
+import { ReadExtendedOrderSchema } from "@/api/types/types";
 import { STATUS_OPTIONS } from "@/constants/orders";
 
-export default function OrderHeader({ order }: { order: Order }) {
+export default function OrderHeader({ order }: { order: ReadExtendedOrderSchema }) {
     return (
         <div className="flex flex-col">
             <div className='flex gap-4 border-b-2'>

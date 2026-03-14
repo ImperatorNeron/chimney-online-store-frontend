@@ -9,9 +9,9 @@ import type SwiperType from "swiper";
 import MainSlider from "./MainSlider";
 import MainThumbnailSlider from "./MainThumbnailSlider";
 import SliderZoomView from "./SliderZoomView";
-import { ReadImages } from "@/api/types/types";
+import { listReadProductImageSchema } from "@/api/types/types";
 
-export default function ProductSlider({ images, uniqueSlug }: { images: ReadImages, uniqueSlug: string }) {
+export default function ProductSlider({ images, uniqueSlug }: { images: listReadProductImageSchema, uniqueSlug: string }) {
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
     const [thumbsSwiperModal, setThumbsSwiperModal] = useState<SwiperType | null>(null);
     const [slideIndex, setSlideIndex] = useState(0);

@@ -1,6 +1,6 @@
-import { Product } from '@/api/types/types';
+import { ReadProductSchema } from '@/api/types/types';
 
-export default function ProductCharacteristics({ product }: { product: Product }) {
+export default function ProductCharacteristics({ product }: { product: ReadProductSchema }) {
     const characteristics = [
         product.diameter && `Діаметр: ${product.diameter} мм`,
         product.length && `Довжина: ${product.length} м`,

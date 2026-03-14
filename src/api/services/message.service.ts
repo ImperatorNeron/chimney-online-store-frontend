@@ -1,6 +1,6 @@
 import { endpoints } from "../endpoints";
 import { http } from '@/api/http';
-import { ChangeMessageStatusSchema, CreateMessageSchema, ReadCreatedMessageSchema, ReadMessages } from "../types/types";
+import { ChangeMessageStatusSchema, CreateMessageSchema, AReadMessageSchema, ALReadMessageSchema } from "../types/types";
 
 export type MessageStatus = 'new' | 'progress' | 'read';
 
@@ -8,7 +8,7 @@ class MessageService {
     private endpoint = endpoints.messages;
 
     async createMessage(message: CreateMessageSchema) {
-        const response = await http.post<ReadCreatedMessageSchema>(this.endpoint, message);
+        const response = await http.post<AReadMessageSchema>(this.endpoint, message);
         return response.data;
     };
 
@@ -38,7 +38,7 @@ class MessageService {
             query.append("ordering", params.ordering);
         }
         const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}?${query.toString()}`
-        const response = await http.get<ReadMessages>(url, token)
+        const response = await http.get<ALReadMessageSchema>(url, token)
         return response.data
     }
 
@@ -50,7 +50,7 @@ class MessageService {
     async changeMessageStatus(token: string, messageId: number, messageIn: ChangeMessageStatusSchema) {
         console.log(token, messageId, messageIn)
         const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}change-status/${messageId}`
-        const response = await http.patch<ReadCreatedMessageSchema>(url, messageIn, token)
+        const response = await http.patch<AReadMessageSchema>(url, messageIn, token)
         return response.data
     }
 }
