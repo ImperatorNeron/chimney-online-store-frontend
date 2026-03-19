@@ -40,7 +40,7 @@ export default function PersonalDataForm({ user }: { user: ReadUserSchema }) {
     };
 
     return (
-        <div className="min-h-screen text-gray-900 flex flex-col">
+        <div className="text-gray-900 flex flex-col">
             <div className="w-full max-w-2xl mx-auto">
                 {user.is_superuser && (
                     <div className="mb-6 text-center sm:text-right">

@@ -62,7 +62,7 @@ export const useCreateProduct = () => {
         try {
             await productService.createProduct(token, formData);
             NotificationService.success("Продукт успішно створено");
-            router.push(`/admin-panel/products/update/${data.slug}`);
+            router.push("/admin-panel/products");
         } catch (err: any) {
             if (err.response?.status === 401) {
                 NotificationService.error("Токен недійсний або сесія закінчився");

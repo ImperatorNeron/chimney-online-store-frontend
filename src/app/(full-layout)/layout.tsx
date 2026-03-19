@@ -10,15 +10,25 @@ export default function FullLayout({
     children: React.ReactNode
 }) {
     return (
-        <>
+        <div className="flex flex-col min-h-screen w-full">
             <CartInitializer />
             <LikeInitializer />
             <Header />
-            <main className="max-w-screen-2xl mt-[72px] lg:mt-[114px] mx-auto px-3">
+            
+            {/* ГОЛОВНИЙ КОНТЕНТ */}
+            <main className="
+                flex-1                // розтягується по вертикалі
+                w-full                // займає всю ширину батька
+                max-w-screen-2xl      // але обмежена максимальна ширина
+                mx-auto               // центрується після обмеження
+                mt-[72px] lg:mt-[114px]
+                px-3
+            ">
                 {children}
             </main>
+            
             <Footer />
             <FeedBackButton />
-        </>
+        </div>
     );
 };
