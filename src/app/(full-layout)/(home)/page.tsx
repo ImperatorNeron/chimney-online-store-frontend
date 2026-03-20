@@ -1,5 +1,6 @@
 import { productService } from "@/api/services/products.service";
-import CategoriesServer from "@/components/modules/categories/components/CategoriesServer";
+import CategoriesDesktopServer from "@/components/modules/categories/components/CategoriesDesktopServer";
+import CategoriesMobileServer from "@/components/modules/categories/components/CategoriesMobileServer";
 import ProductsGrid from "@/components/modules/products/components/ProductGrid";
 
 export const revalidate = 600;
@@ -25,8 +26,10 @@ export default async function Home() {
     const popularItems = await productService.getPopularProducts({ offset: 0, limit: 10 });
 
     return (
-        <div className="space-y-16 sm:space-y-24 mt-8 sm:my-16">
-            <CategoriesServer />
+        <div className="space-y-24 mt-8">
+            <div className="lg:hidden">
+                <CategoriesMobileServer />
+            </div>
             <ProductsGrid title={"Найпопулярніші товари"} items={popularItems?.items}/>
             <ProductsGrid title={"Нові надходження"} items={newItems?.items} />
         </div>

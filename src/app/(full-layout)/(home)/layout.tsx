@@ -1,4 +1,5 @@
 import BannerSlider from "@/app/(full-layout)/(home)/components/BannerSlider"
+import CatalogBanner from "@/app/(full-layout)/(home)/components/CatalogBanner"
 import FeaturesGrid from "@/app/(full-layout)/(home)/components/Features"
 
 export default function CatalogLayout({
@@ -8,7 +9,7 @@ export default function CatalogLayout({
 }) {
     return (
         <div>
-            <BannerSlider />
+            <CatalogBanner />
             <FeaturesGrid />
             {children}
         </div>
