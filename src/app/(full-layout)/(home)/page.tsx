@@ -1,5 +1,4 @@
 import { productService } from "@/api/services/products.service";
-import CategoriesDesktopServer from "@/components/modules/categories/components/CategoriesDesktopServer";
 import CategoriesMobileServer from "@/components/modules/categories/components/CategoriesMobileServer";
 import ProductsGrid from "@/components/modules/products/components/ProductGrid";
 

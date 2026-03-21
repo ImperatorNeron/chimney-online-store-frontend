@@ -1,4 +1,3 @@
-import BannerSlider from "@/app/(full-layout)/(home)/components/BannerSlider"
 import CatalogBanner from "@/app/(full-layout)/(home)/components/CatalogBanner"
 import FeaturesGrid from "@/app/(full-layout)/(home)/components/Features"
 

@@ -176,7 +176,7 @@ export default function MessagesPage() {
             <div className="flex flex-col md:flex-row justify-between gap-4 mb-4">
                 <div>
                     <h1 className="text-2xl md:text-3xl font-bold">Повідомлення клієнтів</h1>
-                    <p className="text-gray-600">Перегляд повідомлень з форми зворотнього зв'язку</p>
+                    <p className="text-gray-600">Перегляд повідомлень з форми зворотнього зв&apos;язку</p>
                 </div>
                 <Filters
                     search={search}

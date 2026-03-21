@@ -13,7 +13,7 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 
 export default function OrdersPage() {
     const { currentOffset, currentLimit, handleNextPage, handlePrevPage } = usePagination();
-    const { orders, loading, setOrders } = useOrders(currentLimit, currentOffset);
+    const { orders, loading } = useOrders(currentLimit, currentOffset);
 
     const shippingOptions = Object.entries(SHIPPING_METHODS).map(([value, label]) => ({ value, label }));
     const paymentOptions = Object.entries(PAYMENT_METHODS).map(([value, label]) => ({ value, label }));
@@ -32,7 +32,7 @@ export default function OrdersPage() {
             header: "Спосіб доставки", render: (m) => (
                 <SelectFilter
                     value={m.shipping_method}
-                    onChange={(val) => true}
+                    onChange={() => true}
                     options={shippingOptions}
                 />
             ),
@@ -41,7 +41,7 @@ export default function OrdersPage() {
             header: "Спосіб оплати", render: (m) => (
                 <SelectFilter
                     value={m.payment_method}
-                    onChange={(val) => true}
+                    onChange={() => true}
                     options={paymentOptions}
                 />
             ),
@@ -53,14 +53,14 @@ export default function OrdersPage() {
             header: "Статус", render: (m) => (
                 <SelectFilter
                     value={STATUS_OPTIONS.find(s => s.value === m.status)?.label ?? ""}
-                    onChange={(val) => true}
+                    onChange={() => true}
                     options={STATUS_OPTIONS.map(option => ({ ...option }))}
                 />
             ),
         },
         {
             header: "Товар",
-            render: (m) => (
+            render: () => (
                 <button
                     className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-full"
                 >

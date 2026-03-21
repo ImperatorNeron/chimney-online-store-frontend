@@ -6,7 +6,6 @@ import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 import PaginationControls from "@/components/modules/admin/components/messages/pagination";
 import LoadingState from "@/components/modules/admin/components/products/LoadingState";
-import ErrorState from "@/components/modules/admin/components/products/ErrorState";
 import EmptyState from "@/components/modules/admin/components/products/EmptyState";
 import SearchFilter from "@/components/shared/AdminTableSearctFilter";
 import SelectFilter from "@/components/shared/AdminTableSelectFilter";
@@ -52,28 +51,28 @@ function buildCategoryOptions(categories: AlistReadCategorySchema): { value: str
 
 function useProductColumns(categoryMap: Record<number, string>, handleDelete: (id: number) => void): Column<Create_ReadAbsoluteProductSchema>[] {
     return [
-        { header: "Назва товару", render: (m) => <b>{m.name}</b>, className: "break-words break-all" },
-        { header: "Slug", render: (m) => m.slug },
+        { header: "Назва товару", render: (m: Create_ReadAbsoluteProductSchema) => <b>{m?.name}</b>, className: "break-words break-all" },
+        { header: "Slug", render: (m: Create_ReadAbsoluteProductSchema) => m?.slug },
         {
             header: "Категорія",
-            render: (m) => categoryMap[m.category_id] || 'Невідома',
+            render: (m: Create_ReadAbsoluteProductSchema) => categoryMap[m?.category_id || 0] || 'Невідома',
             className: "break-words break-all mr-1",
         },
-        { header: "Дата створення", render: (m) => formatDate(m.created_at), className: "text-sm text-gray-500" },
-        { header: "Зображень", render: (m) => m.images?.length || 0 },
+        { header: "Дата створення", render: (m: Create_ReadAbsoluteProductSchema) => m?.created_at ? formatDate(m.created_at) : '-', className: "text-sm text-gray-500" },
+        { header: "Зображень", render: (m: Create_ReadAbsoluteProductSchema) => m?.images?.length || 0 },
         {
             header: "Дії",
             render: (m) => (
                 <div className="flex items-center space-x-1">
                     <Link
-                        href={`/admin-panel/products/update/${m.slug}`}
+                        href={`/admin-panel/products/update/${m?.slug}`}
                         className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-full bg-gray-50"
                         title="Редагувати"
                     >
                         <PencilIcon className="h-5 w-5" />
                     </Link>
                     <button
-                        onClick={() => handleDelete(m.id)}
+                        onClick={() => handleDelete(m?.id ?? 0)}
                         className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-full bg-gray-50"
                     >
                         <TrashIcon className="h-5 w-5" />
@@ -171,7 +170,7 @@ export default function ProductPage() {
     };
 
     useEffect(() => { document.title = "Продукти на сайті"; }, []);
-    useEffect(() => { if (products?.pagination?.total) setTotal(products.pagination.total); }, [products?.pagination?.total]);
+    useEffect(() => { if (products?.pagination?.total) setTotal(products.pagination.total); }, [products?.pagination?.total, setTotal]);
 
     // 🔹 Підготуємо дані для таблиці
     const preparedData = products?.items?.map(item => ({
