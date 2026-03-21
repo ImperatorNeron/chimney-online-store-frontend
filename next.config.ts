@@ -28,14 +28,14 @@ function getRemotePatterns(): RemotePattern[] {
   const port = process.env.NEXT_PUBLIC_MEDIA_PORT
   const schema = process.env.NEXT_PUBLIC_MEDIA_SCHEMA
 
-  if (!host || !pathname || !schema){
-      console.error('Error: Missing environment variables');
-      return [];
+  if (!host || !pathname || !schema) {
+    console.error('Error: Missing environment variables');
+    return [];
   }
 
   const pattern: RemotePattern = {
     protocol: schema as "http" | "https",
-    hostname: host,
+    hostname: `${host}/**`,
     pathname: pathname,
   };
 
