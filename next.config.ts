@@ -4,6 +4,7 @@ import { RemotePattern } from "next/dist/shared/lib/image-config";
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: getRemotePatterns(),
+    unoptimized: true,
   },
   reactStrictMode: false,
 
