@@ -211,6 +211,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/categories/children": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Child Categories */
+        get: operations["get_child_categories_api_v1_categories_children_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/categories/{category_id}": {
         parameters: {
             query?: never;
@@ -583,180 +600,260 @@ export interface components {
         /** ApiResponseSchema[ListPaginatedResponse[ReadExtendedOrderSchema]] */
         ApiResponseSchema_ListPaginatedResponse_ReadExtendedOrderSchema__: {
             /** Data */
-            data?: components["schemas"]["ListPaginatedResponse_ReadExtendedOrderSchema_"] | Record<string, never>;
+            data?: components["schemas"]["ListPaginatedResponse_ReadExtendedOrderSchema_"] | {
+                [key: string]: unknown;
+            };
             /** Meta */
-            meta?: Record<string, never>;
+            meta?: {
+                [key: string]: unknown;
+            };
             /** Errors */
             errors?: components["schemas"]["ErrorDetail"][];
         };
         /** ApiResponseSchema[ListPaginatedResponse[ReadFullUniqueProductSchema]] */
         ApiResponseSchema_ListPaginatedResponse_ReadFullUniqueProductSchema__: {
             /** Data */
-            data?: components["schemas"]["ListPaginatedResponse_ReadFullUniqueProductSchema_"] | Record<string, never>;
+            data?: components["schemas"]["ListPaginatedResponse_ReadFullUniqueProductSchema_"] | {
+                [key: string]: unknown;
+            };
             /** Meta */
-            meta?: Record<string, never>;
+            meta?: {
+                [key: string]: unknown;
+            };
             /** Errors */
             errors?: components["schemas"]["ErrorDetail"][];
         };
         /** ApiResponseSchema[ListPaginatedResponse[ReadMessageSchema]] */
         ApiResponseSchema_ListPaginatedResponse_ReadMessageSchema__: {
             /** Data */
-            data?: components["schemas"]["ListPaginatedResponse_ReadMessageSchema_"] | Record<string, never>;
+            data?: components["schemas"]["ListPaginatedResponse_ReadMessageSchema_"] | {
+                [key: string]: unknown;
+            };
             /** Meta */
-            meta?: Record<string, never>;
+            meta?: {
+                [key: string]: unknown;
+            };
             /** Errors */
             errors?: components["schemas"]["ErrorDetail"][];
         };
         /** ApiResponseSchema[ListPaginatedResponse[ReadPreviewProductSchema]] */
         ApiResponseSchema_ListPaginatedResponse_ReadPreviewProductSchema__: {
             /** Data */
-            data?: components["schemas"]["ListPaginatedResponse_ReadPreviewProductSchema_"] | Record<string, never>;
+            data?: components["schemas"]["ListPaginatedResponse_ReadPreviewProductSchema_"] | {
+                [key: string]: unknown;
+            };
             /** Meta */
-            meta?: Record<string, never>;
+            meta?: {
+                [key: string]: unknown;
+            };
             /** Errors */
             errors?: components["schemas"]["ErrorDetail"][];
         };
         /** ApiResponseSchema[ReadAbsoluteProductSchema] */
         ApiResponseSchema_ReadAbsoluteProductSchema_: {
             /** Data */
-            data?: components["schemas"]["ReadAbsoluteProductSchema"] | Record<string, never>;
+            data?: components["schemas"]["ReadAbsoluteProductSchema"] | {
+                [key: string]: unknown;
+            };
             /** Meta */
-            meta?: Record<string, never>;
+            meta?: {
+                [key: string]: unknown;
+            };
             /** Errors */
             errors?: components["schemas"]["ErrorDetail"][];
         };
         /** ApiResponseSchema[ReadCartItemSchema] */
         ApiResponseSchema_ReadCartItemSchema_: {
             /** Data */
-            data?: components["schemas"]["ReadCartItemSchema"] | Record<string, never>;
+            data?: components["schemas"]["ReadCartItemSchema"] | {
+                [key: string]: unknown;
+            };
             /** Meta */
-            meta?: Record<string, never>;
+            meta?: {
+                [key: string]: unknown;
+            };
             /** Errors */
             errors?: components["schemas"]["ErrorDetail"][];
         };
         /** ApiResponseSchema[ReadCategorySchema] */
         ApiResponseSchema_ReadCategorySchema_: {
             /** Data */
-            data?: components["schemas"]["ReadCategorySchema"] | Record<string, never>;
+            data?: components["schemas"]["ReadCategorySchema"] | {
+                [key: string]: unknown;
+            };
             /** Meta */
-            meta?: Record<string, never>;
+            meta?: {
+                [key: string]: unknown;
+            };
             /** Errors */
             errors?: components["schemas"]["ErrorDetail"][];
         };
         /** ApiResponseSchema[ReadFAQSchema] */
         ApiResponseSchema_ReadFAQSchema_: {
             /** Data */
-            data?: components["schemas"]["ReadFAQSchema"] | Record<string, never>;
+            data?: components["schemas"]["ReadFAQSchema"] | {
+                [key: string]: unknown;
+            };
             /** Meta */
-            meta?: Record<string, never>;
+            meta?: {
+                [key: string]: unknown;
+            };
             /** Errors */
             errors?: components["schemas"]["ErrorDetail"][];
         };
         /** ApiResponseSchema[ReadFiltersSchema] */
         ApiResponseSchema_ReadFiltersSchema_: {
             /** Data */
-            data?: components["schemas"]["ReadFiltersSchema"] | Record<string, never>;
+            data?: components["schemas"]["ReadFiltersSchema"] | {
+                [key: string]: unknown;
+            };
             /** Meta */
-            meta?: Record<string, never>;
+            meta?: {
+                [key: string]: unknown;
+            };
             /** Errors */
             errors?: components["schemas"]["ErrorDetail"][];
         };
         /** ApiResponseSchema[ReadFullCartSchema] */
         ApiResponseSchema_ReadFullCartSchema_: {
             /** Data */
-            data?: components["schemas"]["ReadFullCartSchema"] | Record<string, never>;
+            data?: components["schemas"]["ReadFullCartSchema"] | {
+                [key: string]: unknown;
+            };
             /** Meta */
-            meta?: Record<string, never>;
+            meta?: {
+                [key: string]: unknown;
+            };
             /** Errors */
             errors?: components["schemas"]["ErrorDetail"][];
         };
         /** ApiResponseSchema[ReadLikeSchema] */
         ApiResponseSchema_ReadLikeSchema_: {
             /** Data */
-            data?: components["schemas"]["ReadLikeSchema"] | Record<string, never>;
+            data?: components["schemas"]["ReadLikeSchema"] | {
+                [key: string]: unknown;
+            };
             /** Meta */
-            meta?: Record<string, never>;
+            meta?: {
+                [key: string]: unknown;
+            };
             /** Errors */
             errors?: components["schemas"]["ErrorDetail"][];
         };
         /** ApiResponseSchema[ReadMessageSchema] */
         ApiResponseSchema_ReadMessageSchema_: {
             /** Data */
-            data?: components["schemas"]["ReadMessageSchema"] | Record<string, never>;
+            data?: components["schemas"]["ReadMessageSchema"] | {
+                [key: string]: unknown;
+            };
             /** Meta */
-            meta?: Record<string, never>;
+            meta?: {
+                [key: string]: unknown;
+            };
             /** Errors */
             errors?: components["schemas"]["ErrorDetail"][];
         };
         /** ApiResponseSchema[ReadOrderBaseSchema] */
         ApiResponseSchema_ReadOrderBaseSchema_: {
             /** Data */
-            data?: components["schemas"]["ReadOrderBaseSchema"] | Record<string, never>;
+            data?: components["schemas"]["ReadOrderBaseSchema"] | {
+                [key: string]: unknown;
+            };
             /** Meta */
-            meta?: Record<string, never>;
+            meta?: {
+                [key: string]: unknown;
+            };
             /** Errors */
             errors?: components["schemas"]["ErrorDetail"][];
         };
         /** ApiResponseSchema[ReadUserSchema] */
         ApiResponseSchema_ReadUserSchema_: {
             /** Data */
-            data?: components["schemas"]["ReadUserSchema"] | Record<string, never>;
+            data?: components["schemas"]["ReadUserSchema"] | {
+                [key: string]: unknown;
+            };
             /** Meta */
-            meta?: Record<string, never>;
+            meta?: {
+                [key: string]: unknown;
+            };
             /** Errors */
             errors?: components["schemas"]["ErrorDetail"][];
         };
         /** ApiResponseSchema[list[ReadCategorySchema]] */
         ApiResponseSchema_list_ReadCategorySchema__: {
             /** Data */
-            data?: components["schemas"]["ReadCategorySchema"][] | Record<string, never>;
+            data?: components["schemas"]["ReadCategorySchema"][] | {
+                [key: string]: unknown;
+            };
             /** Meta */
-            meta?: Record<string, never>;
+            meta?: {
+                [key: string]: unknown;
+            };
             /** Errors */
             errors?: components["schemas"]["ErrorDetail"][];
         };
         /** ApiResponseSchema[list[ReadExtendedOrderSchema]] */
         ApiResponseSchema_list_ReadExtendedOrderSchema__: {
             /** Data */
-            data?: components["schemas"]["ReadExtendedOrderSchema"][] | Record<string, never>;
+            data?: components["schemas"]["ReadExtendedOrderSchema"][] | {
+                [key: string]: unknown;
+            };
             /** Meta */
-            meta?: Record<string, never>;
+            meta?: {
+                [key: string]: unknown;
+            };
             /** Errors */
             errors?: components["schemas"]["ErrorDetail"][];
         };
         /** ApiResponseSchema[list[ReadFAQSchema]] */
         ApiResponseSchema_list_ReadFAQSchema__: {
             /** Data */
-            data?: components["schemas"]["ReadFAQSchema"][] | Record<string, never>;
+            data?: components["schemas"]["ReadFAQSchema"][] | {
+                [key: string]: unknown;
+            };
             /** Meta */
-            meta?: Record<string, never>;
+            meta?: {
+                [key: string]: unknown;
+            };
             /** Errors */
             errors?: components["schemas"]["ErrorDetail"][];
         };
         /** ApiResponseSchema[list[ReadPreviewProductSchema]] */
         ApiResponseSchema_list_ReadPreviewProductSchema__: {
             /** Data */
-            data?: components["schemas"]["ReadPreviewProductSchema"][] | Record<string, never>;
+            data?: components["schemas"]["ReadPreviewProductSchema"][] | {
+                [key: string]: unknown;
+            };
             /** Meta */
-            meta?: Record<string, never>;
+            meta?: {
+                [key: string]: unknown;
+            };
             /** Errors */
             errors?: components["schemas"]["ErrorDetail"][];
         };
         /** ApiResponseSchema[list[int]] */
         ApiResponseSchema_list_int__: {
             /** Data */
-            data?: number[] | Record<string, never>;
+            data?: number[] | {
+                [key: string]: unknown;
+            };
             /** Meta */
-            meta?: Record<string, never>;
+            meta?: {
+                [key: string]: unknown;
+            };
             /** Errors */
             errors?: components["schemas"]["ErrorDetail"][];
         };
         /** ApiResponseSchema[list[list[str, str]]] */
         ApiResponseSchema_list_list_str__str___: {
             /** Data */
-            data?: string[][] | Record<string, never>;
+            data?: string[][] | {
+                [key: string]: unknown;
+            };
             /** Meta */
-            meta?: Record<string, never>;
+            meta?: {
+                [key: string]: unknown;
+            };
             /** Errors */
             errors?: components["schemas"]["ErrorDetail"][];
         };
@@ -898,7 +995,9 @@ export interface components {
             /** Message */
             message: string;
             /** Meta */
-            meta?: Record<string, never> | null;
+            meta?: {
+                [key: string]: unknown;
+            } | null;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -1161,7 +1260,6 @@ export interface components {
         };
         /** ReadFullUniqueProductSchema */
         ReadFullUniqueProductSchema: {
-            variations: never[];
             /** Id */
             id: number;
             /**
@@ -1338,7 +1436,9 @@ export interface components {
              */
             price: number;
             /** Extra Attrs */
-            extra_attrs: Record<string, never> | null;
+            extra_attrs: {
+                [key: string]: unknown;
+            } | null;
             /**
              * Category Id
              * @example 1
@@ -1423,7 +1523,9 @@ export interface components {
              */
             price: number;
             /** Extra Attrs */
-            extra_attrs: Record<string, never> | null;
+            extra_attrs: {
+                [key: string]: unknown;
+            } | null;
             /**
              * Category Id
              * @example 1
@@ -2100,6 +2202,37 @@ export interface operations {
             };
         };
     };
+    get_child_categories_api_v1_categories_children_get: {
+        parameters: {
+            query: {
+                parent_ids: number[];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponseSchema_list_ReadCategorySchema__"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     delete_category_api_v1_categories__category_id__delete: {
         parameters: {
             query?: never;
@@ -2276,6 +2409,10 @@ export interface operations {
     get_unique_product_list_api_v1_products_unique_get: {
         parameters: {
             query?: {
+                category_id?: number | null;
+                text?: string | null;
+                field?: string;
+                ordering?: string;
                 offset?: number;
                 limit?: number;
             };

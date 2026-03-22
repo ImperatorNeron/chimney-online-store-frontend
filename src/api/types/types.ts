@@ -6,10 +6,13 @@ type Res<T, Status extends number = 200> = T extends { responses: { [K in Status
 // ТИПИ ДЛЯ ЗАПИТІВ (requestBody)
 type Req<T> = T extends { requestBody: { content: { "application/json": infer R } } } ? R : never;
 
+type ExtractArrayField<T, K extends string> = Extract<NonNullable<T>, Record<K, unknown[]>>[K];
+
 // ORDERS
 export type ALReadExtendedOrderSchema = Res<paths["/api/v1/orders"]["get"]>;
 export type LReadExtendedOrderSchema = ALReadExtendedOrderSchema["data"];
-export type ReadExtendedOrderSchema = NonNullable<LReadExtendedOrderSchema>["items"][number];
+type OrdersList = ExtractArrayField<ALReadExtendedOrderSchema["data"], "items">;
+export type ReadExtendedOrderSchema = OrdersList[number];
 export type ReadOrderItemSchema = ReadExtendedOrderSchema["items"][number];
 export type ReadProductSchema = ReadOrderItemSchema["product"];
 export type UpdateOrderSchema = Req<paths["/api/v1/orders/{order_id}"]["patch"]>;
@@ -25,6 +28,7 @@ export type PaginationIn = paths["/api/v1/orders"]["get"]["parameters"]["query"]
 // CATEGORIES
 export type AlistReadCategorySchema = Res<paths["/api/v1/categories"]["get"]>;
 export type listReadCategorySchema = Res<paths["/api/v1/categories"]["get"]>["data"];
+export type Child_AlistReadCategorySchema = Res<paths["/api/v1/categories/children"]["get"]>["data"];
 // TODO: add schema to backend
 export type ReadCategoriesBySlug = Res<paths["/api/v1/categories/by-slugs"]["get"]>;
 
@@ -34,7 +38,8 @@ export type LReadFullUniqueProductSchema = ALReadFullUniqueProductSchema["data"]
 export type AlistReadPreviewProductSchema = Res<paths["/api/v1/products/by-ids"]["get"]>;
 export type Get_AReadAbsoluteProductSchema = Res<paths["/api/v1/products/{product_slug}"]["get"]>;
 export type Get_ReadAbsoluteProductSchema = NonNullable<Get_AReadAbsoluteProductSchema>["data"];
-export type ReadProductVariationSchema = NonNullable<Get_ReadAbsoluteProductSchema>["variations"][number];
+type VariationList = ExtractArrayField<Get_AReadAbsoluteProductSchema["data"], "variations">;
+export type ReadProductVariationSchema = VariationList[number];
 export type Create_AReadAbsoluteProductSchema = Get_AReadAbsoluteProductSchema;
 export type Create_ReadAbsoluteProductSchema = Create_AReadAbsoluteProductSchema["data"];
 export type listReadProductImageSchema = NonNullable<Create_ReadAbsoluteProductSchema>["images"];
@@ -44,7 +49,8 @@ export type ProductFiltersSchema = paths["/api/v1/products"]["get"]["parameters"
 
 export type ALReadPreviewProductSchema = Res<paths["/api/v1/products"]["get"]>;
 export type LReadPreviewProductSchema = NonNullable<ALReadPreviewProductSchema>["data"];
-export type ReadPreviewProductSchema = NonNullable<LReadPreviewProductSchema>["items"][number];
+type PreviewProductList = ExtractArrayField<ALReadPreviewProductSchema["data"], "items">;
+export type ReadPreviewProductSchema = PreviewProductList[number];
 
 // FAQS
 export type AlistReadFAQSchema = Res<paths["/api/v1/faq"]["get"]>;
@@ -64,7 +70,8 @@ export type UserUpdateWithPasswordSchema = Req<paths["/api/v1/users/me/update"][
 export type AReadFullCartSchema = Res<paths["/api/v1/cart"]["get"]>;
 export type AReadCartItemSchema = Res<paths["/api/v1/cart"]["post"]>;
 export type ReadFullCartSchema = AReadFullCartSchema["data"];
-export type ReadCartItemWithTotalPriceSchema = NonNullable<ReadFullCartSchema>["items"][number];
+type FullCartList = ExtractArrayField<AReadFullCartSchema["data"], "items">;
+export type ReadCartItemWithTotalPriceSchema = FullCartList[number];
 
 // LIKES
 export type CreateLikeSchema = paths["/api/v1/like"]["post"]["parameters"]["query"];
@@ -75,7 +82,8 @@ export type ReadLikedProductIdsSchema = Res<paths["/api/v1/like"]["get"]>;
 // MESSAGES
 export type ALReadMessageSchema = Res<paths["/api/v1/messages/"]["get"]>;
 export type LReadMessageSchema = ALReadMessageSchema["data"];
-export type ReadMessage = NonNullable<LReadMessageSchema>["items"][number];
+type MessageList = ExtractArrayField<ALReadMessageSchema["data"], "items">;
+export type ReadMessage = MessageList[number];
 export type CreateMessageSchema = Req<paths["/api/v1/messages/"]["post"]>;
 export type AReadMessageSchema = Res<paths["/api/v1/messages/"]["post"]>;
 export type ChangeMessageStatusSchema = Req<paths["/api/v1/messages/change-status/{message_id}"]["patch"]>;
