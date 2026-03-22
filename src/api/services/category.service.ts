@@ -1,6 +1,6 @@
 import { endpoints } from "../endpoints";
 import { http } from '@/api/http';
-import { AlistReadCategorySchema, ReadCategoriesBySlug } from "../types/types";
+import { AlistReadCategorySchema, Child_AlistReadCategorySchema, ReadCategoriesBySlug } from "../types/types";
 
 
 class CategoryService {
@@ -16,6 +16,14 @@ class CategoryService {
         slugs.forEach(slug => params.append('slugs', slug));
         const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}/by-slugs?${params.toString()}`
         const response = await http.get<ReadCategoriesBySlug>(url);
+        return response.data;
+    }
+
+    async getChildCategories(parentIds: number[]) {
+        const params = new URLSearchParams();
+        parentIds.forEach((id) => params.append('parent_ids', String(id)));
+        const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}/children?${params.toString()}`
+        const response = await http.get<Child_AlistReadCategorySchema>(url);
         return response.data;
     }
 }

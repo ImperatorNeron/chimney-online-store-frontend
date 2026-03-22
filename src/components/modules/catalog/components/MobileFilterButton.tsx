@@ -1,11 +1,13 @@
-'use client'
+﻿'use client'
+
 import { FunnelIcon } from "@heroicons/react/24/solid";
+import { ProductFiltersSchema } from "@/api/types/types";
 import FiltersOverlay from "./FiltersOverlay";
 import useMobileFilters from "../hooks/useMobileFilters";
-import { ProductFiltersSchema } from "@/api/types/types";
 
 export default function MobileFilterButton({ filters }: { filters: ProductFiltersSchema }) {
     const { isOpen, toggleMenu, closeMenu } = useMobileFilters();
+
     return (
         <>
             <button
@@ -16,12 +18,7 @@ export default function MobileFilterButton({ filters }: { filters: ProductFilter
                 <FunnelIcon className="h-6 w-6 text-white" />
             </button>
 
-            <FiltersOverlay
-                isOpen={isOpen}
-                onClose={closeMenu}
-                filters={filters}
-            />
+            <FiltersOverlay isOpen={isOpen} onClose={closeMenu} filters={filters} />
         </>
     );
-};
-
+}

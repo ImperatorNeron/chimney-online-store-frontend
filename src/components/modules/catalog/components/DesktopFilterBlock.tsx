@@ -1,4 +1,4 @@
-import { ProductFiltersSchema } from "@/api/types/types";
+﻿import { ProductFiltersSchema } from "@/api/types/types";
 import Filters from "./Filters";
 
 export default function DesktopFilterBlock({ filters }: { filters: ProductFiltersSchema }) {

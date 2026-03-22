@@ -1,9 +1,17 @@
-import OverlayHeader from "@/components/shared/OverlayHeader";
+﻿import OverlayHeader from "@/components/shared/OverlayHeader";
 import Overlay from "@/components/ui/Overlay";
-import Filters from "./Filters";
 import { ProductFiltersSchema } from "@/api/types/types";
+import Filters from "./Filters";
 
-export default function FiltersOverlay({ isOpen, onClose, filters }: { isOpen: boolean; onClose: () => void, filters: ProductFiltersSchema }) {
+export default function FiltersOverlay({
+    isOpen,
+    onClose,
+    filters,
+}: {
+    isOpen: boolean;
+    onClose: () => void;
+    filters: ProductFiltersSchema;
+}) {
     return (
         <Overlay isOpen={isOpen} onClose={onClose}>
             <OverlayHeader onClose={onClose} title="Фільтри" />
