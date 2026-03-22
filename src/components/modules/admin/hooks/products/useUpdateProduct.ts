@@ -87,6 +87,19 @@ export function useUpdateProduct() {
         load();
     }, [productSlug, resetForm, router]);
 
+    useEffect(() => {
+        return () => {
+            reset({
+                name: '',
+                slug: '',
+                description: '',
+                category_id: 0,
+                images: undefined,
+                variations: []
+            });
+        };
+    }, [reset]);
+
     const markImageForDelete = (id: number) => {
         setExistingImages(imgs => imgs.filter(img => img.id !== id));
         setImagesToDelete(ids => [...ids, id]);
@@ -181,7 +194,7 @@ export function useUpdateProduct() {
             if (!updated) throw new Error('Не вдалося завантажити оновлений продукт');
 
             resetForm(updated);
-            router.push(`/admin-panel/products/update/${data.slug}`);
+            router.replace(`/admin-panel/products/update/${data.slug}`);
         } catch (error) {
             console.error('Помилка оновлення продукту:', error);
             NotificationService.error('Помилка оновлення продукту');
