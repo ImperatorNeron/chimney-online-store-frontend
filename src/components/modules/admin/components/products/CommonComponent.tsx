@@ -103,7 +103,7 @@ export default function ProductActionComponent({ categories, form, mode }: { cat
                                         <div key={img.id} className="relative group">
                                             <div className="aspect-square overflow-hidden rounded-lg bg-gray-50">
                                                 <Image
-                                                    src={`${process.env.NEXT_PUBLIC_MEDIA_PATH}/${form.productSlug}/${img.filename}`}
+                                                    src={`${process.env.NEXT_PUBLIC_MEDIA_PATH}/${process.env.NEXT_PUBLIC_MEDIA_ITEMS}/${form.productSlug}/${img.filename}`}
                                                     alt={img.alt}
                                                     className="object-cover w-full h-full transition-opacity group-hover:opacity-75"
                                                     height={200}

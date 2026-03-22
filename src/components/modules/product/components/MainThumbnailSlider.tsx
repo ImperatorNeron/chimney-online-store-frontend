@@ -36,7 +36,7 @@ export default function MainThumbnailSlider({
                         <div className="w-[56px] h-14 relative cursor-pointer transition-opacity opacity-40 hover:opacity-100">
                             <div className="w-[56px] h-[56px] relative overflow-hidden">
                                 <Image
-                                    src={`${process.env.NEXT_PUBLIC_MEDIA_PATH}/${uniqueSlug}/${slide.filename}`}
+                                    src={`${process.env.NEXT_PUBLIC_MEDIA_PATH}/${process.env.NEXT_PUBLIC_MEDIA_ITEMS}/${uniqueSlug}/${slide.filename}`}
                                     alt={slide.alt ?? ""}
                                     fill
                                     sizes="56px"

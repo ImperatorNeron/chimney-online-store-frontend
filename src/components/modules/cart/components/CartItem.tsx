@@ -44,7 +44,7 @@ export default function CartItem({ item }: { item: ReadCartItemWithTotalPriceSch
                 <div className="relative w-16 h-16 flex-shrink-0">
                     {item.product.preview ? (
                         <Image
-                            src={`${process.env.NEXT_PUBLIC_MEDIA_PATH}/${item.product.slug}/${item.product.preview.filename}`}
+                            src={`${process.env.NEXT_PUBLIC_MEDIA_PATH}/${process.env.NEXT_PUBLIC_MEDIA_ITEMS}/${item.product.slug}/${item.product.preview.filename}`}
                             alt={item.product.preview.alt || ""}
                             width={100}
                             height={100}
