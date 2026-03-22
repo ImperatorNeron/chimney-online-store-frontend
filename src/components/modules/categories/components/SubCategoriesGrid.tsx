@@ -33,7 +33,7 @@ export function SubCategoriesGrid({
           className="group flex items-center gap-3 rounded-lg bg-white p-2 transition-all duration-200 hover:bg-zinc-100"
         >
           <CategoryImage
-            imageSrc={joinMediaPath("categories", child.slug, child.file_path)}
+            imageSrc={joinMediaPath("categories", mainSlug, child.file_path)}
             alt={child.name}
             size={56}
           />

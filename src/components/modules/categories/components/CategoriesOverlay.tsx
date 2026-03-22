@@ -13,20 +13,13 @@ import {
 import Overlay from '@/components/ui/Overlay'
 import OverlayHeader from '@/components/shared/OverlayHeader'
 import useCatalog from '../hooks/useCatalog'
+import { joinMediaPath } from '@/utils/utils'
 
 type Category = {
     id: number
     name: string
     slug: string
     file_path?: string | null
-}
-
-function joinMediaPath(...parts: Array<string | undefined | null>) {
-    const base = (process.env.NEXT_PUBLIC_MEDIA_PATH ?? '').replace(/\/$/, '')
-    const normalizedParts = parts
-        .filter(Boolean)
-        .map((part) => String(part).replace(/^\/+|\/+$/g, ''))
-    return [base, ...normalizedParts].filter(Boolean).join('/')
 }
 
 function CategoryThumb({ src, alt }: { src?: string | null; alt: string }) {
@@ -146,7 +139,7 @@ export default function CategoriesOverlay({
                         <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">
                             {childCategories(category.id).map((child) => {
                                 const childImage = child.file_path
-                                    ? joinMediaPath('categories', child.slug, child.file_path)
+                                    ? joinMediaPath('categories', category.slug, child.file_path)
                                     : null
                                 return (
                                     <Link
@@ -305,7 +298,7 @@ export default function CategoriesOverlay({
                                         <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3 xl:grid-cols-4">
                                             {activeSubCategories.map((child) => {
                                                 const childImage = child.file_path
-                                                    ? joinMediaPath('categories', child.slug, child.file_path)
+                                                    ? joinMediaPath('categories', activeCategory.slug, child.file_path)
                                                     : null
                                                 return (
                                                     <Link
