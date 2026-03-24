@@ -1,12 +1,12 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useCatalogNavigation } from '../providers/CatalogNavigationProvider';
 
 export default function useResetFilters(keepKeys: string[] = []) {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const [loading, setLoading] = useState(false);
+    const { isPending, navigate } = useCatalogNavigation();
 
     const resetFilters = () => {
         const params = new URLSearchParams(searchParams);
@@ -15,18 +15,12 @@ export default function useResetFilters(keepKeys: string[] = []) {
         );
 
         keysToDelete.forEach(key => params.delete(key));
-        setLoading(true);
-
-        router.replace(`?${params.toString()}`, { scroll: false });
-
-        setTimeout(() => {
-            setLoading(false);
-        }, 1000);
+        navigate(() => router.replace(`?${params.toString()}`, { scroll: false }));
     };
 
     const hasRemovableFilters = Array.from(searchParams.keys()).some(
         key => !keepKeys.includes(key)
     );
 
-    return { resetFilters, hasRemovableFilters, loading };
+    return { resetFilters, hasRemovableFilters, loading: isPending };
 }

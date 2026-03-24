@@ -1,8 +1,10 @@
 import { useRouter, useSearchParams } from "next/navigation";
+import { useCatalogNavigation } from "../providers/CatalogNavigationProvider";
 
 export default function useOrderSelector() {
     const router = useRouter();
     const searchParams = useSearchParams();
+    const { navigate } = useCatalogNavigation();
 
     const currentField = searchParams.get("field") || "created_at";
     const currentOrdering = searchParams.get("ordering") || "asc";
@@ -15,7 +17,7 @@ export default function useOrderSelector() {
         newParams.set("field", field);
         newParams.set("ordering", ordering);
         newParams.delete("page");
-        router.push(`?${newParams.toString()}`);
+        navigate(() => router.push(`?${newParams.toString()}`));
     };
 
     return {

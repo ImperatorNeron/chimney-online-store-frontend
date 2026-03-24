@@ -4,10 +4,8 @@ import MobileFilterButton from "@/components/modules/catalog/components/MobileFi
 import DesktopFilterBlock from "@/components/modules/catalog/components/DesktopFilterBlock";
 import LimitSelector from "@/components/modules/catalog/components/LimitSelector";
 import OrderSelector from "@/components/modules/catalog/components/OrderSelector";
-import ProductList from "@/components/modules/products/components/ProductList";
-import Pagination from "@/components/modules/catalog/components/Pagination";
-import EmptySearch from "@/components/shared/EmptySearch";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
+import CatalogResults from "@/components/modules/catalog/components/CatalogResults";
 
 export const metadata = {
     title: 'Пошук в каталозі',
@@ -53,19 +51,7 @@ export default async function SearchPage({ searchParams }: {
                         <OrderSelector />
                     </div>
 
-                    {items.length > 0 ? (
-                        <>
-                            <ProductList
-                                items={items}
-                                className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 lg:gap-3"
-                            />
-                            {totalPages > 1 && (
-                                <Pagination limit={limit} currentPage={currentPage} totalPages={totalPages} />
-                            )}
-                        </>
-                    ) : (
-                        <EmptySearch />
-                    )}
+                    <CatalogResults items={items as any[]} limit={limit} currentPage={currentPage} totalPages={totalPages} />
                 </div>
             </div>
         </>

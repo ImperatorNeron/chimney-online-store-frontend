@@ -1,8 +1,10 @@
 import { useRouter, useSearchParams } from "next/navigation";
+import { useCatalogNavigation } from "../providers/CatalogNavigationProvider";
 
 export const useFilterSelect = (name: string, options: (string | null)[]) => {
     const router = useRouter();
     const searchParams = useSearchParams();
+    const { navigate } = useCatalogNavigation();
     const currentValue = searchParams.get(name) || '';
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -13,7 +15,7 @@ export const useFilterSelect = (name: string, options: (string | null)[]) => {
             params.delete(name);
         }
         params.delete("page");
-        router.replace(`?${params.toString()}`, { scroll: false });
+        navigate(() => router.replace(`?${params.toString()}`, { scroll: false }));
     };
 
     const sortedOptions = options

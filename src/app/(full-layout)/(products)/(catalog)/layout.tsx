@@ -1,3 +1,5 @@
+import { CatalogNavigationProvider } from "@/components/modules/catalog/providers/CatalogNavigationProvider";
+
 export default function CatalogLayout({
     children
 }: {
@@ -5,8 +7,6 @@ export default function CatalogLayout({
 }) {
 
     return (
-        <div>
-            {children}
-        </div>
+        <CatalogNavigationProvider>{children}</CatalogNavigationProvider>
     )
 }

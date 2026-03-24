@@ -9,7 +9,8 @@ export default function Selector({
     currentValue,
     handleChange,
     width,
-    emptyValue = false
+    emptyValue = false,
+    disabled = false
 }: {
     label: string;
     name: string;
@@ -18,6 +19,7 @@ export default function Selector({
     handleChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
     width: string;
     emptyValue?: boolean;
+    disabled?: boolean;
 }) {
     const totalOptions = options.length + (emptyValue ? 1 : 0);
     
@@ -35,7 +37,8 @@ export default function Selector({
                     id={name}
                     value={currentValue}
                     onChange={handleChange}
-                    className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-4 py-2 pr-10 text-sm text-gray-700 shadow-sm transition-all"
+                    disabled={disabled}
+                    className={`w-full appearance-none rounded-lg border border-gray-300 bg-white px-4 py-2 pr-10 text-sm text-gray-700 shadow-sm transition-all ${disabled ? 'opacity-60 cursor-not-allowed' : ''}`}
                 >
                     {emptyValue && <option value="">Всі опції</option>}
                     {options.map(option => (

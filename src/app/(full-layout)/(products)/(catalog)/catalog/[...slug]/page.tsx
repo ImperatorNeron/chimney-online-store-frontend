@@ -6,10 +6,8 @@ import MobileFilterButton from "@/components/modules/catalog/components/MobileFi
 import ChildCategories, { type ChildCategoryItem } from "@/components/modules/catalog/components/ChildCategories";
 import LimitSelector from "@/components/modules/catalog/components/LimitSelector";
 import OrderSelector from "@/components/modules/catalog/components/OrderSelector";
-import Pagination from "@/components/modules/catalog/components/Pagination";
-import ProductList from "@/components/modules/products/components/ProductList";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
-import EmptySearch from "@/components/shared/EmptySearch";
+import CatalogResults from "@/components/modules/catalog/components/CatalogResults";
 
 type Params = Promise<{ slug: string[] }>;
 
@@ -131,19 +129,7 @@ export default async function CatalogPage({
                         <OrderSelector />
                     </div>
 
-                    {items.length > 0 ? (
-                        <>
-                            <ProductList
-                                items={items}
-                                className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 lg:gap-3"
-                            />
-                            {totalPages > 1 && (
-                                <Pagination limit={limit} currentPage={currentPage} totalPages={totalPages} />
-                            )}
-                        </>
-                    ) : (
-                        <EmptySearch />
-                    )}
+                    <CatalogResults items={items as any[]} limit={limit} currentPage={currentPage} totalPages={totalPages} />
                 </div>
             </div>
         </>

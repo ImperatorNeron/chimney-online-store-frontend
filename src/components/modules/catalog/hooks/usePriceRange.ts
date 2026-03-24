@@ -2,6 +2,7 @@
 import { debounce } from "lodash-es";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useMemo, useCallback } from "react";
+import { useCatalogNavigation } from "../providers/CatalogNavigationProvider";
 
 export const usePriceRange = (minPrice: number, maxPrice: number) => {
     const router = useRouter();
@@ -9,7 +10,7 @@ export const usePriceRange = (minPrice: number, maxPrice: number) => {
     const [low, setLow] = useState(minPrice);
     const [high, setHigh] = useState(maxPrice);
     const [activeThumb, setActiveThumb] = useState<'low' | 'high' | null>(null);
-    const [loading, setLoading] = useState(false);
+    const { isPending, navigate } = useCatalogNavigation();
 
     useEffect(() => {
         const minFromUrl = parseFloat(searchParams.get('min_price') || '');
@@ -25,13 +26,9 @@ export const usePriceRange = (minPrice: number, maxPrice: number) => {
                 params.set('min_price', l.toString());
                 params.set('max_price', h.toString());
                 params.delete("page");
-                router.replace(`?${params.toString()}`, { scroll: false });
-
-                setLoading(true);
-                router.replace(`?${params.toString()}`, { scroll: false });
-                setTimeout(() => setLoading(false), 1000);
+                navigate(() => router.replace(`?${params.toString()}`, { scroll: false }));
             }, 500),
-        [searchParams, router]
+        [searchParams, router, navigate]
     );
 
     const handleLowChange = useCallback(
@@ -67,7 +64,7 @@ export const usePriceRange = (minPrice: number, maxPrice: number) => {
     return {
         low,
         high,
-        loading,
+        loading: isPending,
         activeThumb,
         handleLowChange,
         handleHighChange,
