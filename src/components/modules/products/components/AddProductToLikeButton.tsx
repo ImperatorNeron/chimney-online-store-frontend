@@ -44,7 +44,7 @@ export default function AddProductToLikeButton({ productId }: { productId: numbe
 
     return (
         <button
-            className="absolute top-1.5 right-1.5 p-2 rounded-full shadow-sm hover:bg-gray-100 transition-colors z-10"
+            className="absolute top-1.5 right-1.5 p-2 rounded-full hover:bg-gray-100 transition-colors z-10"
             onClick={handleClick}
             disabled={loading}
         >
