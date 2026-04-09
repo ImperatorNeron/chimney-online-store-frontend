@@ -20,7 +20,7 @@ export default function ProfileFavouriteNavigationIcons() {
                 iconSrc="/icons/heart.png"
                 alt="Улюблене"
                 count={likedCount}
-                countColor="bg-green-500"
+                countColor="bg-gray-500"
                 label="Улюблене"
             />
         </>

@@ -32,7 +32,7 @@ export default function MobileMenuOverlay({ isOpen, onClose }: {
                                 alt="Улюблене"
                                 label="Улюблене"
                                 count={likedCount}
-                                countColor="bg-green-500"
+                                countColor="bg-gray-500"
                                 onClose={onClose}
                             />)}
                         <NavigationLink
