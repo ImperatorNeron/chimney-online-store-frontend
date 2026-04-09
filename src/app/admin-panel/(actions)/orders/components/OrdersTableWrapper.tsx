@@ -26,23 +26,8 @@ export default function OrdersTableWrapper({
     if (loading) return <LoadingState />;
     if (!orders?.length) return <EmptyState />;
 
-    // Гнучкі ширини: пошта та накладна отримують fr, щоб займати вільний простір
     const columnTemplate =
-        "40px 130px 90px minmax(150px, 1fr) 100px 110px 100px 70px 120px 100px 80px 110px 40px";
-    // Пояснення:
-    // 1. № (40)
-    // 2. Клієнт (130)
-    // 3. Телефон (90)
-    // 4. Пошта (min 150, може рости)
-    // 5. Дата (100)
-    // 6. Доставка (110)
-    // 7. Оплата метод (100)
-    // 8. Оплачено (70)
-    // 9. Накладна (min 90, росте сильніше)
-    // 10. Знижка (70)
-    // 11. Сума (80)
-    // 12. Статус (110)
-    // 13. Розгорнути (40)
+        "40px 130px 100px minmax(130px, 1fr) 95px 110px 100px 85px minmax(100px, 1fr) 90px 80px 110px 40px";
 
     return (
         <>

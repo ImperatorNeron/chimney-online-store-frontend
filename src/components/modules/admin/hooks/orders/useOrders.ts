@@ -10,6 +10,9 @@ export default function useOrders(
         text?: string;
         field?: string;
         ordering?: string;
+        status?: string;
+        shipping_method?: string;
+        payment_method?: string;
     },
 ) {
     const { data: orders, setData: setOrders, ...rest } = useFetchData<LReadExtendedOrderSchema>(

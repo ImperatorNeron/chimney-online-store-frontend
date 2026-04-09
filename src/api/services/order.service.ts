@@ -31,6 +31,9 @@ export class OrderService {
             text?: string;
             field?: string;
             ordering?: string;
+            status?: string;
+            shipping_method?: string;
+            payment_method?: string;
         },
     ) {
         const query = new URLSearchParams({
@@ -42,6 +45,9 @@ export class OrderService {
             query.append("field", params.field);
             query.append("ordering", params.ordering);
         }
+        if (params?.status) query.append("status", params.status);
+        if (params?.shipping_method) query.append("shipping_method", params.shipping_method);
+        if (params?.payment_method) query.append("payment_method", params.payment_method);
         const url = `${this.endpoint}?${query.toString()}`;
         const response = await http.get<ALReadExtendedOrderSchema>(url, token);
         return response.data;

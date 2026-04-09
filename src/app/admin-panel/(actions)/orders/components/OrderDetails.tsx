@@ -150,6 +150,8 @@ export default function OrderDetails({
                                 <input
                                     className={inputClass}
                                     value={draft.last_name}
+                                    maxLength={50}
+                                    placeholder="Обовʼязкове поле"
                                     onChange={(e) => onChange({ last_name: e.target.value })}
                                 />
                             ) : (
@@ -162,6 +164,8 @@ export default function OrderDetails({
                                 <input
                                     className={inputClass}
                                     value={draft.first_name}
+                                    maxLength={50}
+                                    placeholder="Обовʼязкове поле"
                                     onChange={(e) => onChange({ first_name: e.target.value })}
                                 />
                             ) : (
@@ -174,6 +178,7 @@ export default function OrderDetails({
                                 <input
                                     className={inputClass}
                                     value={draft.patronymic}
+                                    maxLength={50}
                                     onChange={(e) => onChange({ patronymic: e.target.value })}
                                 />
                             ) : (
@@ -186,6 +191,8 @@ export default function OrderDetails({
                                 <input
                                     className={inputClass}
                                     value={draft.phone_number}
+                                    maxLength={13}
+                                    placeholder="+380XXXXXXXXX"
                                     onChange={(e) => onChange({ phone_number: e.target.value })}
                                 />
                             ) : (
@@ -199,6 +206,8 @@ export default function OrderDetails({
                                     type="email"
                                     className={inputClass}
                                     value={draft.email}
+                                    maxLength={320}
+                                    placeholder="email@example.com"
                                     onChange={(e) => onChange({ email: e.target.value })}
                                 />
                             ) : (
@@ -211,6 +220,8 @@ export default function OrderDetails({
                                 <textarea
                                     className={`${inputClass} min-h-[70px]`}
                                     value={draft.address}
+                                    maxLength={200}
+                                    placeholder="Обовʼязкове поле"
                                     onChange={(e) => onChange({ address: e.target.value })}
                                 />
                             ) : (

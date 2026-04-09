@@ -172,9 +172,11 @@ export default function useOrderColumns({
             render: (o) => (
                 <EditableCell
                     value={o.waybill_number || ""}
-                    onSave={(val) => onQuickUpdate(o.id, { waybill_number: val })}
+                    onSave={(val) => onQuickUpdate(o.id, { waybill_number: val.trim() })}
                     disabled={isUpdating(o.id)}
                     placeholder="№ ТТН"
+                    sanitize={(v) => v.replace(/[^0-9]/g, "")}
+                    maxLength={30}
                 />
             ),
             className: "min-w-[110px]",
@@ -193,11 +195,18 @@ export default function useOrderColumns({
                 <EditableCell
                     value={o.price_discount ?? "0"}
                     onSave={(val) => {
-                        // quickUpdate всередині перетворить рядок через calcPriceDiscount
                         onQuickUpdate(o.id, { price_discount: val });
                     }}
                     disabled={isUpdating(o.id)}
                     placeholder="0"
+                    sanitize={(v) => {
+                        let s = v.replace(/[^0-9.,%]/g, "").replace(",", ".");
+                        const dotCount = (s.match(/\./g) || []).length;
+                        if (dotCount > 1) s = s.slice(0, s.lastIndexOf("."));
+                        if (s.includes("%")) s = s.replace(/%/g, "") + "%";
+                        return s;
+                    }}
+                    maxLength={10}
                 />
             ),
             className: "min-w-[90px]",

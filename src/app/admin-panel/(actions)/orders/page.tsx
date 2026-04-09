@@ -308,6 +308,9 @@ export default function OrdersPage() {
   const [search, setSearch] = useState("");
   const [sortField, setSortField] = useState<OrderSortField>("created_at");
   const [sortOrdering, setSortOrdering] = useState<SortOrdering>("desc");
+  const [filterStatus, setFilterStatus] = useState("");
+  const [filterShipping, setFilterShipping] = useState("");
+  const [filterPayment, setFilterPayment] = useState("");
 
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
   const [editingOrderId, setEditingOrderId] = useState<number | null>(null);
@@ -333,8 +336,11 @@ export default function OrdersPage() {
       text: debouncedSearch || undefined,
       field: sortField,
       ordering: sortOrdering,
+      status: filterStatus || undefined,
+      shipping_method: filterShipping || undefined,
+      payment_method: filterPayment || undefined,
     }),
-    [debouncedSearch, sortField, sortOrdering],
+    [debouncedSearch, sortField, sortOrdering, filterStatus, filterShipping, filterPayment],
   );
 
   const { orders, loading, reload, setOrders } = useOrders(currentLimit, currentOffset, params);
@@ -379,8 +385,13 @@ export default function OrdersPage() {
       if (!prev) return prev;
       const next = { ...prev, ...patch };
       if (patch.discount_input !== undefined) next.discount_input = normalizeDiscountInput(patch.discount_input);
-      if (patch.phone_number !== undefined) next.phone_number = patch.phone_number.replace(/\\D/g, "");
+      if (patch.phone_number !== undefined) next.phone_number = patch.phone_number.replace(/[^\d+]/g, "").slice(0, 13);
       if (patch.waybill_number !== undefined) next.waybill_number = patch.waybill_number.trim().slice(0, 30);
+      if (patch.first_name !== undefined) next.first_name = patch.first_name.replace(/[^a-zA-Zа-яА-ЯіІїЇєЄґҐʼ'\- ]/g, "").slice(0, 50);
+      if (patch.last_name !== undefined) next.last_name = patch.last_name.replace(/[^a-zA-Zа-яА-ЯіІїЇєЄґҐʼ'\- ]/g, "").slice(0, 50);
+      if (patch.patronymic !== undefined) next.patronymic = patch.patronymic.replace(/[^a-zA-Zа-яА-ЯіІїЇєЄґҐʼ'\- ]/g, "").slice(0, 50);
+      if (patch.email !== undefined) next.email = patch.email.slice(0, 320);
+      if (patch.address !== undefined) next.address = patch.address.slice(0, 200);
       return next;
     });
   };
@@ -389,6 +400,19 @@ export default function OrdersPage() {
     if (!draft || editingOrderId == null) return;
     const order = orders?.items?.find((o) => o.id === editingOrderId);
     if (!order) return;
+
+    if (!draft.first_name.trim() || !draft.last_name.trim() || !draft.phone_number.trim() || !draft.address.trim()) {
+      NotificationService.error("Заповніть обовʼязкові поля: імʼя, прізвище, телефон, адреса");
+      return;
+    }
+    if (draft.phone_number.replace(/\D/g, "").length < 10) {
+      NotificationService.error("Номер телефону має містити щонайменше 10 цифр");
+      return;
+    }
+    if (draft.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(draft.email)) {
+      NotificationService.error("Невірний формат електронної пошти");
+      return;
+    }
 
     try {
       setSaving(true);
@@ -420,6 +444,33 @@ export default function OrdersPage() {
 
   const quickUpdate = async (id: number, patch: Partial<UpdateOrderSchema>) => {
     if (isUpdating(id)) return;
+
+    let processedPatch = { ...patch };
+
+    if (typeof processedPatch.price_discount === 'string') {
+      const order = orders?.items?.find(o => o.id === id);
+      const total = order ? Number(order.total_price) : 0;
+      const discount = calcPriceDiscount(processedPatch.price_discount, total);
+      if (discount < 0) {
+        NotificationService.error("Знижка не може бути відʼємною");
+        return;
+      }
+      if (total > 0 && discount > total) {
+        NotificationService.error("Знижка не може перевищувати суму замовлення");
+        return;
+      }
+      processedPatch.price_discount = discount;
+    }
+
+    if (processedPatch.waybill_number !== undefined) {
+      const trimmed = String(processedPatch.waybill_number).trim();
+      if (trimmed && !/^\d+$/.test(trimmed)) {
+        NotificationService.error("Номер накладної має містити тільки цифри");
+        return;
+      }
+      processedPatch.waybill_number = trimmed || null;
+    }
+
     try {
       setUpdatingIds((prev) => {
         const next = new Set(prev);
@@ -428,16 +479,6 @@ export default function OrdersPage() {
       });
       const token = await getValidToken();
       if (!token) return router.push("/auth/login");
-
-      let processedPatch = { ...patch };
-      if (typeof processedPatch.price_discount === 'string') {
-        const order = orders?.items?.find(o => o.id === id);
-        if (order) {
-          processedPatch.price_discount = calcPriceDiscount(processedPatch.price_discount, Number(order.total_price));
-        } else {
-          processedPatch.price_discount = 0;
-        }
-      }
 
       await orderService.updateOrderInfo(token, processedPatch as UpdateOrderSchema, id);
       updateOrderInState(setOrders, id, processedPatch);
@@ -467,12 +508,15 @@ export default function OrdersPage() {
     setSearch("");
     setSortField("created_at");
     setSortOrdering("desc");
+    setFilterStatus("");
+    setFilterShipping("");
+    setFilterPayment("");
     setCurrentOffset(0);
     reload();
   };
 
   return (
-    <div className="max-w-screen-2xl mx-auto">
+    <div className="max-w-[1920px] mx-auto px-4">
       <div className="flex flex-col md:flex-row justify-between gap-4 mb-4">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold">Замовлення клієнтів</h1>
@@ -484,6 +528,12 @@ export default function OrdersPage() {
           loading={loading}
           onRefresh={handleRefresh}
           setOffset={setCurrentOffset}
+          status={filterStatus}
+          setStatus={setFilterStatus}
+          shippingMethod={filterShipping}
+          setShippingMethod={setFilterShipping}
+          paymentMethod={filterPayment}
+          setPaymentMethod={setFilterPayment}
         />
       </div>
 
