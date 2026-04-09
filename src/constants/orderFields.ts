@@ -12,4 +12,5 @@ export type OrderSortField =
     | "payment_method"
     | "price_discount"
     | "is_paid";
+export type ProductSortField = "name" | "slug" | "category_id" | "created_at";
 export type SortOrdering = "asc" | "desc";

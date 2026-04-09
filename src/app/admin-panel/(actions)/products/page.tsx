@@ -10,6 +10,7 @@ import EmptyState from "@/components/modules/admin/components/products/EmptyStat
 import SearchFilter from "@/components/shared/AdminTableSearctFilter";
 import SelectFilter from "@/components/shared/AdminTableSelectFilter";
 import RefreshButton from "@/components/shared/AdminTableRefreshButton";
+import SortableHeader from "@/components/shared/AdminTableSortableHeader";
 import GenericTable, { Column } from "@/components/shared/AdminTable";
 
 import useProductsData from "@/components/modules/admin/hooks/products/useProducts";
@@ -21,6 +22,7 @@ import { AlistReadCategorySchema, Create_ReadAbsoluteProductSchema } from "@/api
 import formatDate from "@/utils/formatDate";
 import AddProductButton from "@/components/modules/admin/components/products/AddProductButton";
 import useDebounce from "@/hooks/forms/useDebounce";
+import type { ProductSortField, SortOrdering } from "@/constants/orderFields";
 
 function useCategoryMap(categories: any) {
     return useMemo(() => {
@@ -33,33 +35,48 @@ function useCategoryMap(categories: any) {
 }
 
 function buildCategoryOptions(categories: AlistReadCategorySchema): { value: string; label: string }[] {
-    const options = [{ value: "all", label: "Всі" }];
-
+    const options = [{ value: "all", label: "Всі категорії" }];
     if (Array.isArray(categories.data)) {
         options.push(
             ...categories.data
                 .filter((cat) => cat.parent_id !== null && cat.parent_id !== undefined)
-                .map((cat) => ({
-                    value: cat.id.toString(),
-                    label: cat.name,
-                }))
+                .map((cat) => ({ value: cat.id.toString(), label: cat.name }))
         );
     }
-
     return options;
 }
 
-function useProductColumns(categoryMap: Record<number, string>, handleDelete: (id: number) => void): Column<Create_ReadAbsoluteProductSchema>[] {
+function useProductColumns(
+    categoryMap: Record<number, string>,
+    handleDelete: (id: number) => void,
+    sortField: ProductSortField,
+    sortOrdering: SortOrdering,
+    onSort: (field: ProductSortField) => void,
+): Column<Create_ReadAbsoluteProductSchema>[] {
     return [
-        { header: "Назва товару", render: (m: Create_ReadAbsoluteProductSchema) => <b>{m?.name}</b>, className: "break-words break-all" },
-        { header: "Slug", render: (m: Create_ReadAbsoluteProductSchema) => m?.slug },
         {
-            header: "Категорія",
-            render: (m: Create_ReadAbsoluteProductSchema) => categoryMap[m?.category_id || 0] || 'Невідома',
-            className: "break-words break-all mr-1",
+            header: <SortableHeader label="Назва" sortField="name" activeField={sortField} ordering={sortOrdering} onSort={onSort} />,
+            render: (m) => <b className="text-xs">{m?.name}</b>,
+            className: "break-words [overflow-wrap:anywhere]",
         },
-        { header: "Дата створення", render: (m: Create_ReadAbsoluteProductSchema) => m?.created_at ? formatDate(m.created_at) : '-', className: "text-sm text-gray-500" },
-        { header: "Зображень", render: (m: Create_ReadAbsoluteProductSchema) => m?.images?.length || 0 },
+        {
+            header: <SortableHeader label="Slug" sortField="slug" activeField={sortField} ordering={sortOrdering} onSort={onSort} />,
+            render: (m) => <span className="text-xs text-gray-600">{m?.slug}</span>,
+            className: "break-words [overflow-wrap:anywhere]",
+        },
+        {
+            header: <SortableHeader label="Категорія" sortField="category_id" activeField={sortField} ordering={sortOrdering} onSort={onSort} />,
+            render: (m) => <span className="text-xs">{categoryMap[m?.category_id || 0] || 'Невідома'}</span>,
+            className: "break-words [overflow-wrap:anywhere]",
+        },
+        {
+            header: <SortableHeader label="Дата" sortField="created_at" activeField={sortField} ordering={sortOrdering} onSort={onSort} />,
+            render: (m) => <span className="text-xs text-gray-500">{m?.created_at ? formatDate(m.created_at) : '-'}</span>,
+        },
+        {
+            header: "Зображень",
+            render: (m) => <span className="text-xs">{m?.images?.length || 0}</span>,
+        },
         {
             header: "Дії",
             render: (m) => (
@@ -69,13 +86,13 @@ function useProductColumns(categoryMap: Record<number, string>, handleDelete: (i
                         className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-full bg-gray-50"
                         title="Редагувати"
                     >
-                        <PencilIcon className="h-5 w-5" />
+                        <PencilIcon className="h-4 w-4" />
                     </Link>
                     <button
                         onClick={() => handleDelete(m?.id ?? 0)}
                         className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-full bg-gray-50"
                     >
-                        <TrashIcon className="h-5 w-5" />
+                        <TrashIcon className="h-4 w-4" />
                     </button>
                 </div>
             ),
@@ -89,8 +106,6 @@ function Filters({
     category,
     categories,
     setCategory,
-    order,
-    setOrder,
     loading,
     onRefresh,
     setOffset,
@@ -100,8 +115,6 @@ function Filters({
     category: string;
     categories: AlistReadCategorySchema;
     setCategory: (v: string) => void;
-    order: "newest" | "oldest";
-    setOrder: (v: "newest" | "oldest") => void;
     loading: boolean;
     onRefresh: () => void;
     setOffset: (offset: number) => void;
@@ -115,15 +128,6 @@ function Filters({
                 setOffset={setOffset}
                 options={buildCategoryOptions(categories)}
             />
-            <SelectFilter
-                value={order}
-                onChange={setOrder}
-                setOffset={setOffset}
-                options={[
-                    { value: "newest", label: "Новіші" },
-                    { value: "oldest", label: "Старіші" },
-                ]}
-            />
             <RefreshButton onClick={onRefresh} loading={loading} />
             <AddProductButton />
         </div>
@@ -133,19 +137,30 @@ function Filters({
 export default function ProductPage() {
     const [search, setSearch] = useState("");
     const [category, setCategory] = useState("all");
-    const [order, setOrder] = useState<"newest" | "oldest">("newest");
+    const [sortField, setSortField] = useState<ProductSortField>("created_at");
+    const [sortOrdering, setSortOrdering] = useState<SortOrdering>("desc");
 
     const debouncedSearch = useDebounce(search, 400);
     const { currentOffset, currentLimit, handleNextPage, handlePrevPage, setTotal, setCurrentOffset } = usePagination();
 
+    const handleSort = (field: ProductSortField) => {
+        setCurrentOffset(0);
+        if (field === sortField) {
+            setSortOrdering((prev) => (prev === "asc" ? "desc" : "asc"));
+            return;
+        }
+        setSortField(field);
+        setSortOrdering(field === "created_at" ? "desc" : "asc");
+    };
+
     const params = useMemo(
         () => ({
             text: debouncedSearch || undefined,
-            field: "created_at",
+            field: sortField,
             category: category !== "all" ? category : undefined,
-            ordering: order === "newest" ? "desc" : "asc",
+            ordering: sortOrdering,
         }),
-        [debouncedSearch, category, order]
+        [debouncedSearch, category, sortField, sortOrdering]
     );
 
     const categories = useCategories();
@@ -154,32 +169,31 @@ export default function ProductPage() {
     const { handleDelete } = useDeleteProduct({
         onReload: reload,
         onAfterDelete: () => {
-            if (products?.items?.length === 1 && currentOffset > 0) {
-                handlePrevPage();
-            }
+            if (products?.items?.length === 1 && currentOffset > 0) handlePrevPage();
         }
     });
 
     const categoryMap = useCategoryMap(categories.data);
-    const columns = useProductColumns(categoryMap, handleDelete);
+    const columns = useProductColumns(categoryMap, handleDelete, sortField, sortOrdering, handleSort);
 
     const handleRefresh = () => {
         setSearch("");
         setCategory("all");
-        setOrder("newest");
+        setSortField("created_at");
+        setSortOrdering("desc");
+        setCurrentOffset(0);
     };
 
     useEffect(() => { document.title = "Продукти на сайті"; }, []);
     useEffect(() => { if (products?.pagination?.total) setTotal(products.pagination.total); }, [products?.pagination?.total, setTotal]);
 
-    // 🔹 Підготуємо дані для таблиці
     const preparedData = products?.items?.map(item => ({
         ...item,
         variations: item.variations ?? []
     })) ?? [];
 
     return (
-        <>
+        <div className="max-w-[1920px] mx-auto px-4">
             <div className="flex flex-col md:flex-row justify-between gap-4 mb-4">
                 <div>
                     <h1 className="text-2xl md:text-3xl font-bold">Товар на сайті</h1>
@@ -191,8 +205,6 @@ export default function ProductPage() {
                     category={category}
                     categories={categories}
                     setCategory={setCategory}
-                    order={order}
-                    setOrder={setOrder}
                     loading={loading}
                     onRefresh={handleRefresh}
                     setOffset={setCurrentOffset}
@@ -204,13 +216,13 @@ export default function ProductPage() {
             ) : error ? (
                 <div className="p-4 text-red-600 text-center">Помилка завантаження</div>
             ) : !preparedData.length ? (
-                <EmptyState/>
+                <EmptyState />
             ) : (
                 <GenericTable
                     data={preparedData}
                     columns={columns}
                     rowKey={(row) => String(row.id)}
-                    columnTemplate="1fr 1fr 1fr 1fr 1fr 80px"
+                    columnTemplate="minmax(180px, 2fr) minmax(140px, 1.5fr) minmax(130px, 1fr) 120px 90px 80px"
                 />
             )}
 
@@ -224,6 +236,6 @@ export default function ProductPage() {
                     isLoading={loading}
                 />
             )}
-        </>
+        </div>
     );
 }
