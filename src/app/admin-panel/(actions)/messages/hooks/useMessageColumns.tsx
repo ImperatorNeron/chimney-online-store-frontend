@@ -27,7 +27,7 @@ export default function useMessageColumns(
                 />
             ),
             render: (m) => <b>{m.user_name}</b>,
-            className: "break-words break-all",
+            className: "break-words [overflow-wrap:anywhere]",
         },
         {
             header: (
@@ -40,6 +40,7 @@ export default function useMessageColumns(
                 />
             ),
             render: (m) => m.phone_number,
+            className: "break-words [overflow-wrap:anywhere]",
         },
         {
             header: (
@@ -65,7 +66,7 @@ export default function useMessageColumns(
                 />
             ),
             render: (m) => m.message,
-            className: "break-words break-all mr-1",
+            className: "break-words [overflow-wrap:anywhere] mr-1",
         },
         {
             header: (

@@ -65,7 +65,7 @@ export default function MessagesPage() {
     };
 
     return (
-        <div className="max-w-screen-2xl mx-auto">
+        <div className="max-w-[1920px] mx-auto px-4">
             <div className="flex flex-col md:flex-row justify-between gap-4 mb-4">
                 <div>
                     <h1 className="text-2xl md:text-3xl font-bold">Повідомлення клієнтів</h1>

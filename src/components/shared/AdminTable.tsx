@@ -48,7 +48,7 @@ export default function GenericTable<T>({
                         {columns.map((col, i) => (
                             <div
                                 key={i}
-                                className={` ${col.className || ""}`}
+                                className={`min-w-0 ${col.className || ""}`}
                             >
                                 {col.render(row)}
                             </div>

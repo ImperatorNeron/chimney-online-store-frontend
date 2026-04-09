@@ -26,7 +26,7 @@ export default function MessagesTableWrapper({
                 data={messages}
                 columns={columns}
                 rowKey={(row) => String(row.id)}
-                columnTemplate="200px 120px 170px auto 200px 40px"
+                columnTemplate="minmax(150px, 1fr) 130px 150px minmax(250px, 2fr) 180px 50px"
             />
             <PaginationControls {...paginationProps} />
         </>
