@@ -13,9 +13,22 @@ import BackToPageButton from '@/components/ui/BackToPageButton';
 import MessageSkeleton from '@/components/layout/loaders/MessageSkeleton';
 import usePagination from '@/components/modules/admin/hooks/products/usePagination';
 import PaginationControls from '@/components/modules/admin/components/messages/pagination';
-import { useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useRouter } from "next/navigation";
 
-export default function OrdersPage() {
+import type { ReadExtendedOrderSchema, UpdateOrderSchema } from "@/api/types/types";
+import { orderService } from "@/api/services/order.service";
+import { NotificationService } from "@/api/services/notification.service";
+import { useAuthStore } from "@/store/auth.store";
+import useDebounce from "@/hooks/forms/useDebounce";
+import type { OrderSortField, SortOrdering } from "@/constants/orderFields";
+
+import Filters from "./components/Filters";
+import OrdersTableWrapper from "./components/OrdersTableWrapper";
+import OrderDetails, { type OrderEditDraft } from "./components/OrderDetails";
+import useOrderColumns from "./hooks/useOrderColumns";
+
+function LegacyOrdersPage() {
   const { currentOffset, currentLimit, handleNextPage, handlePrevPage } = usePagination();
   const { orders, loading, setOrders } = useOrders(currentLimit, currentOffset);
   const {
@@ -243,6 +256,280 @@ export default function OrdersPage() {
         })}
       </ul>
 
+    </div>
+  );
+}
+
+// New Orders table UI (search/sort/edit). LegacyOrdersPage is kept above for reference.
+
+function normalizeDiscountInput(input: string) {
+  let value = input.replace(/[^0-9.,%\\s]/g, "");
+  value = value.replace(",", ".");
+  if (value.includes("%")) {
+    value = value.replace(/%/g, "") + "%";
+  }
+  value = value.replace(/^0+([1-9])/, "$1");
+  return value.trim();
+}
+
+function calcPriceDiscount(discountInput: string, total: number) {
+  const normalized = normalizeDiscountInput(discountInput);
+  if (!normalized) return 0;
+
+  if (normalized.includes("%")) {
+    const percent = parseFloat(normalized.replace("%", ""));
+    if (Number.isNaN(percent)) return 0;
+    return Math.round((percent / 100) * total * 100) / 100;
+  }
+
+  const value = parseFloat(normalized);
+  if (Number.isNaN(value)) return 0;
+  return Math.round(value * 100) / 100;
+}
+
+function updateOrderInState(
+  setOrders: any,
+  orderId: number,
+  patch: Partial<ReadExtendedOrderSchema>,
+) {
+  setOrders((prev: any) => {
+    if (!prev || !("items" in prev) || !Array.isArray(prev.items)) return prev;
+    return {
+      ...prev,
+      items: prev.items.map((o: ReadExtendedOrderSchema) => (o.id === orderId ? { ...o, ...patch } : o)),
+    };
+  });
+}
+
+export default function OrdersPage() {
+  const router = useRouter();
+  const { getValidToken } = useAuthStore();
+
+  const [search, setSearch] = useState("");
+  const [sortField, setSortField] = useState<OrderSortField>("created_at");
+  const [sortOrdering, setSortOrdering] = useState<SortOrdering>("desc");
+
+  const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
+  const [editingOrderId, setEditingOrderId] = useState<number | null>(null);
+  const [draft, setDraft] = useState<OrderEditDraft | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [updatingIds, setUpdatingIds] = useState<Set<number>>(new Set());
+
+  const debouncedSearch = useDebounce(search, 400);
+  const { currentOffset, currentLimit, handleNextPage, handlePrevPage, setCurrentOffset } = usePagination();
+
+  const handleSort = (field: OrderSortField) => {
+    setCurrentOffset(0);
+    if (field === sortField) {
+      setSortOrdering((prev) => (prev === "asc" ? "desc" : "asc"));
+      return;
+    }
+    setSortField(field);
+    setSortOrdering(field === "created_at" ? "desc" : "asc");
+  };
+
+  const params = useMemo(
+    () => ({
+      text: debouncedSearch || undefined,
+      field: sortField,
+      ordering: sortOrdering,
+    }),
+    [debouncedSearch, sortField, sortOrdering],
+  );
+
+  const { orders, loading, reload, setOrders } = useOrders(currentLimit, currentOffset, params);
+
+  useEffect(() => {
+    document.title = "Замовлення клієнтів";
+  }, []);
+
+  const isUpdating = (id: number) => updatingIds.has(id);
+
+  const toggleExpand = (id: number) => {
+    setExpandedOrderId((prev) => {
+      const next = prev === id ? null : id;
+      if (prev === id) {
+        setEditingOrderId(null);
+        setDraft(null);
+      }
+      return next;
+    });
+  };
+
+  const startEdit = (order: ReadExtendedOrderSchema) => {
+    setExpandedOrderId(order.id);
+    setEditingOrderId(order.id);
+    setDraft({
+      first_name: order.first_name || "",
+      last_name: order.last_name || "",
+      patronymic: order.patronymic || "",
+      email: order.email || "",
+      phone_number: order.phone_number || "",
+      address: order.address || "",
+    });
+  };
+
+  const cancelEdit = () => {
+    setEditingOrderId(null);
+    setDraft(null);
+  };
+
+  const handleDraftChange = (patch: Partial<OrderEditDraft>) => {
+    setDraft((prev) => {
+      if (!prev) return prev;
+      const next = { ...prev, ...patch };
+      if (patch.discount_input !== undefined) next.discount_input = normalizeDiscountInput(patch.discount_input);
+      if (patch.phone_number !== undefined) next.phone_number = patch.phone_number.replace(/\\D/g, "");
+      if (patch.waybill_number !== undefined) next.waybill_number = patch.waybill_number.trim().slice(0, 30);
+      return next;
+    });
+  };
+
+  const saveEdit = async () => {
+    if (!draft || editingOrderId == null) return;
+    const order = orders?.items?.find((o) => o.id === editingOrderId);
+    if (!order) return;
+
+    try {
+      setSaving(true);
+      const token = await getValidToken();
+      if (!token) return router.push("/auth/login");
+
+      const payload: Partial<UpdateOrderSchema> = {
+        first_name: draft.first_name,
+        last_name: draft.last_name,
+        patronymic: draft.patronymic || undefined,
+        email: draft.email || undefined,
+        phone_number: draft.phone_number,
+        address: draft.address,
+      };
+
+      await orderService.updateOrderInfo(token, payload as UpdateOrderSchema, editingOrderId);
+      updateOrderInState(setOrders, editingOrderId, payload);
+
+      NotificationService.success("Дані клієнта оновлено");
+      setEditingOrderId(null);
+      setDraft(null);
+    } catch (err) {
+      console.error(err);
+      NotificationService.error(err instanceof Error ? err.message : "Не вдалося оновити");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const quickUpdate = async (id: number, patch: Partial<UpdateOrderSchema>) => {
+    if (isUpdating(id)) return;
+    try {
+      setUpdatingIds((prev) => {
+        const next = new Set(prev);
+        next.add(id);
+        return next;
+      });
+      const token = await getValidToken();
+      if (!token) return router.push("/auth/login");
+
+      let processedPatch = { ...patch };
+      if (typeof processedPatch.price_discount === 'string') {
+        const order = orders?.items?.find(o => o.id === id);
+        if (order) {
+          processedPatch.price_discount = calcPriceDiscount(processedPatch.price_discount, Number(order.total_price));
+        } else {
+          processedPatch.price_discount = 0;
+        }
+      }
+
+      await orderService.updateOrderInfo(token, processedPatch as UpdateOrderSchema, id);
+      updateOrderInState(setOrders, id, processedPatch);
+    } catch (err) {
+      console.error(err);
+      NotificationService.error(err instanceof Error ? err.message : "Не вдалося оновити замовлення");
+    } finally {
+      setUpdatingIds((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
+    }
+  };
+
+  const columns = useOrderColumns({
+    sortField,
+    sortOrdering,
+    onSort: handleSort,
+    expandedOrderId,
+    onToggleExpand: toggleExpand,
+    onQuickUpdate: quickUpdate,
+    isUpdating,
+  });
+
+  const handleRefresh = () => {
+    setSearch("");
+    setSortField("created_at");
+    setSortOrdering("desc");
+    setCurrentOffset(0);
+    reload();
+  };
+
+  return (
+    <div className="max-w-screen-2xl mx-auto">
+      <div className="flex flex-col md:flex-row justify-between gap-4 mb-4">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold">Замовлення клієнтів</h1>
+          <p className="text-gray-600">Пошук, сортування, пагінація та редагування</p>
+        </div>
+        <Filters
+          search={search}
+          setSearch={setSearch}
+          loading={loading}
+          onRefresh={handleRefresh}
+          setOffset={setCurrentOffset}
+        />
+      </div>
+
+      <OrdersTableWrapper
+        loading={loading}
+        orders={orders?.items}
+        columns={columns}
+        expandedOrderId={expandedOrderId}
+        renderExpandedRow={(order) => (
+          <OrderDetails
+            order={order}
+            isEditing={editingOrderId === order.id}
+            draft={
+              editingOrderId === order.id && draft
+                ? draft
+                : {
+                  first_name: order.first_name || "",
+                  last_name: order.last_name || "",
+                  patronymic: order.patronymic || "",
+                  email: order.email || "",
+                  phone_number: order.phone_number || "",
+                  address: order.address || "",
+                  shipping_method: order.shipping_method || "nova_poshta",
+                  payment_method: order.payment_method || "cash",
+                  status: order.status || "pending",
+                  is_paid: Boolean(order.is_paid),
+                  waybill_number: order.waybill_number || "",
+                  discount_input: String(order.price_discount ?? 0),
+                }
+            }
+            onChange={handleDraftChange}
+            onStartEdit={() => startEdit(order)}
+            onCancel={cancelEdit}
+            onSave={saveEdit}
+            saving={saving}
+          />
+        )}
+        paginationProps={{
+          currentOffset,
+          currentLimit,
+          total: orders?.pagination.total ?? 0,
+          onPrev: handlePrevPage,
+          onNext: handleNextPage,
+          isLoading: loading,
+        }}
+      />
     </div>
   );
 }

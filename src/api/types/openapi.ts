@@ -1192,6 +1192,8 @@ export interface components {
              * @default 0
              */
             price_discount: number;
+            /** Is Paid */
+            is_paid: boolean;
             /** Items */
             items: components["schemas"]["ReadOrderItemSchema"][];
             /**
@@ -1388,6 +1390,8 @@ export interface components {
              * @default 0
              */
             price_discount: number;
+            /** Is Paid */
+            is_paid: boolean;
         };
         /** ReadOrderItemSchema */
         ReadOrderItemSchema: {
@@ -1730,13 +1734,39 @@ export interface components {
             /**
              * Status
              * @description Invalid order status
-             * @default pending
              */
-            status: string | null;
+            status?: string | null;
             /** Waybill Number */
             waybill_number?: string | null;
             /** Price Discount */
-            price_discount: number;
+            price_discount?: number | null;
+            /** Is Paid */
+            is_paid?: boolean | null;
+            /** First Name */
+            first_name?: string | null;
+            /** Last Name */
+            last_name?: string | null;
+            /** Patronymic */
+            patronymic?: string | null;
+            /** Phone Number */
+            phone_number?: string | null;
+            /** Email address of the user */
+            email?: string | null;
+            /**
+             * Address
+             * @description 5-200 characters
+             */
+            address?: string | null;
+            /**
+             * Shipping Method
+             * @description Invalid shipping method
+             */
+            shipping_method?: string | null;
+            /**
+             * Payment Method
+             * @description Invalid payment method
+             */
+            payment_method?: string | null;
         };
         /** UserUpdateWithPasswordSchema */
         UserUpdateWithPasswordSchema: {
