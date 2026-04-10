@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 
-import PaginationControls from "@/components/modules/admin/components/messages/pagination";
 import LoadingState from "@/components/modules/admin/components/products/LoadingState";
 import EmptyState from "@/components/modules/admin/components/products/EmptyState";
 import SearchFilter from "@/components/shared/AdminTableSearctFilter";
@@ -12,9 +11,9 @@ import SelectFilter from "@/components/shared/AdminTableSelectFilter";
 import RefreshButton from "@/components/shared/AdminTableRefreshButton";
 import SortableHeader from "@/components/shared/AdminTableSortableHeader";
 import GenericTable, { Column } from "@/components/shared/AdminTable";
+import InfiniteScrollSentinel from "@/components/modules/admin/components/InfiniteScrollSentinel";
 
 import useProductsData from "@/components/modules/admin/hooks/products/useProducts";
-import usePagination from "@/components/modules/admin/hooks/products/usePagination";
 import useDeleteProduct from "@/components/modules/admin/hooks/products/useDeleteProduct";
 import useCategories from "@/components/modules/admin/hooks/products/useCategories";
 
@@ -108,7 +107,6 @@ function Filters({
     setCategory,
     loading,
     onRefresh,
-    setOffset,
 }: {
     search: string;
     setSearch: (v: string) => void;
@@ -117,15 +115,13 @@ function Filters({
     setCategory: (v: string) => void;
     loading: boolean;
     onRefresh: () => void;
-    setOffset: (offset: number) => void;
 }) {
     return (
         <div className="flex flex-wrap gap-3 w-full md:w-auto items-end">
-            <SearchFilter value={search} onChange={setSearch} setOffset={setOffset} />
+            <SearchFilter value={search} onChange={setSearch} />
             <SelectFilter
                 value={category}
                 onChange={setCategory}
-                setOffset={setOffset}
                 options={buildCategoryOptions(categories)}
             />
             <RefreshButton onClick={onRefresh} loading={loading} />
@@ -141,10 +137,8 @@ export default function ProductPage() {
     const [sortOrdering, setSortOrdering] = useState<SortOrdering>("desc");
 
     const debouncedSearch = useDebounce(search, 400);
-    const { currentOffset, currentLimit, handleNextPage, handlePrevPage, setTotal, setCurrentOffset } = usePagination();
 
     const handleSort = (field: ProductSortField) => {
-        setCurrentOffset(0);
         if (field === sortField) {
             setSortOrdering((prev) => (prev === "asc" ? "desc" : "asc"));
             return;
@@ -164,13 +158,10 @@ export default function ProductPage() {
     );
 
     const categories = useCategories();
-    const { products, loading, error, reload } = useProductsData(currentLimit, currentOffset, params);
+    const { items, total, loading, loadingMore, error, hasMore, loadMore, reload } = useProductsData(params);
 
     const { handleDelete } = useDeleteProduct({
         onReload: reload,
-        onAfterDelete: () => {
-            if (products?.items?.length === 1 && currentOffset > 0) handlePrevPage();
-        }
     });
 
     const categoryMap = useCategoryMap(categories.data);
@@ -181,16 +172,14 @@ export default function ProductPage() {
         setCategory("all");
         setSortField("created_at");
         setSortOrdering("desc");
-        setCurrentOffset(0);
     };
 
     useEffect(() => { document.title = "Продукти на сайті"; }, []);
-    useEffect(() => { if (products?.pagination?.total) setTotal(products.pagination.total); }, [products?.pagination?.total, setTotal]);
 
-    const preparedData = products?.items?.map(item => ({
+    const preparedData = items.map(item => ({
         ...item,
         variations: item.variations ?? []
-    })) ?? [];
+    }));
 
     return (
         <div className="max-w-[1920px] mx-auto px-4">
@@ -207,11 +196,10 @@ export default function ProductPage() {
                     setCategory={setCategory}
                     loading={loading}
                     onRefresh={handleRefresh}
-                    setOffset={setCurrentOffset}
                 />
             </div>
 
-            {loading || (categories.loading && !products) ? (
+            {loading && !items.length ? (
                 <LoadingState />
             ) : error ? (
                 <div className="p-4 text-red-600 text-center">Помилка завантаження</div>
@@ -226,16 +214,13 @@ export default function ProductPage() {
                 />
             )}
 
-            {products?.pagination && preparedData.length > 0 && (
-                <PaginationControls
-                    currentOffset={currentOffset}
-                    currentLimit={currentLimit}
-                    total={products.pagination.total}
-                    onPrev={handlePrevPage}
-                    onNext={handleNextPage}
-                    isLoading={loading}
-                />
-            )}
+            <InfiniteScrollSentinel
+                hasMore={hasMore}
+                loading={loadingMore}
+                onLoadMore={loadMore}
+                total={total}
+                loaded={items.length}
+            />
         </div>
     );
 }

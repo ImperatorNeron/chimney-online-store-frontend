@@ -1,20 +1,27 @@
+import { useCallback } from 'react';
 import { productService } from "@/api/services/products.service";
 import { LReadFullUniqueProductSchema } from '@/api/types/types';
-import useFetchData from "../common/useFetchData";
+import useInfiniteData from "../common/useInfiniteData";
+
+// Infer item type from the paginated response
+type UniqueProductItem = NonNullable<LReadFullUniqueProductSchema>["items"] extends (infer U)[] ? U : never;
 
 export default function useProductsData(
-    limit: number = 20,
-    offset: number = 0,
     params?: {
         text?: string;
         field?: string;
         category?: string;
         ordering?: string;
-    },) {
-    const { data: products, ...rest } = useFetchData<LReadFullUniqueProductSchema>(
-        (token) => productService.getUniqueProducts(token, limit, offset, params),
-        [limit, offset, params]
+    },
+) {
+    const fetchFn = useCallback(
+        (token: string, limit: number, offset: number) =>
+            productService.getUniqueProducts(token, limit, offset, params),
+        [params],
     );
 
-    return { products, ...rest };
+    const { items, total, loading, loadingMore, error, hasMore, loadMore, reload } =
+        useInfiniteData<LReadFullUniqueProductSchema, UniqueProductItem>(fetchFn, [params]);
+
+    return { items, total, loading, loadingMore, error, hasMore, loadMore, reload };
 }

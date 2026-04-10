@@ -1,11 +1,9 @@
+import { useCallback } from 'react';
 import { orderService } from '@/api/services/order.service';
-import { LReadExtendedOrderSchema } from '@/api/types/types';
-import useFetchData from '../common/useFetchData';
-
+import { LReadExtendedOrderSchema, ReadExtendedOrderSchema } from '@/api/types/types';
+import useInfiniteData from '../common/useInfiniteData';
 
 export default function useOrders(
-    limit: number = 20,
-    offset: number = 0,
     params?: {
         text?: string;
         field?: string;
@@ -15,10 +13,14 @@ export default function useOrders(
         payment_method?: string;
     },
 ) {
-    const { data: orders, setData: setOrders, ...rest } = useFetchData<LReadExtendedOrderSchema>(
-        (token) => orderService.getOrders(token, limit, offset, params),
-        [limit, offset, params]
+    const fetchFn = useCallback(
+        (token: string, limit: number, offset: number) =>
+            orderService.getOrders(token, limit, offset, params),
+        [params],
     );
 
-    return { orders, setOrders, ...rest };
+    const { items, setItems, total, loading, loadingMore, error, hasMore, loadMore, reload } =
+        useInfiniteData<LReadExtendedOrderSchema, ReadExtendedOrderSchema>(fetchFn, [params]);
+
+    return { items, setItems, total, loading, loadingMore, error, hasMore, loadMore, reload };
 }

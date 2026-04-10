@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useMemo, useState } from "react";
 
@@ -6,9 +6,9 @@ import { MessageStatus } from "@/api/services/message.service";
 import useFetchMessages from "@/components/modules/admin/hooks/messages/useMessages";
 import useChangeMessageStatus from "@/components/modules/admin/hooks/messages/useChangeMessageStatus";
 import useDeleteMessage from "@/components/modules/admin/hooks/messages/useDeleteMessage";
-import usePagination from "@/components/modules/admin/hooks/products/usePagination";
 import { MessageSortField, SortOrdering } from "@/constants/orderFields";
 import useDebounce from "@/hooks/forms/useDebounce";
+import InfiniteScrollSentinel from "@/components/modules/admin/components/InfiniteScrollSentinel";
 
 import Filters from "./components/Filters";
 import MessagesTableWrapper from "./components/MessagesTableWrapper";
@@ -21,10 +21,8 @@ export default function MessagesPage() {
     const [sortOrdering, setSortOrdering] = useState<SortOrdering>("desc");
 
     const debouncedSearch = useDebounce(search, 400);
-    const { currentOffset, currentLimit, handleNextPage, handlePrevPage, setCurrentOffset } = usePagination();
 
     const handleSort = (field: MessageSortField) => {
-        setCurrentOffset(0);
         if (field === sortField) {
             setSortOrdering((prev) => (prev === "asc" ? "desc" : "asc"));
             return;
@@ -43,15 +41,9 @@ export default function MessagesPage() {
         [debouncedSearch, status, sortField, sortOrdering]
     );
 
-    const { messages, loading, reload } = useFetchMessages(currentLimit, currentOffset, params);
+    const { items, total, loading, loadingMore, hasMore, loadMore, reload } = useFetchMessages(params);
 
-    const { handleDelete } = useDeleteMessage({
-        onReload: reload,
-        onAfterDelete: () => {
-            if (messages?.items?.length === 1 && currentOffset > 0) handlePrevPage();
-        },
-    });
-
+    const { handleDelete } = useDeleteMessage({ onReload: reload });
     const { changeStatus } = useChangeMessageStatus({ onReload: reload });
 
     const columns = useMessageColumns(changeStatus, handleDelete, sortField, sortOrdering, handleSort);
@@ -61,7 +53,6 @@ export default function MessagesPage() {
         setStatus("all");
         setSortField("created_at");
         setSortOrdering("desc");
-        setCurrentOffset(0);
     };
 
     return (
@@ -78,22 +69,22 @@ export default function MessagesPage() {
                     setStatus={setStatus}
                     loading={loading}
                     onRefresh={handleRefresh}
-                    setOffset={setCurrentOffset}
+                    setOffset={() => {}}
                 />
             </div>
 
             <MessagesTableWrapper
                 loading={loading}
-                messages={messages?.items}
+                messages={items}
                 columns={columns}
-                paginationProps={{
-                    currentOffset,
-                    currentLimit,
-                    total: messages?.pagination.total ?? 0,
-                    onPrev: handlePrevPage,
-                    onNext: handleNextPage,
-                    isLoading: loading,
-                }}
+            />
+
+            <InfiniteScrollSentinel
+                hasMore={hasMore}
+                loading={loadingMore}
+                onLoadMore={loadMore}
+                total={total}
+                loaded={items.length}
             />
         </div>
     );

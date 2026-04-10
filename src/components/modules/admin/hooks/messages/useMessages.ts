@@ -1,21 +1,24 @@
+import { useCallback } from 'react';
 import { messageService } from "@/api/services/message.service";
-import useFetchData from "../common/useFetchData";
-import { LReadMessageSchema } from "@/api/types/types";
-
+import { LReadMessageSchema, ReadMessage } from "@/api/types/types";
+import useInfiniteData from "../common/useInfiniteData";
 
 export default function useFetchMessages(
-    limit: number = 20,
-    offset: number = 0,
     params?: {
         text?: string;
         status?: string;
         field?: string;
         ordering?: string;
-    },) {
-    const { data: messages, ...rest } = useFetchData<LReadMessageSchema>(
-        (token) => messageService.getMessages(token, limit, offset, params),
-        [limit, offset, params]
+    },
+) {
+    const fetchFn = useCallback(
+        (token: string, limit: number, offset: number) =>
+            messageService.getMessages(token, limit, offset, params),
+        [params],
     );
 
-    return { messages, ...rest };
+    const { items, total, loading, loadingMore, error, hasMore, loadMore, reload } =
+        useInfiniteData<LReadMessageSchema, ReadMessage>(fetchFn, [params]);
+
+    return { items, total, loading, loadingMore, error, hasMore, loadMore, reload };
 }
