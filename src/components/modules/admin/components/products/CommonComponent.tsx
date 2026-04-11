@@ -1,12 +1,14 @@
 import { listReadCategorySchema } from "@/api/types/types";
 import FormField from "@/components/shared/FormField";
 import FormSelect from "@/components/shared/FormSelect";
+import GenericTable, { Column } from "@/components/shared/AdminTable";
 import BackToPageButton from "@/components/ui/BackToPageButton";
 import TextareaField from "@/components/ui/Textarea";
 import { inputPatterns } from "@/utils/field.patterns";
-import { ArrowLeftEndOnRectangleIcon, IdentificationIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { ArrowLeftEndOnRectangleIcon, IdentificationIcon, PencilIcon, PlusIcon, TrashIcon, CheckIcon } from "@heroicons/react/24/outline";
 import Image from 'next/image';
 import ConfirmButton from "@/components/ui/ConfirmButton";
+import { useState } from "react";
 
 type Mode = 'edit' | 'create';
 
@@ -123,81 +125,7 @@ export default function ProductActionComponent({ categories, form, mode }: { cat
                             )}
                         </div>
 
-                        <div className="space-y-8 border-t border-gray-200 pt-8">
-                            <h2 className="text-xl font-semibold text-gray-900">Варіації товару</h2>
-
-                            <div className="space-y-5">
-                                {form.fields.map((field: { rhfId: string; id?: number }, idx: number) => (
-                                    <div key={field.rhfId} className="bg-white rounded-xl p-5 space-y-4 border-2 border-indigo-50 shadow-sm">
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-2">
-                                            <FormField
-                                                id={`variations.${idx}.price`}
-                                                label="Ціна"
-                                                placeholder="1500"
-                                                required
-                                                type="number"
-                                                step="any"
-                                                errorMessage={form.errors.variations?.[idx]?.price?.message}
-                                                {...form.register(`variations.${idx}.price`, { valueAsNumber: true })}
-                                                icon={IdentificationIcon}
-                                            />
-
-                                            <FormField
-                                                id={`variations.${idx}.discount_percentage`}
-                                                label="Знижка (%)"
-                                                placeholder="20"
-                                                {...form.register(`variations.${idx}.discount_percentage`, { valueAsNumber: true })}
-                                                pattern={inputPatterns.numbers}
-                                                icon={IdentificationIcon}
-                                            />
-
-                                            {['diameter', 'length', 'thickness', 'angle', 'metal_type'].map((fieldName) => (
-                                                <FormField
-                                                    key={fieldName}
-                                                    id={`variations.${idx}.${fieldName}`}
-                                                    label={getFieldLabel(fieldName)}
-                                                    placeholder={getFieldPlaceholder(fieldName)}
-                                                    {...form.register(`variations.${idx}.${fieldName}`)}
-                                                    pattern={inputPatterns.message}
-                                                    icon={IdentificationIcon}
-                                                />
-                                            ))}
-                                        </div>
-
-                                        <button
-                                            type="button"
-                                            onClick={() => mode === 'edit' ? form.remove(idx, field.id) : form.remove(idx)}
-                                            className="flex items-center gap-1.5 text-sm text-red-600 hover:text-red-700 transition-colors"
-                                        >
-                                            <TrashIcon className="h-4 w-4" />
-                                            Видалити варіацію
-                                        </button>
-                                    </div>
-                                ))}
-                            </div>
-
-                            <button
-                                type="button"
-                                onClick={() =>
-                                    form.append({
-                                        ...(mode === 'edit' && { id: null }),
-                                        price: 0,
-                                        discount_percentage: 0,
-                                        diameter: null,
-                                        length: null,
-                                        thickness: null,
-                                        angle: null,
-                                        metal_type: null,
-                                    })
-                                }
-                                className="w-full flex items-center justify-center gap-2 px-4 py-3.5 border-2 border-dashed border-indigo-200 rounded-xl hover:border-indigo-500 hover:bg-indigo-50 transition-all group"
-                            >
-                                <PlusIcon className="h-5 w-5 text-indigo-500 group-hover:text-indigo-600 transition-colors" />
-                                <span className="text-indigo-600 group-hover:text-indigo-700 transition-colors font-medium">
-                                    Додати варіацію
-                                </span>
-                            </button>
-                        </div>
+                        <VariationsSection form={form} mode={mode} />
 
                         <ConfirmButton
                             label={mode === 'create' ? 'Створити продукт' : 'Оновити продукт'}
@@ -212,24 +140,131 @@ export default function ProductActionComponent({ categories, form, mode }: { cat
     )
 }
 
-function getFieldLabel(name: string): string {
-    const labels: { [key: string]: string } = {
-        diameter: 'Діаметр, мм',
-        length: 'Довжина, м',
-        thickness: 'Товщина, мм',
-        angle: 'Кут, °',
-        metal_type: 'Тип металу'
-    }
-    return labels[name] || name
-}
+const VARIATION_COLS = [
+    { key: "price", label: "Ціна", placeholder: "1500", type: "number" },
+    { key: "discount_percentage", label: "Знижка %", placeholder: "0", type: "number" },
+    { key: "diameter", label: "Діаметр", placeholder: "150" },
+    { key: "length", label: "Довжина", placeholder: "1" },
+    { key: "thickness", label: "Товщина", placeholder: "0.8" },
+    { key: "angle", label: "Кут", placeholder: "45" },
+    { key: "metal_type", label: "Метал", placeholder: "Сталь" },
+] as const;
 
-function getFieldPlaceholder(name: string): string {
-    const placeholders: { [key: string]: string } = {
-        diameter: '150 або 300/360',
-        length: '1',
-        thickness: '0.8',
-        angle: '45',
-        metal_type: 'Сталь'
-    }
-    return placeholders[name] || 'Введіть значення'
+type VariationSortField = typeof VARIATION_COLS[number]["key"];
+type SortDir = "asc" | "desc";
+
+function VariationsSection({ form, mode }: { form: any; mode: Mode }) {
+    const [editingIdx, setEditingIdx] = useState<number | null>(null);
+    const watched: any[] = form.watch?.("variations") || [];
+
+    const isEditingEmpty = editingIdx !== null && (() => {
+        const v = watched[editingIdx];
+        return !v || (!v.price && !v.diameter && !v.length && !v.thickness && !v.angle && !v.metal_type);
+    })();
+
+    const handleAdd = () => {
+        form.append({
+            ...(mode === 'edit' && { id: null }),
+            price: 0,
+            discount_percentage: 0,
+            diameter: null,
+            length: null,
+            thickness: null,
+            angle: null,
+            metal_type: null,
+        });
+        setEditingIdx(form.fields.length);
+    };
+
+    const rows = form.fields.map((field: any, idx: number) => ({
+        ...field,
+        _idx: idx,
+        _values: watched[idx] || {},
+    }));
+
+    const columns: Column<typeof rows[number]>[] = VARIATION_COLS.map(({ key, label, placeholder, type }) => ({
+        header: label,
+        render: (row: any) => {
+            if (editingIdx === row._idx) {
+                return (
+                    <input
+                        type={type || "text"}
+                        step={type === "number" ? "any" : undefined}
+                        placeholder={placeholder}
+                        {...form.register(
+                            `variations.${row._idx}.${key}`,
+                            type === "number" ? { valueAsNumber: true } : undefined,
+                        )}
+                        className="w-full px-2 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
+                    />
+                );
+            }
+            return <span className="text-xs">{row._values[key] != null && row._values[key] !== "" ? row._values[key] : "—"}</span>;
+        },
+    }));
+
+    columns.push({
+        header: "",
+        render: (row: any) => (
+            <div className="flex items-center gap-0.5">
+                <button
+                    type="button"
+                    onClick={() => setEditingIdx(editingIdx === row._idx ? null : row._idx)}
+                    className={`p-1.5 rounded-full transition-colors ${
+                        editingIdx === row._idx
+                            ? "bg-gray-200 text-gray-700"
+                            : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
+                    }`}
+                    title={editingIdx === row._idx ? "Готово" : "Редагувати"}
+                >
+                    {editingIdx === row._idx
+                        ? <CheckIcon className="h-4 w-4" />
+                        : <PencilIcon className="h-4 w-4" />}
+                </button>
+                <button
+                    type="button"
+                    onClick={() => {
+                        if (editingIdx === row._idx) setEditingIdx(null);
+                        mode === 'edit' ? form.remove(row._idx, row.id) : form.remove(row._idx);
+                    }}
+                    className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors"
+                    title="Видалити"
+                >
+                    <TrashIcon className="h-4 w-4" />
+                </button>
+            </div>
+        ),
+    });
+
+    return (
+        <div className="space-y-4 border-t border-gray-200 pt-8">
+            <div className="flex items-center justify-between">
+                <h2 className="text-xl font-semibold text-gray-900">
+                    Варіації <span className="text-sm font-normal text-gray-500">({form.fields.length})</span>
+                </h2>
+                <button
+                    type="button"
+                    onClick={handleAdd}
+                    disabled={isEditingEmpty}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                    <PlusIcon className="h-4 w-4" />
+                    Додати
+                </button>
+            </div>
+
+            {rows.length === 0 ? (
+                <div className="text-center text-sm text-gray-400 py-8">
+                    Немає варіацій
+                </div>
+            ) : (
+                <GenericTable
+                    data={rows}
+                    columns={columns}
+                    rowKey={(row) => row.rhfId}
+                    columnTemplate="repeat(7, minmax(70px, 1fr)) 72px"
+                />
+            )}
+        </div>
+    );
 }

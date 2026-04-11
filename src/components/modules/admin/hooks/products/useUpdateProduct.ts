@@ -35,7 +35,7 @@ export function useUpdateProduct() {
             variations: []
         },
     });
-    const { register, control, handleSubmit, reset, formState } = form;
+    const { register, control, handleSubmit, reset, formState, watch } = form;
     const { fields, append, replace, remove } = useFieldArray({
         name: 'variations',
         control,
@@ -205,6 +205,7 @@ export function useUpdateProduct() {
         register,
         control,
         handleSubmit,
+        watch,
         onSubmit,
         errors,
         isSubmitting,
