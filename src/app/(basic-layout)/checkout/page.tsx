@@ -4,6 +4,7 @@ import OrderSummary from "@/components/modules/checkout/components/OrderSummary"
 import ContactInfoSection from "@/components/modules/checkout/components/ContactInfoSection";
 import DeliveryMethodSection from "@/components/modules/checkout/components/DeliveryMethodSection";
 import PaymentMethodSectionSelect from "@/components/modules/checkout/components/PaymentMethodSection";
+import CommentSection from "@/components/modules/checkout/components/CommentSection";
 import { useOrderForm } from "@/components/modules/checkout/hooks/useOrderForm";
 import { useEffect } from "react";
 
@@ -31,6 +32,7 @@ export default function OrderPage() {
                     />
                     <DeliveryMethodSection errors={formState.errors} register={register} />
                     <PaymentMethodSectionSelect errors={formState.errors} register={register} />
+                    <CommentSection errors={formState.errors} register={register} />
                 </div>
                 <div className="lg:min-w-[450px] lg:max-w-[450px]">
                     <OrderSummary isSubmitting={formState.isSubmitting} />

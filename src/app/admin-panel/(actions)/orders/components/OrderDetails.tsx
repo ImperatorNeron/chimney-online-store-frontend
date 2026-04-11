@@ -50,6 +50,8 @@ export type OrderEditDraft = {
     email: string;
     phone_number: string;
     address: string;
+    comment?: string;
+    internal_comment?: string;
 };
 
 export default function OrderDetails({
@@ -230,6 +232,35 @@ export default function OrderDetails({
                                 />
                             ) : (
                                 <div className="font-medium break-words">{order.address}</div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Коментарі */}
+                <div className="bg-white border rounded-lg p-4">
+                    <div className="text-xs text-gray-600 mb-3">Коментарі</div>
+                    <div className="space-y-3">
+                        <div>
+                            <div className="text-xs text-gray-500 mb-0.5">Коментар клієнта</div>
+                            <div className="font-medium break-words text-sm text-gray-700">
+                                {order.comment || <span className="text-gray-400 italic">Немає</span>}
+                            </div>
+                        </div>
+                        <div>
+                            <div className="text-xs text-gray-500 mb-0.5">Внутрішній коментар</div>
+                            {isEditing ? (
+                                <textarea
+                                    className={`${inputClass} min-h-[60px] bg-amber-50 border-amber-200`}
+                                    value={draft.internal_comment || ""}
+                                    maxLength={500}
+                                    placeholder="Нотатка для адміністратора"
+                                    onChange={(e) => onChange({ internal_comment: e.target.value })}
+                                />
+                            ) : (
+                                <div className="font-medium break-words text-sm text-gray-700">
+                                    {order.internal_comment || <span className="text-gray-400 italic">Немає</span>}
+                                </div>
                             )}
                         </div>
                     </div>

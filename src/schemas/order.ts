@@ -17,6 +17,7 @@ export const orderSchema = z.object({
     first_name: nameField,
     last_name: nameField,
     patronymic: nameField,
+    comment: z.string().max(500, "Коментар має містити не більше 500 символів").optional().or(z.literal("")),
 });
 
 export type CreateOrderZodSchema = z.infer<typeof orderSchema>;

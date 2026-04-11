@@ -121,6 +121,8 @@ export default function OrdersPage() {
       email: order.email || "",
       phone_number: order.phone_number || "",
       address: order.address || "",
+      comment: order.comment || "",
+      internal_comment: order.internal_comment || "",
     });
   };
 
@@ -141,6 +143,8 @@ export default function OrdersPage() {
       if (patch.patronymic !== undefined) next.patronymic = patch.patronymic.replace(/[^a-zA-Zа-яА-ЯіІїЇєЄґҐʼ'\- ]/g, "").slice(0, 50);
       if (patch.email !== undefined) next.email = patch.email.slice(0, 320);
       if (patch.address !== undefined) next.address = patch.address.slice(0, 200);
+      if (patch.comment !== undefined) next.comment = patch.comment.slice(0, 500);
+      if (patch.internal_comment !== undefined) next.internal_comment = patch.internal_comment.slice(0, 500);
       return next;
     });
   };
@@ -175,6 +179,7 @@ export default function OrdersPage() {
         email: draft.email || undefined,
         phone_number: draft.phone_number,
         address: draft.address,
+        internal_comment: draft.internal_comment || undefined,
       };
 
       await orderService.updateOrderInfo(token, payload as UpdateOrderSchema, editingOrderId);
@@ -309,6 +314,8 @@ export default function OrdersPage() {
                   is_paid: Boolean(order.is_paid),
                   waybill_number: order.waybill_number || "",
                   discount_input: String(order.price_discount ?? 0),
+                  comment: order.comment || "",
+                  internal_comment: order.internal_comment || "",
                 }
             }
             onChange={handleDraftChange}
