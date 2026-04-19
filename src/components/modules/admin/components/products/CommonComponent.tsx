@@ -2,13 +2,15 @@ import { listReadCategorySchema } from "@/api/types/types";
 import FormField from "@/components/shared/FormField";
 import FormSelect from "@/components/shared/FormSelect";
 import GenericTable, { Column } from "@/components/shared/AdminTable";
+import SortableHeader from "@/components/shared/AdminTableSortableHeader";
 import BackToPageButton from "@/components/ui/BackToPageButton";
 import TextareaField from "@/components/ui/Textarea";
 import { inputPatterns } from "@/utils/field.patterns";
 import { ArrowLeftEndOnRectangleIcon, IdentificationIcon, PencilIcon, PlusIcon, TrashIcon, CheckIcon } from "@heroicons/react/24/outline";
 import Image from 'next/image';
-import ConfirmButton from "@/components/ui/ConfirmButton";
+import InfiniteScrollSentinel from "@/components/modules/admin/components/InfiniteScrollSentinel";
 import { useState } from "react";
+import type { VariationSortField } from "@/constants/orderFields";
 
 type Mode = 'edit' | 'create';
 
@@ -126,13 +128,6 @@ export default function ProductActionComponent({ categories, form, mode }: { cat
                         </div>
 
                         <VariationsSection form={form} mode={mode} />
-
-                        <ConfirmButton
-                            label={mode === 'create' ? 'Створити продукт' : 'Оновити продукт'}
-                            isLoading={form.isSubmitting}
-                            icon={<ArrowLeftEndOnRectangleIcon className="h-5 w-5" />}
-                            className="w-full !mt-10"
-                        />
                     </form>
                 </div>
             </div>
@@ -150,11 +145,10 @@ const VARIATION_COLS = [
     { key: "metal_type", label: "Метал", placeholder: "Сталь" },
 ] as const;
 
-type VariationSortField = typeof VARIATION_COLS[number]["key"];
-type SortDir = "asc" | "desc";
-
 function VariationsSection({ form, mode }: { form: any; mode: Mode }) {
     const [editingIdx, setEditingIdx] = useState<number | null>(null);
+    const [hiddenIds, setHiddenIds] = useState<Set<number>>(new Set());
+    const [editedServerValues, setEditedServerValues] = useState<Record<number, any>>({});
     const watched: any[] = form.watch?.("variations") || [];
 
     const isEditingEmpty = editingIdx !== null && (() => {
@@ -163,7 +157,7 @@ function VariationsSection({ form, mode }: { form: any; mode: Mode }) {
     })();
 
     const handleAdd = () => {
-        form.append({
+        form.prepend({
             ...(mode === 'edit' && { id: null }),
             price: 0,
             discount_percentage: 0,
@@ -173,21 +167,57 @@ function VariationsSection({ form, mode }: { form: any; mode: Mode }) {
             angle: null,
             metal_type: null,
         });
-        setEditingIdx(form.fields.length);
+        setEditingIdx(0);
     };
 
-    const rows = form.fields.map((field: any, idx: number) => ({
-        ...field,
-        _idx: idx,
-        _values: watched[idx] || {},
-    }));
+    // Build rows: create mode uses fields directly (original pattern), edit mode merges local + server
+    const serverItems = mode === 'edit' ? (form.variations?.items ?? []).filter((v: any) => !hiddenIds.has(v.id)) : [];
+    const localFields: any[] = mode === 'edit' ? (form.fields ?? []).filter((f: any) => !f.id) : [];
 
-    const columns: Column<typeof rows[number]>[] = VARIATION_COLS.map(({ key, label, placeholder, type }) => ({
-        header: label,
+    let rows: any[];
+    if (mode === 'create') {
+        // Original pattern: fields for stable keys, watched for values
+        rows = (form.fields ?? []).map((field: any, idx: number) => ({
+            ...field,
+            _idx: idx,
+            _values: watched[idx] || {},
+        }));
+    } else {
+        // Edit mode: local new fields + server items
+        rows = [
+            ...localFields.map((field: any, idx: number) => ({
+                ...field,
+                _idx: idx,
+                _values: watched[idx] || {},
+                _isLocal: true,
+            })),
+            ...serverItems.map((item: any, idx: number) => ({
+                ...item,
+                _idx: localFields.length + idx,
+                _values: editedServerValues[item.id] || item,
+                rhfId: `server-${item.id}`,
+            })),
+        ];
+    }
+
+    const columns: Column<typeof rows[number]>[] = VARIATION_COLS.map((col) => {
+        const { key, label, placeholder } = col;
+        const type = 'type' in col ? col.type : undefined;
+        return {
+        header: mode === 'edit'
+            ? <SortableHeader
+                label={label}
+                sortField={key as VariationSortField}
+                activeField={form.sortField}
+                ordering={form.sortOrdering}
+                onSort={form.handleVariationSort}
+              />
+            : label,
         render: (row: any) => {
             if (editingIdx === row._idx) {
                 return (
                     <input
+                        key={`${row.rhfId}-${key}`}
                         type={type || "text"}
                         step={type === "number" ? "any" : undefined}
                         placeholder={placeholder}
@@ -199,9 +229,10 @@ function VariationsSection({ form, mode }: { form: any; mode: Mode }) {
                     />
                 );
             }
-            return <span className="text-xs">{row._values[key] != null && row._values[key] !== "" ? row._values[key] : "—"}</span>;
+            const val = row._values[key];
+            return <span className="text-xs">{val != null && val !== "" ? val : "—"}</span>;
         },
-    }));
+    };});
 
     columns.push({
         header: "",
@@ -209,7 +240,13 @@ function VariationsSection({ form, mode }: { form: any; mode: Mode }) {
             <div className="flex items-center gap-0.5">
                 <button
                     type="button"
-                    onClick={() => setEditingIdx(editingIdx === row._idx ? null : row._idx)}
+                    onClick={() => {
+                        if (editingIdx === row._idx && mode === 'edit' && !row._isLocal && row.id) {
+                            const vals = watched[row._idx];
+                            if (vals) setEditedServerValues(prev => ({ ...prev, [row.id]: vals }));
+                        }
+                        setEditingIdx(editingIdx === row._idx ? null : row._idx);
+                    }}
                     className={`p-1.5 rounded-full transition-colors ${
                         editingIdx === row._idx
                             ? "bg-gray-200 text-gray-700"
@@ -225,7 +262,22 @@ function VariationsSection({ form, mode }: { form: any; mode: Mode }) {
                     type="button"
                     onClick={() => {
                         if (editingIdx === row._idx) setEditingIdx(null);
-                        mode === 'edit' ? form.remove(row._idx, row.id) : form.remove(row._idx);
+                        if (mode === 'edit') {
+                            if (row._idx >= localFields.length) {
+                                // Server item
+                                const serverId = serverItems[row._idx - localFields.length]?.id;
+                                if (serverId) {
+                                    form.remove(undefined, serverId);
+                                    setHiddenIds(prev => new Set(prev).add(serverId));
+                                }
+                            } else {
+                                // New local item — find its index in fields
+                                const fieldIdx = form.fields.findIndex((f: any) => f.rhfId === row.rhfId);
+                                if (fieldIdx >= 0) form.remove(fieldIdx, row.id);
+                            }
+                        } else {
+                            form.remove(row._idx);
+                        }
                     }}
                     className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors"
                     title="Видалити"
@@ -240,30 +292,55 @@ function VariationsSection({ form, mode }: { form: any; mode: Mode }) {
         <div className="space-y-4 border-t border-gray-200 pt-8">
             <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold text-gray-900">
-                    Варіації <span className="text-sm font-normal text-gray-500">({form.fields.length})</span>
+                    Варіації <span className="text-sm font-normal text-gray-500">({rows.length})</span>
                 </h2>
-                <button
-                    type="button"
-                    onClick={handleAdd}
-                    disabled={isEditingEmpty}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                >
-                    <PlusIcon className="h-4 w-4" />
-                    Додати
-                </button>
+                <div className="flex items-center gap-2">
+                    <button
+                        type="button"
+                        onClick={handleAdd}
+                        disabled={isEditingEmpty}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                        <PlusIcon className="h-4 w-4" />
+                        Додати
+                    </button>
+                    <button
+                        type="submit"
+                        disabled={form.isSubmitting}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-black rounded-full hover:bg-gray-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                        {form.isSubmitting
+                            ? <div className="h-4 w-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+                            : <ArrowLeftEndOnRectangleIcon className="h-4 w-4" />}
+                        {mode === 'create' ? 'Створити продукт' : 'Оновити продукт'}
+                    </button>
+                </div>
             </div>
 
-            {rows.length === 0 ? (
+            {rows.length === 0 && !form.variations?.loading ? (
                 <div className="text-center text-sm text-gray-400 py-8">
                     Немає варіацій
                 </div>
             ) : (
-                <GenericTable
-                    data={rows}
-                    columns={columns}
-                    rowKey={(row) => row.rhfId}
-                    columnTemplate="repeat(7, minmax(70px, 1fr)) 72px"
-                />
+                <>
+                    <div className={`transition-opacity ${form.variations?.loading && rows.length > 0 ? 'opacity-50 pointer-events-none' : ''}`}>
+                        <GenericTable
+                        data={rows}
+                        columns={columns}
+                        rowKey={(row) => row.rhfId}
+                        columnTemplate="repeat(7, minmax(70px, 1fr)) 72px"
+                    />
+                    </div>
+                    {mode === 'edit' && form.variations && (
+                        <InfiniteScrollSentinel
+                            hasMore={form.variations.items.length < form.variations.total}
+                            loading={form.variations.loadingMore}
+                            onLoadMore={form.variations.loadMore}
+                            total={form.variations.total}
+                            loaded={form.variations.items.length}
+                        />
+                    )}
+                </>
             )}
         </div>
     );

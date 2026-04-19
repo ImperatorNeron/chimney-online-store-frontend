@@ -10,6 +10,7 @@ export default function UpdateProductPage() {
     const { data } = useCategories();
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         document.title = "Оновлення продукту";
     }, []);
 

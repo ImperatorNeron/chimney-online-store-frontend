@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useForm, useFieldArray, SubmitHandler } from 'react-hook-form';
 import { useRouter, useParams } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -7,6 +7,8 @@ import { NotificationService } from '@/api/services/notification.service';
 import { listReadProductImageSchema } from '@/api/types/types';
 import { useAuthStore } from '@/store/auth.store';
 import { updateAbsoluteProductSchema, UpdateAbsoluteProductSchema } from '@/schemas/products';
+import type { VariationSortField, SortOrdering } from '@/constants/orderFields';
+import useVariationsData from './useVariationsData';
 
 const variationKeys = [
     'id', 'price', 'discount_percentage',
@@ -24,6 +26,9 @@ export function useUpdateProduct() {
     const removedVariationIds = useRef<number[]>([]);
     const initialVariations = useRef<UpdateAbsoluteProductSchema['variations']>([]);
 
+    const [sortField, setSortField] = useState<VariationSortField>("price");
+    const [sortOrdering, setSortOrdering] = useState<SortOrdering>("asc");
+
     const form = useForm<UpdateAbsoluteProductSchema>({
         resolver: zodResolver(updateAbsoluteProductSchema),
         defaultValues: {
@@ -36,7 +41,7 @@ export function useUpdateProduct() {
         },
     });
     const { register, control, handleSubmit, reset, formState, watch } = form;
-    const { fields, append, replace, remove } = useFieldArray({
+    const { fields, append: appendField, prepend: prependField, replace, remove } = useFieldArray({
         name: 'variations',
         control,
         keyName: 'rhfId'
@@ -54,18 +59,24 @@ export function useUpdateProduct() {
         metal_type: v.metal_type ?? undefined,
     }), []);
 
+    const variationParams = useMemo(() => ({
+        field: sortField, ordering: sortOrdering,
+    }), [sortField, sortOrdering]);
+
+    const variations = useVariationsData(productSlug, variationParams);
+
     const resetForm = useCallback((dto: any) => {
-        const variations = dto.variations.map(mapDtoVariation);
+        const vars = (dto.variations?.items ?? dto.variations ?? []).map(mapDtoVariation);
         reset({
             name: dto.name,
             slug: dto.slug,
             description: dto.description || '',
             category_id: dto.category_id,
             images: undefined,
-            variations,
+            variations: vars,
         });
-        replace(variations);
-        initialVariations.current = variations;
+        replace(vars);
+        initialVariations.current = vars;
         setExistingImages(dto.images);
         removedVariationIds.current = [];
         setImagesToDelete([]);
@@ -100,14 +111,23 @@ export function useUpdateProduct() {
         };
     }, [reset]);
 
+    const handleVariationSort = useCallback((field: VariationSortField) => {
+        if (field === sortField) {
+            setSortOrdering(prev => prev === "asc" ? "desc" : "asc");
+        } else {
+            setSortField(field);
+            setSortOrdering("asc");
+        }
+    }, [sortField]);
+
     const markImageForDelete = (id: number) => {
         setExistingImages(imgs => imgs.filter(img => img.id !== id));
         setImagesToDelete(ids => [...ids, id]);
     };
 
-    const handleRemoveVariation = (index: number, id?: number) => {
+    const handleRemoveVariation = (index?: number, id?: number) => {
         if (id) removedVariationIds.current.push(id);
-        remove(index);
+        if (index != null) remove(index);
     };
 
     // Функція для нормалізації значень перед порівнянням
@@ -194,6 +214,7 @@ export function useUpdateProduct() {
             if (!updated) throw new Error('Не вдалося завантажити оновлений продукт');
 
             resetForm(updated);
+            variations.reload();
             router.replace(`/admin-panel/products/update/${data.slug}`);
         } catch (error) {
             console.error('Помилка оновлення продукту:', error);
@@ -210,10 +231,15 @@ export function useUpdateProduct() {
         errors,
         isSubmitting,
         fields,
-        append,
+        append: appendField,
+        prepend: prependField,
         remove: handleRemoveVariation,
         existingImages,
         markImageForDelete,
-        productSlug
+        productSlug,
+        sortField,
+        sortOrdering,
+        handleVariationSort,
+        variations,
     };
 }

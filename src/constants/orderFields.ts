@@ -13,4 +13,5 @@ export type OrderSortField =
     | "price_discount"
     | "is_paid";
 export type ProductSortField = "name" | "slug" | "category_id" | "created_at";
+export type VariationSortField = "price" | "discount_percentage" | "diameter" | "length" | "thickness" | "angle" | "metal_type";
 export type SortOrdering = "asc" | "desc";

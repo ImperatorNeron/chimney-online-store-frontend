@@ -30,13 +30,14 @@ export const useCreateProduct = () => {
         register,
         handleSubmit,
         control,
+        watch,
         formState: { errors, isSubmitting },
         setError,
     } = useForm<CreateAbsoluteProductSchema>({
         resolver: zodResolver(createAbsoluteProductSchema),
     });
 
-    const { fields, append, remove } = useFieldArray({ name: "variations", control, keyName: 'rhfId' });
+    const { fields, append, prepend, remove } = useFieldArray({ name: "variations", control, keyName: 'rhfId' });
 
     const onSubmit = async (data: CreateAbsoluteProductSchema) => {
         const token = await getValidToken();
@@ -74,6 +75,6 @@ export const useCreateProduct = () => {
     };
 
     return {
-        register, control, handleSubmit, errors, isSubmitting, onSubmit, fields, append, remove
+        register, control, handleSubmit, errors, isSubmitting, onSubmit, fields, append, prepend, remove, watch
     };
 };
