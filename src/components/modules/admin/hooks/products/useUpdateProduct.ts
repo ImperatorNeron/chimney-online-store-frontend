@@ -24,6 +24,7 @@ export function useUpdateProduct() {
     const [imagesToDelete, setImagesToDelete] = useState<number[]>([]);
     const [productId, setProductId] = useState<number>();
     const removedVariationIds = useRef<number[]>([]);
+    const editedServerVariations = useRef<Record<number, any>>({});
     const initialVariations = useRef<UpdateAbsoluteProductSchema['variations']>([]);
 
     const [sortField, setSortField] = useState<VariationSortField>("price");
@@ -79,6 +80,7 @@ export function useUpdateProduct() {
         initialVariations.current = vars;
         setExistingImages(dto.images);
         removedVariationIds.current = [];
+        editedServerVariations.current = {};
         setImagesToDelete([]);
     }, [mapDtoVariation, reset, replace]);
 
@@ -140,30 +142,36 @@ export function useUpdateProduct() {
         const payload: any[] = [];
         const initialVars = initialVariations.current;
 
+        // New local variations from form
         currentVariations.forEach(v => {
             const base = variationKeys.reduce((acc, key) => {
                 if (key !== 'id') acc[key] = (v as any)[key];
                 return acc;
             }, {} as Record<string, any>);
 
-            const initialVar = initialVars.find(iv => iv.id === v.id);
-
-            if (v.id && initialVar) {
-                // Перевіряємо зміни з нормалізацією значень
-                const hasChanges = variationKeys.some(key => {
-                    if (key === 'id') return false;
-
-                    const currentValue = normalizeValue(v[key]);
-                    const initialValue = normalizeValue(initialVar[key]);
-
-                    return currentValue !== initialValue;
-                });
-
-                if (hasChanges) {
-                    payload.push({ action: 'update', id: v.id, ...base });
-                }
-            } else if (!v.id) {
+            if (!v.id) {
                 payload.push({ action: 'create', ...base });
+            }
+        });
+
+        // Edited server variations (by id, independent of sort order)
+        Object.entries(editedServerVariations.current).forEach(([idStr, edited]) => {
+            const id = Number(idStr);
+            const initialVar = initialVars.find(iv => iv.id === id);
+            if (!initialVar) return;
+
+            const base = variationKeys.reduce((acc, key) => {
+                if (key !== 'id') acc[key] = edited[key];
+                return acc;
+            }, {} as Record<string, any>);
+
+            const hasChanges = variationKeys.some(key => {
+                if (key === 'id') return false;
+                return normalizeValue(edited[key]) !== normalizeValue(initialVar[key]);
+            });
+
+            if (hasChanges) {
+                payload.push({ action: 'update', id, ...base });
             }
         });
 
@@ -222,6 +230,10 @@ export function useUpdateProduct() {
         }
     };
 
+    const updateServerVariation = (id: number, values: any) => {
+        editedServerVariations.current[id] = values;
+    };
+
     return {
         register,
         control,
@@ -241,5 +253,6 @@ export function useUpdateProduct() {
         sortOrdering,
         handleVariationSort,
         variations,
+        updateServerVariation,
     };
 }

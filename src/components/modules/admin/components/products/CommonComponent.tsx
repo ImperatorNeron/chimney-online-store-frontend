@@ -171,7 +171,13 @@ function VariationsSection({ form, mode }: { form: any; mode: Mode }) {
     };
 
     // Build rows: create mode uses fields directly (original pattern), edit mode merges local + server
-    const serverItems = mode === 'edit' ? (form.variations?.items ?? []).filter((v: any) => !hiddenIds.has(v.id)) : [];
+    const serverItemsRaw = mode === 'edit' ? (form.variations?.items ?? []).filter((v: any) => !hiddenIds.has(v.id)) : [];
+    const seenIds = new Set<number>();
+    const serverItems = serverItemsRaw.filter((v: any) => {
+        if (seenIds.has(v.id)) return false;
+        seenIds.add(v.id);
+        return true;
+    });
     const localFields: any[] = mode === 'edit' ? (form.fields ?? []).filter((f: any) => !f.id) : [];
 
     let rows: any[];
@@ -215,6 +221,28 @@ function VariationsSection({ form, mode }: { form: any; mode: Mode }) {
             : label,
         render: (row: any) => {
             if (editingIdx === row._idx) {
+                if (mode === 'edit' && !row._isLocal) {
+                    // Server item: use local state, not form.register (index shifts on sort)
+                    const currentVal = row._values[key];
+                    return (
+                        <input
+                            key={`${row.rhfId}-${key}`}
+                            type={type || "text"}
+                            step={type === "number" ? "any" : undefined}
+                            placeholder={placeholder}
+                            defaultValue={currentVal ?? ""}
+                            onChange={(e) => {
+                                const v = type === "number" ? (e.target.value === "" ? null : Number(e.target.value)) : e.target.value;
+                                setEditedServerValues(prev => ({
+                                    ...prev,
+                                    [row.id]: { ...(prev[row.id] || row._values), [key]: v },
+                                }));
+                                form.updateServerVariation?.(row.id, { ...(editedServerValues[row.id] || row._values), [key]: v });
+                            }}
+                            className="w-full px-2 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
+                        />
+                    );
+                }
                 return (
                     <input
                         key={`${row.rhfId}-${key}`}
@@ -241,10 +269,6 @@ function VariationsSection({ form, mode }: { form: any; mode: Mode }) {
                 <button
                     type="button"
                     onClick={() => {
-                        if (editingIdx === row._idx && mode === 'edit' && !row._isLocal && row.id) {
-                            const vals = watched[row._idx];
-                            if (vals) setEditedServerValues(prev => ({ ...prev, [row.id]: vals }));
-                        }
                         setEditingIdx(editingIdx === row._idx ? null : row._idx);
                     }}
                     className={`p-1.5 rounded-full transition-colors ${
