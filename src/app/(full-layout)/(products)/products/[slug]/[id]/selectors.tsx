@@ -60,12 +60,12 @@ export default function Selectors({ fullItem, variation, slug }: SelectorsProps)
       );
       if (!fallbackVariation) return;
       setIsLocked(true);
-      router.push(`/products/${slug}/${fallbackVariation.id}`);
+      router.push(`/products/${slug}/${fallbackVariation.id}`, { scroll: false });
       return;
     }
 
     setIsLocked(true);
-    router.push(`/products/${slug}/${variationId}`);
+    router.push(`/products/${slug}/${variationId}`, { scroll: false });
   };
 
   return (
