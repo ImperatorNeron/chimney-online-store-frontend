@@ -74,6 +74,7 @@ export class ProductService {
     }
 
     async getFullProduct(slug: string, params?: { field?: string; ordering?: string; offset?: number; limit?: number }) {
+        // TODO: not sure about params here if they are needed 
         const query = new URLSearchParams();
         if (params?.field) query.append("field", params.field);
         if (params?.ordering) query.append("ordering", params.ordering);
@@ -84,12 +85,11 @@ export class ProductService {
         const response = await http.get<Get_AReadAbsoluteProductSchema>(url)
         return response.data
     }
-    // TODO: not sure why ai created this again and did not use example above 
     async getProductVariations(slug: string, limit: number, offset: number, params?: { field?: string; ordering?: string }) {
         const query = new URLSearchParams({ limit: String(limit), offset: String(offset) });
         if (params?.field) query.append("field", params.field);
         if (params?.ordering) query.append("ordering", params.ordering);
-        const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}/${encodeURIComponent(slug)}?${query.toString()}`
+        const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}/${encodeURIComponent(slug)}/variations?${query.toString()}`
         const dto = (await http.get<Get_AReadAbsoluteProductSchema>(url)).data as any;
         return {
             items: dto?.variations ?? [],
