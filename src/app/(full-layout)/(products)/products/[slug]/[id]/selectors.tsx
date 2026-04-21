@@ -42,28 +42,19 @@ export default function Selectors({ fullItem, variation, slug }: SelectorsProps)
     return null;
   }
 
+  const currentAttributes: Record<string, string> = {};
+  availableSelectors.forEach(({ attr }) => {
+    currentAttributes[attr] = variation[attr as keyof typeof variation]?.toString() || '';
+  });
+
   const handleClick = async (attr: keyof typeof variation, value: string) => {
     if (variation[attr] === value || isLocked) return;
 
-    const currentAttributes: Record<string, string> = {};
-    availableSelectors.forEach(selector => {
-      const attrName = selector.attr;
-      currentAttributes[attrName] = variation[attrName as keyof typeof variation]?.toString() || '';
-    });
+    const desired = { ...currentAttributes, [attr]: value };
+    const variationId = findVariationByAttributes(fullItem.variations, desired)
+      ?? findClosestVariation(fullItem.variations, desired, attr);
 
-    currentAttributes[attr] = value;
-    const variationId = findVariationByAttributes(fullItem.variations, currentAttributes);
-
-    if (!variationId) {
-      const fallbackVariation = fullItem.variations.find(
-        (v: any) => v[attr]?.toString() === value
-      );
-      if (!fallbackVariation) return;
-      setIsLocked(true);
-      router.push(`/products/${slug}/${fallbackVariation.id}`, { scroll: false });
-      return;
-    }
-
+    if (!variationId) return;
     setIsLocked(true);
     router.push(`/products/${slug}/${variationId}`, { scroll: false });
   };
@@ -78,18 +69,23 @@ export default function Selectors({ fullItem, variation, slug }: SelectorsProps)
           <div className="flex flex-wrap gap-2 flex-1">
             {values.map((value) => {
               const isActive = variation[attr as keyof typeof variation] === value;
+              const isAvailable = isComboAvailable(fullItem.variations, currentAttributes, attr, value);
 
               return (
                 <button
                   key={value}
                   onClick={() => handleClick(attr as keyof typeof variation, value)}
                   disabled={isActive || isLocked}
-                  className={`px-3 py-1.5 text-sm border rounded transition-all duration-200 flex items-center justify-center min-w-[40px] ${isActive
+                  title={!isAvailable && !isActive ? 'Ця комбінація недоступна' : undefined}
+                  className={`px-3 py-1.5 text-sm border rounded transition-all duration-200 flex items-center justify-center min-w-[40px] ${
+                    isActive
                       ? 'bg-black text-white border-black'
                       : isLocked
                         ? 'bg-gray-200 text-gray-400 border-gray-300 cursor-not-allowed'
-                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
-                    }`}
+                        : isAvailable
+                          ? 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
+                          : 'bg-white text-gray-400 border-dashed border-gray-300 hover:bg-gray-50 relative before:absolute before:inset-0 before:bg-[linear-gradient(to_top_right,transparent_calc(50%-1px),rgb(209,213,219)_calc(50%-1px),rgb(209,213,219)_calc(50%+1px),transparent_calc(50%+1px))]'
+                  }`}
                 >
                   {value}
                 </button>
@@ -99,6 +95,20 @@ export default function Selectors({ fullItem, variation, slug }: SelectorsProps)
         </div>
       ))}
     </div>
+  );
+}
+
+function isComboAvailable(
+  variations: listReadProductVariationSchema,
+  currentAttributes: Record<string, string>,
+  changedAttr: string,
+  changedValue: string,
+): boolean {
+  const desired = { ...currentAttributes, [changedAttr]: changedValue };
+  return variations.some(v =>
+    Object.entries(desired).every(([attr, val]) =>
+      v[attr as keyof typeof v]?.toString() === val
+    )
   );
 }
 
@@ -162,4 +172,32 @@ function findVariationByAttributes(
     });
   });
   return variation?.id;
+}
+
+function findClosestVariation(
+  variations: listReadProductVariationSchema,
+  desired: Record<string, string>,
+  changedAttr: string,
+): number | undefined {
+  const candidates = variations.filter(
+    (v: any) => v[changedAttr]?.toString() === desired[changedAttr]
+  );
+  if (candidates.length === 0) return undefined;
+
+  const otherAttrs = Object.keys(desired).filter(a => a !== changedAttr);
+  let best = candidates[0];
+  let bestScore = 0;
+
+  for (const v of candidates) {
+    let score = 0;
+    for (const attr of otherAttrs) {
+      if ((v as any)[attr]?.toString() === desired[attr]) score++;
+    }
+    if (score > bestScore) {
+      bestScore = score;
+      best = v;
+    }
+  }
+
+  return best.id;
 }
