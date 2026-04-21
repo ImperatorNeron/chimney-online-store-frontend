@@ -1,6 +1,6 @@
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import ProductList from "@/components/modules/products/components/ProductList";
-import AddProductToCartButton from "@/components/modules/product/components/AddProductToCartButton";
+import OrderActions from "@/components/modules/product/components/OrderActions";
 import ProductSlider from "@/components/modules/product/components/ProductSlider";
 import Tabs from "@/components/modules/product/components/Tabs";
 import { TagIcon, CreditCardIcon, ShieldCheckIcon, TruckIcon } from '@heroicons/react/24/outline'
@@ -187,11 +187,8 @@ export default async function ProductPage({
                             <Selectors fullItem={fullItem} variation={variation} slug={productSlug} />
 
                             <div className="flex flex-col sm:flex-row gap-2">
-                                <button className="px-14 bg-gray-900 text-sm xs:text-base text-white py-3 rounded-lg font-medium hover:bg-gray-800 transition" aria-label={`Замовити ${item.name}`}>
-                                    Замовити
-                                </button>
                                 {item.id !== undefined && (
-                                    <AddProductToCartButton productId={item.id} />
+                                    <OrderActions productId={item.id} productName={item.name ?? ''} />
                                 )}
                             </div>
 
