@@ -1,41 +1,39 @@
 'use client';
 
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useRef } from 'react';
 import { orderService } from '@/api/services/order.service';
-import { ProfileContext } from '@/provider/profile.provider';
-import { useAuthStore } from '@/store/auth.store';
-import { useRouter } from 'next/navigation';
-import { listReadExtendedOrderSchemaData } from '@/api/types/types';
+import { ReadExtendedOrderSchema } from '@/api/types/types';
+import useInfiniteData from '@/components/modules/admin/hooks/common/useInfiniteData';
 
+
+// TODO: almost same as useOrderHistory
 export default function useCurrentOrders() {
-    const router = useRouter();
-    const user = useContext(ProfileContext);
-    const [data, setData] = useState<listReadExtendedOrderSchemaData>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const { getValidToken } = useAuthStore.getState();
+    const fetchFn = useCallback(
+        (token: string, limit: number, offset: number) =>
+            orderService.getUserOrders(token, limit, offset),
+        [],
+    );
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const token = await getValidToken();
-                if (!token) {
-                    router.push('/auth/login');
-                    return;
-                }
-                const data = await orderService.getUserOrders(token);
-                setData(data);
-            } catch {
-                setError('Не вдалося завантажити історію');
-            } finally {
-                setLoading(false);
-            }
-        };
+    const data = useInfiniteData<any, ReadExtendedOrderSchema>(fetchFn, []);
 
-        if (user) {
-            fetchData();
-        }
-    }, [user, getValidToken, router]);
+    const dataRef = useRef(data);
+    dataRef.current = data;
 
-    return { data, loading, error };
-};
+    const loadMore = useCallback(() => {
+        const d = dataRef.current;
+        if (d.items.length >= d.total) return;
+        d.loadMore();
+    }, []);
+
+    const hasMore = data.items.length < data.total;
+
+    return {
+        items: data.items,
+        total: data.total,
+        loading: data.loading,
+        loadingMore: data.loadingMore,
+        error: data.error,
+        hasMore,
+        loadMore,
+    };
+}

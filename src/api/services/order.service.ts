@@ -11,15 +11,15 @@ export class OrderService {
         return response.data;
     }
 
-    async getUserHistory(token: string) {
-        const url = `${this.endpoint}/history`;
-        const response = await http.get<AlistReadExtendedOrderSchema>(url, token);
+    async getUserHistory(token: string, limit: number = 20, offset: number = 0) {
+        const url = `${this.endpoint}/history?limit=${limit}&offset=${offset}`;
+        const response = await http.get<any>(url, token);
         return response.data;
     }
 
-    async getUserOrders(token: string) {
-        const url = `${this.endpoint}/active`;
-        const response = await http.get<AlistReadExtendedOrderSchema>(url, token);
+    async getUserOrders(token: string, limit: number = 20, offset: number = 0) {
+        const url = `${this.endpoint}/active?limit=${limit}&offset=${offset}`;
+        const response = await http.get<any>(url, token);
         return response.data;
     }
 
