@@ -11,6 +11,8 @@ export default function useOrders(
         status?: string;
         shipping_method?: string;
         payment_method?: string;
+        date_from?: string;
+        date_to?: string;
     },
 ) {
     const fetchFn = useCallback(

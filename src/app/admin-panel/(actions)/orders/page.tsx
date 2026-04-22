@@ -62,6 +62,8 @@ export default function OrdersPage() {
   const [filterStatus, setFilterStatus] = useState("");
   const [filterShipping, setFilterShipping] = useState("");
   const [filterPayment, setFilterPayment] = useState("");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
 
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
   const [editingOrderId, setEditingOrderId] = useState<number | null>(null);
@@ -88,8 +90,10 @@ export default function OrdersPage() {
       status: filterStatus || undefined,
       shipping_method: filterShipping || undefined,
       payment_method: filterPayment || undefined,
+      date_from: dateFrom || undefined,
+      date_to: dateTo || undefined,
     }),
-    [debouncedSearch, sortField, sortOrdering, filterStatus, filterShipping, filterPayment],
+    [debouncedSearch, sortField, sortOrdering, filterStatus, filterShipping, filterPayment, dateFrom, dateTo],
   );
 
   const { items, setItems, total, loading, loadingMore, hasMore, loadMore, reload } = useOrders(params);
@@ -265,14 +269,15 @@ export default function OrdersPage() {
     setFilterStatus("");
     setFilterShipping("");
     setFilterPayment("");
+    setDateFrom("");
+    setDateTo("");
   };
 
   return (
     <div className="max-w-[1920px] mx-auto px-4">
-      <div className="flex flex-col md:flex-row justify-between gap-4 mb-4">
-        <div>
+      <div className="flex flex-col gap-4 mb-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
           <h1 className="text-2xl md:text-3xl font-bold">Замовлення клієнтів</h1>
-          <p className="text-gray-600">Пошук, сортування та редагування</p>
         </div>
         <Filters
           search={search}
@@ -286,6 +291,10 @@ export default function OrdersPage() {
           setShippingMethod={setFilterShipping}
           paymentMethod={filterPayment}
           setPaymentMethod={setFilterPayment}
+          dateFrom={dateFrom}
+          setDateFrom={setDateFrom}
+          dateTo={dateTo}
+          setDateTo={setDateTo}
         />
       </div>
 
