@@ -117,11 +117,11 @@ export default function CartItem({ item }: { item: ReadCartItemWithTotalPriceSch
                         </div>
                         <div className="flex flex-col lg:flex-row items-baseline gap-0 lg:gap-2 mt-1.5">
                             <span className={`text-sm sm:text-base font-bold ${hasDiscount ? 'text-red-600' : 'text-gray-900'}`}>
-                                {item.total_price.toFixed(2)} ₴
+                                {item.total_price.toFixed(0)} ₴
                             </span>
                             {hasDiscount && (
                                 <span className="text-gray-400 line-through text-xs font-medium">
-                                    {(item.product.price * item.quantity).toFixed(2)} ₴
+                                    {(item.product.price * item.quantity).toFixed(0)} ₴
                                 </span>
                             )}
                         </div>

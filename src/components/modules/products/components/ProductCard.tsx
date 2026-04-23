@@ -79,13 +79,13 @@ export default function ProductCard({ product, className }: {
                         <div className="flex flex-col h-[30px] justify-center">
                             {product.discount_percentage > 0 && (
                                 <div className="text-sm text-gray-400 line-through leading-none">
-                                    ₴{product.price.toFixed(2)}
+                                    ₴{product.price.toFixed(0)}
                                 </div>
                             )}
                             <div className={`text-base font-bold leading-none ${product.discount_percentage > 0 ? "text-red-600" : "text-gray-900"}`} itemProp="price">
                                 ₴{(product.discount_percentage > 0
                                     ? product.price - (product.price * product.discount_percentage / 100)
-                                    : product.price).toFixed(2)}
+                                    : product.price).toFixed(0)}
                             </div>
                         </div>
                         <AddProductToCartButton productId={product.id} />

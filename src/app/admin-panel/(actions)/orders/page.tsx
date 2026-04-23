@@ -36,12 +36,12 @@ function calcPriceDiscount(discountInput: string, total: number) {
   if (normalized.includes("%")) {
     const percent = parseFloat(normalized.replace("%", ""));
     if (Number.isNaN(percent)) return 0;
-    return Math.round((percent / 100) * total * 100) / 100;
+    return Math.round((percent / 100) * total);
   }
 
   const value = parseFloat(normalized);
   if (Number.isNaN(value)) return 0;
-  return Math.round(value * 100) / 100;
+  return Math.round(value);
 }
 
 function updateOrderInState(

@@ -38,7 +38,7 @@ export default function OrderDetails({ order }: { order: ReadExtendedOrderSchema
                 <div className="flex justify-between items-center">
                     <span className="text-base sm:text-md text-gray-700">Загальна вартість:</span>
                     <span className="text-base sm:text-md font-semibold text-gray-900">
-                        {order.total_price.toFixed(2)} ₴
+                        {order.total_price.toFixed(0)} ₴
                     </span>
                 </div>
 
@@ -46,15 +46,15 @@ export default function OrderDetails({ order }: { order: ReadExtendedOrderSchema
                     <span className="text-base sm:text-md text-gray-700">Знижка:</span>
                     <span className="text-base sm:text-md font-semibold text-red-600">
                         {order.price_discount === 0
-                            ? '0.00 ₴'
-                            : `-${order.price_discount.toFixed(2)} ₴`}
+                            ? '0 ₴'
+                            : `-${order.price_discount.toFixed(0)} ₴`}
                     </span>
                 </div>
 
                 <div className="flex justify-between items-center py-2 border-y border-gray-200">
                     <span className="text-base sm:text-md font-semibold text-gray-800">Фінальна вартість:</span>
                     <span className="text-base sm:text-md font-bold text-green-600">
-                        {(order.total_price - order.price_discount).toFixed(2)} ₴
+                        {(order.total_price - order.price_discount).toFixed(0)} ₴
                     </span>
                 </div>
             </div>
@@ -77,10 +77,10 @@ export default function OrderDetails({ order }: { order: ReadExtendedOrderSchema
 
                         <div className="flex-shrink-0 text-right whitespace-nowrap">
                             <div className="sm:text-lg font-medium text-gray-900">
-                                {item.price_at_order.toFixed(2)} ₴
+                                {item.price_at_order.toFixed(0)} ₴
                             </div>
                             <div className="text-sm sm:text-sm text-gray-500 mt-1">
-                                {item.quantity} × {item.product.discount_price.toFixed(2)} ₴
+                                {item.quantity} × {item.product.discount_price.toFixed(0)} ₴
                             </div>
                         </div>
                     </div>

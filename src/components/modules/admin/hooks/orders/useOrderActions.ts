@@ -49,7 +49,7 @@ export const useOrderActions = (setOrders: React.Dispatch<React.SetStateAction<L
             if (discount.includes("%")) {
                 const percent = parseFloat(discount.replace('%', '').replace(',', '.'));
                 if (!isNaN(percent)) {
-                    price_discount = Math.round((percent / 100) * total_price * 100) / 100;
+                    price_discount = Math.round((percent / 100) * total_price);
                 }
             } else {
                 const value = parseFloat(discount.replace(',', '.'));

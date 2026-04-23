@@ -8,7 +8,7 @@ const inputClass =
     "w-full border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-300";
 
 function money(v: number) {
-    return new Intl.NumberFormat("uk-UA", { minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(v);
+    return new Intl.NumberFormat("uk-UA", { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(v);
 }
 
 function discountToPercent(total: number, discount: number) {
@@ -75,7 +75,7 @@ export default function OrderDetails({
 }) {
     const total = Number(order.total_price || 0);
     const discount = Number(order.price_discount || 0);
-    const finalTotal = Math.max(0, total - discount);
+    const finalTotal = Math.max(0, Math.round(total - discount));
     const discountPercent = discountToPercent(total, discount);
 
     return (
