@@ -22,6 +22,12 @@ class LikeService {
         const response = await http.get<ReadLikedProductIdsSchema>(this.endpoint, token);
         return response.data;
     }
+
+    async getLikedProducts(token: string, limit: number = 20, offset: number = 0) {
+        const url = `${this.endpoint}/products?limit=${limit}&offset=${offset}`;
+        const response = await http.get<any>(url, token);
+        return response.data;
+    }
 }
 
 export const likeService = new LikeService();

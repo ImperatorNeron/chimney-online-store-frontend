@@ -1,39 +1,38 @@
 'use client';
 
-import { useContext, useEffect, useState } from 'react';
-import { ProfileContext } from '@/provider/profile.provider';
-import { productService } from '@/api/services/products.service';
-import { paths } from '@/api/types/openapi';
-import { useFavouritesStore } from '@/store/favourite.store';
-
-type CreateProductByIdsResponse = paths["/api/v1/products/by-ids"]["get"]["responses"]["200"]["content"]["application/json"]["data"]
+import { useCallback, useRef } from 'react';
+import { likeService } from '@/api/services/likes.service';
+import { ReadPreviewProductSchema } from '@/api/types/types';
+import useInfiniteData from '@/components/modules/admin/hooks/common/useInfiniteData';
 
 export default function useFavourites() {
-    const user = useContext(ProfileContext);
-    const likedProductIds = useFavouritesStore(state => state.likedProductIds);
+    const fetchFn = useCallback(
+        (token: string, limit: number, offset: number) =>
+            likeService.getLikedProducts(token, limit, offset),
+        [],
+    );
 
-    const [data, setData] = useState<CreateProductByIdsResponse>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const data = useInfiniteData<any, ReadPreviewProductSchema>(fetchFn, []);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                if (likedProductIds.length === 0) {
-                    setData([]);
-                    return;
-                }
-                const likedProducts = await productService.getProductsByIds(likedProductIds);
-                setData(likedProducts);
-            } catch {
-                setError('Не вдалося завантажити обрані товари');
-            } finally {
-                setLoading(false);
-            }
-        };
+    const dataRef = useRef(data);
+    dataRef.current = data;
 
-        fetchData();
-    }, [user, likedProductIds]);
+    const loadMore = useCallback(() => {
+        const d = dataRef.current;
+        if (d.items.length >= d.total) return;
+        d.loadMore();
+    }, []);
 
-    return { data, loading, error };
+    const hasMore = data.items.length < data.total;
+
+    return {
+        items: data.items,
+        total: data.total,
+        loading: data.loading,
+        loadingMore: data.loadingMore,
+        error: data.error,
+        hasMore,
+        loadMore,
+        reload: data.reload,
+    };
 }

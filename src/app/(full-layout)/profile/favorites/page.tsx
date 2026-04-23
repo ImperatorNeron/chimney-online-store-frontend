@@ -4,16 +4,14 @@ import ProfileLoading from "@/components/layout/loaders/ProfileLoader";
 import useFavourites from "@/components/modules/orders/hooks/useFavourites";
 import ProductList from "@/components/modules/products/components/ProductList";
 import EmptyState from "@/components/shared/EmptyState";
+import InfiniteScrollSentinel from "@/components/modules/admin/components/InfiniteScrollSentinel";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function FavoritesPage() {
-  const { data, loading } = useFavourites();
-  const router = useRouter()
-  const handleExploreProducts = () => {
-    router.push("/")
-  };
+  const { items, total, loading, loadingMore, hasMore, loadMore } = useFavourites();
+  const router = useRouter();
 
   useEffect(() => {
     document.title = "Улюблене";
@@ -27,18 +25,27 @@ export default function FavoritesPage() {
         Улюблене
       </h1>
 
-      {data?.length ? (
-        <ProductList
-          items={data}
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 lg:gap-3"
-        />
+      {items.length ? (
+        <>
+          <ProductList
+            items={items}
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 lg:gap-3"
+          />
+          <InfiniteScrollSentinel
+            hasMore={hasMore}
+            loading={loadingMore}
+            onLoadMore={loadMore}
+            total={total}
+            loaded={items.length}
+          />
+        </>
       ) : (
         <EmptyState
           title="Немає улюблених товарів"
           icon={HeartIcon}
           description="Додавайте товари до улюблених, щоб знайти їх пізніше"
           buttonText="До покупок"
-          onAction={handleExploreProducts}
+          onAction={() => router.push("/")}
         />
       )}
     </div>
