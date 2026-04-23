@@ -35,6 +35,7 @@ export const useCartStore = create<CartState>((set) => ({
             await useCartStore.getState().fetchCart();
         } catch (err: any) {
             set({ error: err.message || 'Невідома помилка', loading: false });
+            throw err;
         }
     },
 
@@ -45,6 +46,7 @@ export const useCartStore = create<CartState>((set) => ({
             await useCartStore.getState().fetchCart();
         } catch (err: any) {
             set({ error: err.message || 'Невідома помилка', loading: false });
+            throw err;
         }
     },
 

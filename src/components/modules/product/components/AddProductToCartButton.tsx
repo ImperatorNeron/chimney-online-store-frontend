@@ -10,15 +10,17 @@ export default function AddProductToCartButton({ productId }: { productId: numbe
 
     const handleAdd = async () => {
         if (quantity < 1 || quantity > 100) {
-            NotificationService.error("Перевищено ліміт додавання в корзину!") 
-            return
-        };
+            NotificationService.error("Перевищено ліміт додавання в корзину!");
+            return;
+        }
         setAddLoading(true);
         try {
             await addToCart(productId, quantity);
+            NotificationService.success("Товар успішно додано в корзину!");
+        } catch (err: any) {
+            NotificationService.error(err.message || "Не вдалося додати товар");
         } finally {
             setAddLoading(false);
-            NotificationService.success("Товар успішно додано в корзину!")
         }
     };
 

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from "react";
+import { NotificationService } from "@/api/services/notification.service";
 import { useCartStore } from "@/store/cart.store";
 import Image from "next/image";
 import Link from "next/link";
@@ -18,6 +19,8 @@ export default function CartItem({ item }: { item: ReadCartItemWithTotalPriceSch
         setUpdateLoading(true);
         try {
             await changeQuantity(item.id, action);
+        } catch (err: any) {
+            NotificationService.error(err.message || "Не вдалося змінити кількість");
         } finally {
             setUpdateLoading(false);
         }

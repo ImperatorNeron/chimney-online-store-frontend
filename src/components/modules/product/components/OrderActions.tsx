@@ -31,7 +31,8 @@ export default function OrderActions({ productId, productName }: { productId: nu
                 NotificationService.success("Товар успішно додано в корзину!");
                 setLoading(false);
             }
-        } catch {
+        } catch (err: any) {
+            NotificationService.error(err.message || "Не вдалося додати товар");
             setLoading(false);
         }
     };

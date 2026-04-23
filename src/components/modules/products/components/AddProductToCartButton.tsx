@@ -11,7 +11,9 @@ export default function AddProductToCartButton({ productId }: { productId: numbe
         setAddLoading(true);
         try {
             await addToCart(productId);
-            NotificationService.success("Товар успішно додано в корзину!")
+            NotificationService.success("Товар успішно додано в корзину!");
+        } catch (err: any) {
+            NotificationService.error(err.message || "Не вдалося додати товар");
         } finally {
             setAddLoading(false);
         }
