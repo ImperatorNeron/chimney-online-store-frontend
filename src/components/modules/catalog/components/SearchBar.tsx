@@ -2,25 +2,22 @@
 
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 
 export default function SearchBar({ onClose }: { onClose?: () => void; }) {
     const router = useRouter();
     const [searchTerm, setSearchTerm] = useState("");
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isPending, startTransition] = useTransition();
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (isSubmitting) return;
+        if (isPending) return;
 
         if (searchTerm.trim()) {
-            setIsSubmitting(true);
             const encodedQuery = encodeURIComponent(searchTerm.trim());
-            router.push(`/search?text=${encodedQuery}`);
-
-            setTimeout(() => {
-                setIsSubmitting(false);
-            }, 1500);
+            startTransition(() => {
+                router.push(`/search?text=${encodedQuery}`);
+            });
         }
     };
 
@@ -38,16 +35,16 @@ export default function SearchBar({ onClose }: { onClose?: () => void; }) {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 aria-label="Введіть пошуковий запит"
-                disabled={isSubmitting}
+                disabled={isPending}
             />
             <button
                 type="submit"
                 className="bg-gray-800 text-white px-3 lg:px-6 py-2 rounded-r-lg hover:bg-gray-700 border-t border-b border-r border-gray-800 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                 aria-label="Виконати пошук"
-                disabled={isSubmitting}
+                disabled={isPending}
                 onClick={onClose}
             >
-                {isSubmitting ? (
+                {isPending ? (
                     <div className="h-6 w-6 mx-auto border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
                 ) : (
                     <>
