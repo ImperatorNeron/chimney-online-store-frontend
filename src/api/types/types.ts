@@ -22,6 +22,12 @@ export type Create_AReadOrderBaseSchema = Update_AReadOrderBaseSchema;
 export type AlistReadExtendedOrderSchema = Res<paths["/api/v1/orders/history"]["get"]>;
 export type listReadExtendedOrderSchemaData = AlistReadExtendedOrderSchema["data"];
 
+// CUSTOMERS
+export type ALReadCustomerSchema = Res<paths["/api/v1/orders/customers"]["get"]>;
+export type LReadCustomerSchema = ALReadCustomerSchema["data"];
+type CustomersList = ExtractArrayField<ALReadCustomerSchema["data"], "items">;
+export type ReadCustomerSchema = CustomersList[number];
+
 // PAGINATION
 export type PaginationIn = paths["/api/v1/orders"]["get"]["parameters"]["query"];
 

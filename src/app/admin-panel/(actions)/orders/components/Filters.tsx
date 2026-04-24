@@ -53,7 +53,7 @@ export default function Filters({
                     value={search}
                     onChange={setSearch}
                     setOffset={setOffset}
-                    placeholder="Пошук по ПІБ або телефону..."
+                    placeholder="Пошук..."
                 />
             </div>
             <div className="flex-1 min-w-0">

@@ -5,6 +5,7 @@ import {
     ClipboardDocumentListIcon,
     PlusCircleIcon,
     MegaphoneIcon,
+    UsersIcon,
 } from "@heroicons/react/24/outline";
 import CardLink from "@/components/modules/admin/components/common/AdminCardLink";
 
@@ -34,10 +35,10 @@ export default function AdminDashboard() {
                 />
 
                 <CardLink
-                    href="/admin/promotions"
-                    title="Акції"
-                    desc="Керуйте акційними блоками та банерами"
-                    icon={<MegaphoneIcon className="h-6 w-6" />}
+                    href="/admin-panel/customers"
+                    title="База клієнтів"
+                    desc="Перегляньте покупців, їх замовлення та статистику"
+                    icon={<UsersIcon className="h-6 w-6" />}
                 />
             </div>
         </main>

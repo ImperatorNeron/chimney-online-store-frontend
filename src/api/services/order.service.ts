@@ -1,6 +1,6 @@
 import { http } from '@/api/http';
 import { endpoints } from '../endpoints';
-import { Update_AReadOrderBaseSchema, CreateOrderSchema, ALReadExtendedOrderSchema, Create_AReadOrderBaseSchema, AlistReadExtendedOrderSchema, UpdateOrderSchema } from '../types/types';
+import { Update_AReadOrderBaseSchema, CreateOrderSchema, ALReadExtendedOrderSchema, ALReadCustomerSchema, Create_AReadOrderBaseSchema, AlistReadExtendedOrderSchema, UpdateOrderSchema } from '../types/types';
 
 
 export class OrderService {
@@ -61,6 +61,22 @@ export class OrderService {
         const url = `${this.endpoint}/${encodeURIComponent(orderId)}`;
         const response = await http.patch<Update_AReadOrderBaseSchema>(url, updateOrder, token);
         return response.data
+    }
+
+    async getCustomers(
+        token: string, limit: number = 30, offset: number = 0,
+        params?: { text?: string; field?: string; ordering?: string; is_registered?: string; date_from?: string; date_to?: string },
+    ) {
+        const query = new URLSearchParams({ limit: String(limit), offset: String(offset) });
+        if (params?.text) query.append("text", params.text);
+        if (params?.field) query.append("field", params.field);
+        if (params?.ordering) query.append("ordering", params.ordering);
+        if (params?.is_registered) query.append("is_registered", params.is_registered);
+        if (params?.date_from) query.append("date_from", params.date_from);
+        if (params?.date_to) query.append("date_to", params.date_to);
+        const url = `${this.endpoint}/customers?${query.toString()}`;
+        const response = await http.get<ALReadCustomerSchema>(url, token);
+        return response.data;
     }
 
 }

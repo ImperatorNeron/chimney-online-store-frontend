@@ -7,5 +7,5 @@ export const endpoints = {
     likes: '/like',
     categories: "/categories",
     faqs: "/faq",
-    cart: "/cart"
+    cart: "/cart",
 };

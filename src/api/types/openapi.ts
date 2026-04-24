@@ -489,6 +489,23 @@ export interface paths {
         patch: operations["update_faq_api_v1_faq__faq_id__patch"];
         trace?: never;
     };
+    "/api/v1/like/products": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Liked Products */
+        get: operations["get_liked_products_api_v1_like_products_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/like": {
         parameters: {
             query?: never;
@@ -536,6 +553,23 @@ export interface paths {
         put?: never;
         /** Create Order */
         post: operations["create_order_api_v1_orders_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/orders/customers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Customers List */
+        get: operations["get_customers_list_api_v1_orders_customers_get"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -614,6 +648,19 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** ApiResponseSchema[ListPaginatedResponse[ReadCustomerSchema]] */
+        ApiResponseSchema_ListPaginatedResponse_ReadCustomerSchema__: {
+            /** Data */
+            data?: components["schemas"]["ListPaginatedResponse_ReadCustomerSchema_"] | {
+                [key: string]: unknown;
+            };
+            /** Meta */
+            meta?: {
+                [key: string]: unknown;
+            };
+            /** Errors */
+            errors?: components["schemas"]["ErrorDetail"][];
+        };
         /** ApiResponseSchema[ListPaginatedResponse[ReadExtendedOrderSchema]] */
         ApiResponseSchema_ListPaginatedResponse_ReadExtendedOrderSchema__: {
             /** Data */
@@ -1002,6 +1049,12 @@ export interface components {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
         };
+        /** ListPaginatedResponse[ReadCustomerSchema] */
+        ListPaginatedResponse_ReadCustomerSchema_: {
+            /** Items */
+            items: components["schemas"]["ReadCustomerSchema"][];
+            pagination: components["schemas"]["PaginationOut"];
+        };
         /** ListPaginatedResponse[ReadExtendedOrderSchema] */
         ListPaginatedResponse_ReadExtendedOrderSchema_: {
             /** Items */
@@ -1140,6 +1193,33 @@ export interface components {
             parent_id?: number | null;
             /** Id */
             id: number;
+        };
+        /** ReadCustomerSchema */
+        ReadCustomerSchema: {
+            /** Phone Number */
+            phone_number: string;
+            /** First Name */
+            first_name: string;
+            /** Last Name */
+            last_name: string;
+            /** Patronymic */
+            patronymic?: string | null;
+            /** Email */
+            email?: string | null;
+            /**
+             * Is Registered
+             * @default false
+             */
+            is_registered: boolean;
+            /** Orders Count */
+            orders_count: number;
+            /** Total Spent */
+            total_spent: number;
+            /**
+             * Last Order At
+             * Format: date-time
+             */
+            last_order_at: string;
         };
         /** ReadExtendedOrderSchema */
         ReadExtendedOrderSchema: {
@@ -2973,6 +3053,38 @@ export interface operations {
             };
         };
     };
+    get_liked_products_api_v1_like_products_get: {
+        parameters: {
+            query?: {
+                offset?: number;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponseSchema_ListPaginatedResponse_ReadPreviewProductSchema__"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_likes_list_api_v1_like_get: {
         parameters: {
             query?: never;
@@ -3115,6 +3227,44 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ApiResponseSchema_ReadOrderBaseSchema_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_customers_list_api_v1_orders_customers_get: {
+        parameters: {
+            query?: {
+                text?: string | null;
+                is_registered?: string | null;
+                date_from?: string | null;
+                date_to?: string | null;
+                field?: string;
+                ordering?: string;
+                offset?: number;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponseSchema_ListPaginatedResponse_ReadCustomerSchema__"];
                 };
             };
             /** @description Validation Error */
