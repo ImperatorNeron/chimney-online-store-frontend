@@ -2096,6 +2096,8 @@ export interface operations {
             query?: {
                 status?: string | null;
                 text?: string | null;
+                date_from?: string | null;
+                date_to?: string | null;
                 field?: string;
                 ordering?: string;
                 offset?: number;

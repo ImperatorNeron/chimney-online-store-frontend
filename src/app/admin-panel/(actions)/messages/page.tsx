@@ -19,6 +19,8 @@ export default function MessagesPage() {
     const [status, setStatus] = useState<MessageStatus | "all">("all");
     const [sortField, setSortField] = useState<MessageSortField>("created_at");
     const [sortOrdering, setSortOrdering] = useState<SortOrdering>("desc");
+    const [dateFrom, setDateFrom] = useState("");
+    const [dateTo, setDateTo] = useState("");
 
     const debouncedSearch = useDebounce(search, 400);
 
@@ -37,8 +39,10 @@ export default function MessagesPage() {
             status: status !== "all" ? status : undefined,
             field: sortField,
             ordering: sortOrdering,
+            date_from: dateFrom || undefined,
+            date_to: dateTo || undefined,
         }),
-        [debouncedSearch, status, sortField, sortOrdering]
+        [debouncedSearch, status, sortField, sortOrdering, dateFrom, dateTo]
     );
 
     const { items, total, loading, loadingMore, hasMore, loadMore, reload } = useFetchMessages(params);
@@ -53,6 +57,8 @@ export default function MessagesPage() {
         setStatus("all");
         setSortField("created_at");
         setSortOrdering("desc");
+        setDateFrom("");
+        setDateTo("");
     };
 
     return (
@@ -70,6 +76,10 @@ export default function MessagesPage() {
                     loading={loading}
                     onRefresh={handleRefresh}
                     setOffset={() => {}}
+                    dateFrom={dateFrom}
+                    setDateFrom={setDateFrom}
+                    dateTo={dateTo}
+                    setDateTo={setDateTo}
                 />
             </div>
 

@@ -21,6 +21,8 @@ class MessageService {
             status?: string;
             field?: string;
             ordering?: string;
+            date_from?: string;
+            date_to?: string;
         },
     ) {
         const query = new URLSearchParams({
@@ -37,6 +39,8 @@ class MessageService {
             query.append("field", params.field);
             query.append("ordering", params.ordering);
         }
+        if (params?.date_from) query.append("date_from", params.date_from);
+        if (params?.date_to) query.append("date_to", params.date_to);
         const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}?${query.toString()}`
         const response = await http.get<ALReadMessageSchema>(url, token)
         return response.data

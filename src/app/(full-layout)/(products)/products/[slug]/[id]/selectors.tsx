@@ -84,7 +84,7 @@ export default function Selectors({ fullItem, variation, slug }: SelectorsProps)
                         ? 'bg-gray-200 text-gray-400 border-gray-300 cursor-not-allowed'
                         : isAvailable
                           ? 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
-                          : 'bg-white text-gray-400 border-dashed border-gray-300 hover:bg-gray-50 relative before:absolute before:inset-0 before:bg-[linear-gradient(to_top_right,transparent_calc(50%-1px),rgb(209,213,219)_calc(50%-1px),rgb(209,213,219)_calc(50%+1px),transparent_calc(50%+1px))]'
+                          : 'bg-white text-gray-400 border-dashed border-gray-300 hover:bg-gray-50'
                   }`}
                 >
                   {value}

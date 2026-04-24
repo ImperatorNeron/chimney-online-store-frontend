@@ -9,6 +9,8 @@ export default function useFetchMessages(
         status?: string;
         field?: string;
         ordering?: string;
+        date_from?: string;
+        date_to?: string;
     },
 ) {
     const fetchFn = useCallback(
