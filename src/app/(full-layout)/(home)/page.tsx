@@ -13,24 +13,28 @@ export const metadata = {
         title: 'Купити димохід від виробника | Інтернет-магазин димоходів',
         description:
             'Димоходи та комплектуючі за вигідними цінами. Власне виробництво. Доставка по всій Україні.',
-        url: '', // замінити на домен
-        siteName: '', // замінити на домен
+        url: '',
+        siteName: '',
         locale: 'uk_UA',
         type: 'website',
     },
 }
 
 export default async function Home() {
-    const newItems = await productService.getProducts({ offset: 0, limit: 10 });
-    const popularItems = await productService.getPopularProducts({ offset: 0, limit: 10 });
+    const newItems = await productService.getProducts({ offset: 0, limit: 10 }, undefined, { exclude_discounted: true });
+    const popularItems = await productService.getPopularProducts({ offset: 0, limit: 40 });
+    const discountedItems = await productService.getDiscountedProducts(15, 0);
 
     return (
         <div className="space-y-24 mt-8">
             <div className="lg:hidden">
                 <CategoriesMobileServer />
             </div>
-            <ProductsGrid title={"Найпопулярніші товари"} items={popularItems?.items}/>
+            {discountedItems?.items && discountedItems.items.length > 0 && (
+                <ProductsGrid title={"Акційні товари"} items={discountedItems.items} />
+            )}
             <ProductsGrid title={"Нові надходження"} items={newItems?.items} />
+            <ProductsGrid title={"Найпопулярніші товари"} items={popularItems?.items} />
         </div>
     );
 };

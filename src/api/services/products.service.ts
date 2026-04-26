@@ -2,6 +2,15 @@ import { http } from '@/api/http';
 import { endpoints } from '../endpoints';
 import { AReadFiltersSchema, ALReadPreviewProductSchema, PaginationIn, ProductFiltersSchema, AlistReadPreviewProductSchema, Create_AReadAbsoluteProductSchema, ALReadFullUniqueProductSchema, Get_AReadAbsoluteProductSchema } from '../types/types';
 
+export type DiscountedAdminItem = {
+    variation_id: number;
+    name: string;
+    slug: string;
+    price: number;
+    discount_percentage: number;
+    sort_order: number | null;
+};
+
 
 export class ProductService {
     private endpoint = endpoints.products;
@@ -106,6 +115,22 @@ export class ProductService {
         const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}/popular?${params.toString()}`
         const response = await http.get<ALReadPreviewProductSchema>(url)
         return response.data
+    }
+
+    async getDiscountedProducts(limit: number = 15, offset: number = 0) {
+        const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}/discounted?limit=${limit}&offset=${offset}`;
+        const response = await http.get<ALReadPreviewProductSchema>(url);
+        return response.data;
+    }
+
+    async getDiscountedAdmin(token: string) {
+        const url = `${this.endpoint}/discounted/admin`;
+        const response = await http.get<{ data: DiscountedAdminItem[] }>(url, token);
+        return response.data;
+    }
+
+    async reorderDiscounted(token: string, items: { variation_id: number; sort_order: number }[]) {
+        await http.patch(`${this.endpoint}/discounted/reorder`, items, token);
     }
 
     async createProduct(token: string, product: FormData) {

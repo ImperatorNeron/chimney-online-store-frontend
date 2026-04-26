@@ -6,6 +6,7 @@ import {
     PlusCircleIcon,
     UsersIcon,
     Cog6ToothIcon,
+    TagIcon,
 } from "@heroicons/react/24/outline";
 import CardLink from "@/components/modules/admin/components/common/AdminCardLink";
 
@@ -46,6 +47,13 @@ export default function AdminDashboard() {
                     title="Налаштування"
                     desc="Глобальні відсотки: знижка виробника та націнка продавця"
                     icon={<Cog6ToothIcon className="h-6 w-6" />}
+                />
+
+                <CardLink
+                    href="/admin-panel/discount-showcase"
+                    title="Вітрина знижок"
+                    desc="Порядок акційних товарів на головній сторінці"
+                    icon={<TagIcon className="h-6 w-6" />}
                 />
             </div>
         </main>
