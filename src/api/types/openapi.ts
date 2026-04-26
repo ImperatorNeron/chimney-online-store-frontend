@@ -627,6 +627,24 @@ export interface paths {
         patch: operations["update_order_info_api_v1_orders__order_id__patch"];
         trace?: never;
     };
+    "/api/v1/website-settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Website Settings */
+        get: operations["get_website_settings_api_v1_website_settings_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update Website Settings */
+        patch: operations["update_website_settings_api_v1_website_settings_patch"];
+        trace?: never;
+    };
     "/api/ping": {
         parameters: {
             query?: never;
@@ -834,6 +852,19 @@ export interface components {
         ApiResponseSchema_ReadUserSchema_: {
             /** Data */
             data?: components["schemas"]["ReadUserSchema"] | {
+                [key: string]: unknown;
+            };
+            /** Meta */
+            meta?: {
+                [key: string]: unknown;
+            };
+            /** Errors */
+            errors?: components["schemas"]["ErrorDetail"][];
+        };
+        /** ApiResponseSchema[ReadWebSiteSettingsSchema] */
+        ApiResponseSchema_ReadWebSiteSettingsSchema_: {
+            /** Data */
+            data?: components["schemas"]["ReadWebSiteSettingsSchema"] | {
                 [key: string]: unknown;
             };
             /** Meta */
@@ -1747,6 +1778,13 @@ export interface components {
              */
             updated_at?: string;
         };
+        /** ReadWebSiteSettingsSchema */
+        ReadWebSiteSettingsSchema: {
+            /** Manufacturer Discount */
+            manufacturer_discount: number;
+            /** Seller Markup */
+            seller_markup: number;
+        };
         /** RegisterUserSchema */
         RegisterUserSchema: {
             /** User's password for registration */
@@ -1876,6 +1914,13 @@ export interface components {
             comment?: string | null;
             /** Internal Comment */
             internal_comment?: string | null;
+        };
+        /** UpdateWebSiteSettingsSchema */
+        UpdateWebSiteSettingsSchema: {
+            /** Manufacturer Discount */
+            manufacturer_discount?: number | null;
+            /** Seller Markup */
+            seller_markup?: number | null;
         };
         /** UserUpdateWithPasswordSchema */
         UserUpdateWithPasswordSchema: {
@@ -3366,6 +3411,59 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ApiResponseSchema_ReadOrderBaseSchema_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_website_settings_api_v1_website_settings_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponseSchema_ReadWebSiteSettingsSchema_"];
+                };
+            };
+        };
+    };
+    update_website_settings_api_v1_website_settings_patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWebSiteSettingsSchema"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiResponseSchema_ReadWebSiteSettingsSchema_"];
                 };
             };
             /** @description Validation Error */

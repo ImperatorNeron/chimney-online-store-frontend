@@ -4,8 +4,8 @@ import {
     InboxIcon,
     ClipboardDocumentListIcon,
     PlusCircleIcon,
-    MegaphoneIcon,
     UsersIcon,
+    Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
 import CardLink from "@/components/modules/admin/components/common/AdminCardLink";
 
@@ -39,6 +39,13 @@ export default function AdminDashboard() {
                     title="База клієнтів"
                     desc="Перегляньте покупців, їх замовлення та статистику"
                     icon={<UsersIcon className="h-6 w-6" />}
+                />
+
+                <CardLink
+                    href="/admin-panel/settings"
+                    title="Налаштування"
+                    desc="Глобальні відсотки: знижка виробника та націнка продавця"
+                    icon={<Cog6ToothIcon className="h-6 w-6" />}
                 />
             </div>
         </main>

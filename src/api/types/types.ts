@@ -93,3 +93,8 @@ export type ReadMessage = MessageList[number];
 export type CreateMessageSchema = Req<paths["/api/v1/messages/"]["post"]>;
 export type AReadMessageSchema = Res<paths["/api/v1/messages/"]["post"]>;
 export type ChangeMessageStatusSchema = Req<paths["/api/v1/messages/change-status/{message_id}"]["patch"]>;
+
+// WEBSITE SETTINGS
+export type AReadWebSiteSettingsSchema = Res<paths["/api/v1/website-settings"]["get"]>;
+export type ReadWebSiteSettingsSchema = AReadWebSiteSettingsSchema["data"];
+export type UpdateWebSiteSettingsSchema = Req<paths["/api/v1/website-settings"]["patch"]>;

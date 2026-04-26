@@ -8,4 +8,5 @@ export const endpoints = {
     categories: "/categories",
     faqs: "/faq",
     cart: "/cart",
+    websiteSettings: "/website-settings",
 };
