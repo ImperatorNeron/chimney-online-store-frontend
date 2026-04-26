@@ -1543,7 +1543,25 @@ export interface components {
              * @description Order item ID
              */
             id: number;
-            product: components["schemas"]["ReadProductSchema"];
+            /** Product Id */
+            product_id?: number | null;
+            /**
+             * Product Name
+             * @default
+             */
+            product_name: string;
+            /**
+             * Product Slug
+             * @default
+             */
+            product_slug: string;
+            /** Product Image */
+            product_image?: string | null;
+            /**
+             * Product Price
+             * @default 0
+             */
+            product_price: number;
         };
         /** ReadPreviewProductSchema */
         ReadPreviewProductSchema: {
@@ -1631,70 +1649,6 @@ export interface components {
             id: number;
             /** Filename */
             filename: string;
-        };
-        /** ReadProductSchema */
-        ReadProductSchema: {
-            /**
-             * Name
-             * @example Sample Product
-             */
-            name: string;
-            /**
-             * Slug
-             * @example sample-product
-             */
-            slug: string;
-            /**
-             * Description
-             * @example This is a sample product description.
-             */
-            description?: string | null;
-            /**
-             * Price
-             * @example 19.99
-             */
-            price: number;
-            /** Extra Attrs */
-            extra_attrs: {
-                [key: string]: unknown;
-            } | null;
-            /**
-             * Category Id
-             * @example 1
-             */
-            category_id: number;
-            /** Id */
-            id: number;
-            /**
-             * Created At
-             * Format: date-time
-             */
-            created_at: string;
-            /**
-             * Updated At
-             * Format: date-time
-             */
-            updated_at: string;
-            /**
-             * Discount Price
-             * @example 19.99
-             */
-            discount_price: number;
-            /**
-             * Discount Percentage
-             * @example 20
-             */
-            discount_percentage: number;
-            /** Diameter */
-            diameter: string | null;
-            /** Length */
-            length: string | null;
-            /** Thickness */
-            thickness: string | null;
-            /** Angle */
-            angle: string | null;
-            /** Metal Type */
-            metal_type: string | null;
         };
         /** ReadProductVariationSchema */
         ReadProductVariationSchema: {

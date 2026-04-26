@@ -14,7 +14,6 @@ export type LReadExtendedOrderSchema = ALReadExtendedOrderSchema["data"];
 type OrdersList = ExtractArrayField<ALReadExtendedOrderSchema["data"], "items">;
 export type ReadExtendedOrderSchema = OrdersList[number];
 export type ReadOrderItemSchema = ReadExtendedOrderSchema["items"][number];
-export type ReadProductSchema = ReadOrderItemSchema["product"];
 export type UpdateOrderSchema = Req<paths["/api/v1/orders/{order_id}"]["patch"]>;
 export type Update_AReadOrderBaseSchema = Res<paths["/api/v1/orders/{order_id}"]["patch"]>;
 export type CreateOrderSchema = Req<paths["/api/v1/orders"]["post"]>;

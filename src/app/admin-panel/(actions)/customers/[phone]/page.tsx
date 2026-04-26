@@ -122,12 +122,18 @@ export default function CustomerDetailPage() {
                                 {order.items?.map((item: ReadOrderItemSchema) => (
                                     <div key={item.id} className="flex items-center justify-between text-sm">
                                         <div className="flex items-center gap-2 min-w-0">
-                                            <Link
-                                                href={`/products/${item.product?.slug}/${item.product?.id}`}
-                                                className="text-gray-800 hover:underline truncate"
-                                            >
-                                                {item.product?.name || 'Товар'}
-                                            </Link>
+                                            {item.product_slug && item.product_id ? (
+                                                <Link
+                                                    href={`/products/${item.product_slug}/${item.product_id}`}
+                                                    className="text-gray-800 hover:underline truncate"
+                                                >
+                                                    {item.product_name || 'Товар'}
+                                                </Link>
+                                            ) : (
+                                                <span className="text-gray-800 truncate">
+                                                    {item.product_name || 'Товар (видалено)'}
+                                                </span>
+                                            )}
                                             <span className="text-gray-400 shrink-0">×{item.quantity}</span>
                                         </div>
                                         <span className="font-medium shrink-0 ml-3">{item.price_at_order?.toFixed(0)} ₴</span>

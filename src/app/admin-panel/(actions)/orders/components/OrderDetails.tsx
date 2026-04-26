@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import type { ReadExtendedOrderSchema, ReadOrderItemSchema } from "@/api/types/types";
-import ProductCharacteristics from "@/components/modules/admin/components/orders/productCharacteristics";
 
 const inputClass =
     "w-full border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-300";
@@ -22,15 +21,20 @@ function OrderItems({ items }: { items: ReadOrderItemSchema[] }) {
             {items.map((item) => (
                 <div key={item.id} className="flex items-start justify-between gap-3 bg-gray-50 rounded-lg border p-3">
                     <div className="min-w-0">
-                        <Link
-                            href={`/products/${item.product?.slug}/${item.product?.id}`}
-                            className="font-medium text-sm text-gray-700 hover:text-gray-900 underline break-words"
-                        >
-                            {item.product?.name || "Товар"}
-                        </Link>
-                        <ProductCharacteristics product={item.product} />
+                        {item.product_slug && item.product_id ? (
+                            <Link
+                                href={`/products/${item.product_slug}/${item.product_id}`}
+                                className="font-medium text-sm text-gray-700 hover:text-gray-900 underline break-words"
+                            >
+                                {item.product_name || "Товар"}
+                            </Link>
+                        ) : (
+                            <span className="font-medium text-sm text-gray-700 break-words">
+                                {item.product_name || "Товар (видалено)"}
+                            </span>
+                        )}
                         <div className="text-xs text-gray-500 mt-1">
-                            К-сть: <b>{item.quantity}</b>
+                            К-сть: <b>{item.quantity}</b> × {money(item.product_price)} грн
                         </div>
                     </div>
                     <div className="text-right shrink-0">

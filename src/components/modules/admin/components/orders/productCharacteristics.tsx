@@ -1,6 +1,12 @@
-import { ReadProductSchema } from '@/api/types/types';
+type ProductWithCharacteristics = {
+    diameter?: string | null;
+    length?: string | null;
+    thickness?: string | null;
+    angle?: string | null;
+    metal_type?: string | null;
+};
 
-export default function ProductCharacteristics({ product }: { product: ReadProductSchema }) {
+export default function ProductCharacteristics({ product }: { product: ProductWithCharacteristics }) {
     const characteristics = [
         product.diameter && `Діаметр: ${product.diameter} мм`,
         product.length && `Довжина: ${product.length} м`,

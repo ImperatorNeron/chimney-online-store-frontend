@@ -5318,8 +5318,42 @@
             "title": "Id",
             "description": "Order item ID"
           },
-          "product": {
-            "$ref": "#/components/schemas/ReadProductSchema"
+          "product_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Product Id"
+          },
+          "product_name": {
+            "type": "string",
+            "title": "Product Name",
+            "default": ""
+          },
+          "product_slug": {
+            "type": "string",
+            "title": "Product Slug",
+            "default": ""
+          },
+          "product_image": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Product Image"
+          },
+          "product_price": {
+            "type": "number",
+            "title": "Product Price",
+            "default": 0
           }
         },
         "type": "object",
@@ -5327,8 +5361,7 @@
           "order_id",
           "quantity",
           "price_at_order",
-          "id",
-          "product"
+          "id"
         ],
         "title": "ReadOrderItemSchema"
       },
@@ -5551,167 +5584,6 @@
           "filename"
         ],
         "title": "ReadProductImageSchema"
-      },
-      "ReadProductSchema": {
-        "properties": {
-          "name": {
-            "type": "string",
-            "maxLength": 200,
-            "minLength": 2,
-            "title": "Name",
-            "example": "Sample Product"
-          },
-          "slug": {
-            "type": "string",
-            "maxLength": 255,
-            "minLength": 2,
-            "title": "Slug",
-            "example": "sample-product"
-          },
-          "description": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Description",
-            "example": "This is a sample product description."
-          },
-          "price": {
-            "type": "number",
-            "exclusiveMinimum": 0.0,
-            "title": "Price",
-            "example": 19.99
-          },
-          "extra_attrs": {
-            "anyOf": [
-              {
-                "additionalProperties": true,
-                "type": "object"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Extra Attrs"
-          },
-          "category_id": {
-            "type": "integer",
-            "minimum": 0.0,
-            "title": "Category Id",
-            "example": 1
-          },
-          "id": {
-            "type": "integer",
-            "minimum": 0.0,
-            "title": "Id"
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Created At"
-          },
-          "updated_at": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Updated At"
-          },
-          "discount_price": {
-            "type": "number",
-            "minimum": 0.0,
-            "title": "Discount Price",
-            "example": 19.99
-          },
-          "discount_percentage": {
-            "type": "integer",
-            "maximum": 100.0,
-            "minimum": 0.0,
-            "title": "Discount Percentage",
-            "example": 20
-          },
-          "diameter": {
-            "anyOf": [
-              {
-                "type": "string",
-                "maxLength": 20
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Diameter"
-          },
-          "length": {
-            "anyOf": [
-              {
-                "type": "string",
-                "maxLength": 20
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Length"
-          },
-          "thickness": {
-            "anyOf": [
-              {
-                "type": "string",
-                "maxLength": 20
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Thickness"
-          },
-          "angle": {
-            "anyOf": [
-              {
-                "type": "string",
-                "maxLength": 20
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Angle"
-          },
-          "metal_type": {
-            "anyOf": [
-              {
-                "type": "string",
-                "maxLength": 50
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Metal Type"
-          }
-        },
-        "type": "object",
-        "required": [
-          "name",
-          "slug",
-          "price",
-          "extra_attrs",
-          "category_id",
-          "id",
-          "created_at",
-          "updated_at",
-          "discount_price",
-          "discount_percentage",
-          "diameter",
-          "length",
-          "thickness",
-          "angle",
-          "metal_type"
-        ],
-        "title": "ReadProductSchema"
       },
       "ReadProductVariationSchema": {
         "properties": {

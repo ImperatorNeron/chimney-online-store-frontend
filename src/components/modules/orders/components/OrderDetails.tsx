@@ -2,7 +2,6 @@ import { ReadExtendedOrderSchema } from "@/api/types/types";
 import { PAYMENT_METHODS, SHIPPING_METHODS } from "@/constants/orders";
 import { CreditCardIcon, TruckIcon, DocumentTextIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import ProductCharacteristics from "../../admin/components/orders/productCharacteristics";
 
 export default function OrderDetails({ order }: { order: ReadExtendedOrderSchema }) {
     return (
@@ -66,13 +65,18 @@ export default function OrderDetails({ order }: { order: ReadExtendedOrderSchema
                         className="py-4 flex justify-between items-center gap-4"
                     >
                         <div>
-                            <Link
-                                href={`/products/${item.product.slug}/${item.product.id}`}
-                                className="text-xs sm:text-base font-medium text-gray-900 hover:underline"
-                            >
-                                {item.product.name}
-                            </Link>
-                            <ProductCharacteristics product={item.product} />
+                            {item.product_slug && item.product_id ? (
+                                <Link
+                                    href={`/products/${item.product_slug}/${item.product_id}`}
+                                    className="text-xs sm:text-base font-medium text-gray-900 hover:underline"
+                                >
+                                    {item.product_name}
+                                </Link>
+                            ) : (
+                                <span className="text-xs sm:text-base font-medium text-gray-900">
+                                    {item.product_name || "Товар (видалено)"}
+                                </span>
+                            )}
                         </div>
 
                         <div className="flex-shrink-0 text-right whitespace-nowrap">
@@ -80,7 +84,7 @@ export default function OrderDetails({ order }: { order: ReadExtendedOrderSchema
                                 {item.price_at_order.toFixed(0)} ₴
                             </div>
                             <div className="text-sm sm:text-sm text-gray-500 mt-1">
-                                {item.quantity} × {item.product.discount_price.toFixed(0)} ₴
+                                {item.quantity} × {item.product_price.toFixed(0)} ₴
                             </div>
                         </div>
                     </div>
