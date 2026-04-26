@@ -63,6 +63,11 @@ export class OrderService {
         return response.data
     }
 
+    async deleteOrder(token: string, orderId: number) {
+        const url = `${this.endpoint}/${encodeURIComponent(orderId)}`;
+        await http.delete(url, token);
+    }
+
     async getCustomers(
         token: string, limit: number = 30, offset: number = 0,
         params?: { text?: string; field?: string; ordering?: string; is_registered?: string; date_from?: string; date_to?: string },

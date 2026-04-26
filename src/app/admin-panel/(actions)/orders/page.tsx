@@ -16,6 +16,7 @@ import Filters from "./components/Filters";
 import OrdersTableWrapper from "./components/OrdersTableWrapper";
 import OrderDetails, { type OrderEditDraft } from "./components/OrderDetails";
 import useOrderColumns from "./hooks/useOrderColumns";
+import useDeleteOrder from "@/components/modules/admin/hooks/orders/useDeleteOrder";
 
 // Orders table UI with search/sort/edit and infinite scroll.
 
@@ -97,6 +98,8 @@ export default function OrdersPage() {
   );
 
   const { items, setItems, total, loading, loadingMore, hasMore, loadMore, reload } = useOrders(params);
+
+  const { handleDelete: deleteOrder, deletingId } = useDeleteOrder({ onReload: reload });
 
   useEffect(() => {
     document.title = "Замовлення клієнтів";
@@ -332,6 +335,8 @@ export default function OrdersPage() {
             onCancel={cancelEdit}
             onSave={saveEdit}
             saving={saving}
+            onDelete={() => deleteOrder(order.id)}
+            deleting={deletingId === order.id}
           />
         )}
       />

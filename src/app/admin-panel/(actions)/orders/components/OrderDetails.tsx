@@ -67,6 +67,8 @@ export default function OrderDetails({
     onCancel,
     onSave,
     saving,
+    onDelete,
+    deleting,
 }: {
     order: ReadExtendedOrderSchema;
     isEditing: boolean;
@@ -76,6 +78,8 @@ export default function OrderDetails({
     onCancel: () => void;
     onSave: () => void;
     saving: boolean;
+    onDelete?: () => void;
+    deleting?: boolean;
 }) {
     const total = Number(order.total_price || 0);
     const discount = Number(order.price_discount || 0);
@@ -93,13 +97,25 @@ export default function OrderDetails({
                             <div className="font-bold">#{order.id}</div>
                         </div>
                         {!isEditing ? (
-                            <button
-                                type="button"
-                                onClick={onStartEdit}
-                                className="px-3 py-1.5 rounded bg-gray-100 text-gray-700 text-xs font-medium hover:bg-gray-200"
-                            >
-                                Редагувати дані
-                            </button>
+                            <div className="flex gap-2">
+                                <button
+                                    type="button"
+                                    onClick={onStartEdit}
+                                    className="px-3 py-1.5 rounded bg-gray-100 text-gray-700 text-xs font-medium hover:bg-gray-200"
+                                >
+                                    Редагувати дані
+                                </button>
+                                {onDelete && (
+                                    <button
+                                        type="button"
+                                        onClick={onDelete}
+                                        disabled={deleting}
+                                        className="px-3 py-1.5 rounded bg-red-50 text-red-600 text-xs font-medium hover:bg-red-100 disabled:opacity-60"
+                                    >
+                                        {deleting ? "Видалення..." : "Видалити"}
+                                    </button>
+                                )}
+                            </div>
                         ) : (
                             <div className="flex gap-2">
                                 <button
