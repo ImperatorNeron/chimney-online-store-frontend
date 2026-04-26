@@ -123,6 +123,12 @@ export class ProductService {
         return response.data;
     }
 
+    async getNewProducts(limit: number = 10, offset: number = 0) {
+        const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}/new?limit=${limit}&offset=${offset}`;
+        const response = await http.get<ALReadPreviewProductSchema>(url);
+        return response.data;
+    }
+
     async getDiscountedAdmin(token: string) {
         const url = `${this.endpoint}/discounted/admin`;
         const response = await http.get<{ data: DiscountedAdminItem[] }>(url, token);

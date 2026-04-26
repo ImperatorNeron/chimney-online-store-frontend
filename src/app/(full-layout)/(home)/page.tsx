@@ -21,7 +21,7 @@ export const metadata = {
 }
 
 export default async function Home() {
-    const newItems = await productService.getProducts({ offset: 0, limit: 10 }, undefined, { exclude_discounted: true });
+    const newItems = await productService.getNewProducts(10, 0);
     const popularItems = await productService.getPopularProducts({ offset: 0, limit: 40 });
     const discountedItems = await productService.getDiscountedProducts(15, 0);
 
