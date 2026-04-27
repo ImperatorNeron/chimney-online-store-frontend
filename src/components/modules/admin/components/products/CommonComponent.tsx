@@ -151,6 +151,14 @@ function VariationsSection({ form, mode }: { form: any; mode: Mode }) {
     const [editedServerValues, setEditedServerValues] = useState<Record<number, any>>({});
     const watched: any[] = form.watch?.("variations") || [];
 
+    // Reset editing state when sort changes
+    const sortKey = mode === 'edit' ? `${form.sortField}-${form.sortOrdering}` : '';
+    const [prevSortKey, setPrevSortKey] = useState(sortKey);
+    if (sortKey !== prevSortKey) {
+        setPrevSortKey(sortKey);
+        if (editingIdx !== null) setEditingIdx(null);
+    }
+
     const isEditingEmpty = editingIdx !== null && (() => {
         const v = watched[editingIdx];
         return !v || (!v.price && !v.diameter && !v.length && !v.thickness && !v.angle && !v.metal_type);
