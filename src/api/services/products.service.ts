@@ -94,16 +94,27 @@ export class ProductService {
         const response = await http.get<Get_AReadAbsoluteProductSchema>(url)
         return response.data
     }
-    async getProductVariations(slug: string, limit: number, offset: number, params?: { field?: string; ordering?: string }) {
+    async getProductVariations(slug: string, token: string, limit: number, offset: number, params?: { field?: string; ordering?: string; diameter?: string; length?: string; thickness?: string; angle?: string; metal_type?: string }) {
         const query = new URLSearchParams({ limit: String(limit), offset: String(offset) });
         if (params?.field) query.append("field", params.field);
         if (params?.ordering) query.append("ordering", params.ordering);
+        if (params?.diameter) query.append("diameter", params.diameter);
+        if (params?.length) query.append("length", params.length);
+        if (params?.thickness) query.append("thickness", params.thickness);
+        if (params?.angle) query.append("angle", params.angle);
+        if (params?.metal_type) query.append("metal_type", params.metal_type);
         const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}/${encodeURIComponent(slug)}/variations?${query.toString()}`
-        const dto = (await http.get<Get_AReadAbsoluteProductSchema>(url)).data as any;
+        const dto = (await http.get<Get_AReadAbsoluteProductSchema>(url, token)).data as any;
         return {
             items: dto?.variations ?? [],
             pagination: { offset, limit, total: dto?.variation_total ?? 0 },
         };
+    }
+
+    async getVariationFilters(slug: string, token: string) {
+        const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}/${encodeURIComponent(slug)}/variations/filters`
+        const response = await http.get<{ data: Record<string, string[]> }>(url, token);
+        return response.data;
     }
 
     async getPopularProducts(paginationIn?: PaginationIn) {

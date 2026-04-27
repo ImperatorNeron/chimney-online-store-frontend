@@ -4,17 +4,22 @@ import useInfiniteData from "../common/useInfiniteData";
 
 export default function useVariationsData(
     slug: string,
-    params?: { field?: string; ordering?: string },
+    params?: { field?: string; ordering?: string; diameter?: string; length?: string; thickness?: string; angle?: string; metal_type?: string },
 ) {
+    const paramsRef = useRef(params);
+    paramsRef.current = params;
+
     const fetchFn = useCallback(
-        (_token: string, limit: number, offset: number) =>
-            productService.getProductVariations(slug, limit, offset, params),
-        [slug, params],
+        (token: string, limit: number, offset: number) =>
+            productService.getProductVariations(slug, token, limit, offset, paramsRef.current),
+        [slug],
     );
 
-    const data = useInfiniteData(fetchFn, [params]);
+    const sortKey = `${params?.field}-${params?.ordering}`;
+    const filterKey = [params?.diameter, params?.length, params?.thickness, params?.angle, params?.metal_type].join('|');
 
-    // Stable loadMore that won't cause InfiniteScrollSentinel to re-create observer
+    const data = useInfiniteData(fetchFn, [sortKey, filterKey]);
+
     const dataRef = useRef(data);
     dataRef.current = data;
 

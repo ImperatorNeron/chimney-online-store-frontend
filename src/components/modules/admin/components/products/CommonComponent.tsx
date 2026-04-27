@@ -6,11 +6,12 @@ import SortableHeader from "@/components/shared/AdminTableSortableHeader";
 import BackToPageButton from "@/components/ui/BackToPageButton";
 import TextareaField from "@/components/ui/Textarea";
 import { inputPatterns } from "@/utils/field.patterns";
-import { ArrowLeftEndOnRectangleIcon, IdentificationIcon, PencilIcon, PlusIcon, TrashIcon, CheckIcon } from "@heroicons/react/24/outline";
+import { ArrowLeftEndOnRectangleIcon, IdentificationIcon, PencilIcon, PlusIcon, TrashIcon, CheckIcon, FunnelIcon } from "@heroicons/react/24/outline";
 import Image from 'next/image';
 import InfiniteScrollSentinel from "@/components/modules/admin/components/InfiniteScrollSentinel";
 import { useState } from "react";
 import type { VariationSortField } from "@/constants/orderFields";
+import type { CharacteristicFilters, VariationFilterOptions } from "@/components/modules/admin/hooks/products/useUpdateProduct";
 
 type Mode = 'edit' | 'create';
 
@@ -133,6 +134,54 @@ export default function ProductActionComponent({ categories, form, mode }: { cat
             </div>
         </div>
     )
+}
+
+const FILTER_FIELDS: { key: keyof CharacteristicFilters; label: string }[] = [
+    { key: "diameter", label: "Діаметр" },
+    { key: "length", label: "Довжина" },
+    { key: "thickness", label: "Товщина" },
+    { key: "angle", label: "Кут" },
+    { key: "metal_type", label: "Метал" },
+];
+
+function VariationFilters({ form }: { form: any }) {
+    const filterOptions: VariationFilterOptions = form.filterOptions || {};
+    const filters: CharacteristicFilters = form.characteristicFilters || {};
+    const hasActiveFilters = Object.values(filters).some(v => v);
+
+    const visibleFields = FILTER_FIELDS.filter(f => (filterOptions[f.key]?.length ?? 0) > 0);
+    if (visibleFields.length === 0) return null;
+
+    return (
+        <div className="flex flex-wrap items-center gap-3">
+            <FunnelIcon className="h-4 w-4 text-gray-400 shrink-0" />
+            {visibleFields.map(({ key, label }) => (
+                <select
+                    key={key}
+                    value={filters[key] || ""}
+                    onChange={(e) => {
+                        const val = e.target.value || undefined;
+                        form.setCharacteristicFilters((prev: CharacteristicFilters) => ({ ...prev, [key]: val }));
+                    }}
+                    className="px-2.5 py-1.5 text-xs border border-gray-300 rounded-lg bg-white text-gray-700 focus:outline-none focus:ring-1 focus:ring-gray-400"
+                >
+                    <option value="">{label}: усі</option>
+                    {filterOptions[key]?.map((v: string) => (
+                        <option key={v} value={v}>{v}</option>
+                    ))}
+                </select>
+            ))}
+            {hasActiveFilters && (
+                <button
+                    type="button"
+                    onClick={() => form.setCharacteristicFilters({})}
+                    className="px-2.5 py-1.5 text-xs text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                    Скинути
+                </button>
+            )}
+        </div>
+    );
 }
 
 const VARIATION_COLS = [
@@ -348,6 +397,8 @@ function VariationsSection({ form, mode }: { form: any; mode: Mode }) {
                     </button>
                 </div>
             </div>
+
+            {mode === 'edit' && form.filterOptions && <VariationFilters form={form} />}
 
             {rows.length === 0 && !form.variations?.loading ? (
                 <div className="text-center text-sm text-gray-400 py-8">

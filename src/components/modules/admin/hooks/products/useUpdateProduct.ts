@@ -10,6 +10,16 @@ import { updateAbsoluteProductSchema, UpdateAbsoluteProductSchema } from '@/sche
 import type { VariationSortField, SortOrdering } from '@/constants/orderFields';
 import useVariationsData from './useVariationsData';
 
+export type CharacteristicFilters = {
+    diameter?: string;
+    length?: string;
+    thickness?: string;
+    angle?: string;
+    metal_type?: string;
+};
+
+export type VariationFilterOptions = Record<string, string[]>;
+
 const variationKeys = [
     'id', 'price', 'discount_percentage',
     'diameter', 'length', 'thickness', 'angle', 'metal_type'
@@ -29,6 +39,8 @@ export function useUpdateProduct() {
 
     const [sortField, setSortField] = useState<VariationSortField>("price");
     const [sortOrdering, setSortOrdering] = useState<SortOrdering>("asc");
+    const [characteristicFilters, setCharacteristicFilters] = useState<CharacteristicFilters>({});
+    const [filterOptions, setFilterOptions] = useState<VariationFilterOptions>({});
 
     const form = useForm<UpdateAbsoluteProductSchema>({
         resolver: zodResolver(updateAbsoluteProductSchema),
@@ -61,8 +73,8 @@ export function useUpdateProduct() {
     }), []);
 
     const variationParams = useMemo(() => ({
-        field: sortField, ordering: sortOrdering,
-    }), [sortField, sortOrdering]);
+        field: sortField, ordering: sortOrdering, ...characteristicFilters,
+    }), [sortField, sortOrdering, characteristicFilters]);
 
     const variations = useVariationsData(productSlug, variationParams);
 
@@ -91,6 +103,11 @@ export function useUpdateProduct() {
                 if (!dto) throw new Error('Product not found');
                 setProductId(dto.id);
                 resetForm(dto);
+                const token = await getValidToken();
+                if (token) {
+                    const opts = await productService.getVariationFilters(productSlug, token);
+                    if (opts) setFilterOptions(opts);
+                }
             } catch (error) {
                 console.error('Failed to load product:', error);
                 NotificationService.error('Не вдалося завантажити продукт');
@@ -254,5 +271,8 @@ export function useUpdateProduct() {
         handleVariationSort,
         variations,
         updateServerVariation,
+        characteristicFilters,
+        setCharacteristicFilters,
+        filterOptions,
     };
 }

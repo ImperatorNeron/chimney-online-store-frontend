@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 
 export default function InfiniteScrollSentinel({
     hasMore,
@@ -16,18 +16,25 @@ export default function InfiniteScrollSentinel({
     loaded: number;
 }) {
     const ref = useRef<HTMLDivElement>(null);
+    const loadingRef = useRef(loading);
+    loadingRef.current = loading;
+    const onLoadMoreRef = useRef(onLoadMore);
+    onLoadMoreRef.current = onLoadMore;
+
+    const handleIntersect = useCallback(([entry]: IntersectionObserverEntry[]) => {
+        if (entry.isIntersecting && !loadingRef.current) {
+            onLoadMoreRef.current();
+        }
+    }, []);
 
     useEffect(() => {
         const el = ref.current;
-        if (!el || !hasMore || loading) return;
+        if (!el || !hasMore) return;
 
-        const observer = new IntersectionObserver(
-            ([entry]) => { if (entry.isIntersecting) onLoadMore(); },
-            { rootMargin: "200px" },
-        );
+        const observer = new IntersectionObserver(handleIntersect, { rootMargin: "200px" });
         observer.observe(el);
         return () => observer.disconnect();
-    }, [hasMore, loading, onLoadMore]);
+    }, [hasMore, handleIntersect]);
 
     return (
         <div className="flex flex-col items-center gap-2 py-4">
