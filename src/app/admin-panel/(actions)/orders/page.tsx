@@ -337,6 +337,7 @@ export default function OrdersPage() {
             saving={saving}
             onDelete={() => deleteOrder(order.id)}
             deleting={deletingId === order.id}
+            onOrderUpdate={(updated) => setItems((prev) => prev.map((o) => o.id === order.id ? updated : o))}
           />
         )}
       />

@@ -68,6 +68,12 @@ export class OrderService {
         await http.delete(url, token);
     }
 
+    async updateOrderItems(token: string, orderId: number, items: { item_id: number; action: string; quantity?: number }[]) {
+        const url = `${this.endpoint}/${encodeURIComponent(orderId)}/items`;
+        const response = await http.patch<{ data: any }>(url, { items }, token);
+        return response.data;
+    }
+
     async getCustomers(
         token: string, limit: number = 30, offset: number = 0,
         params?: { text?: string; field?: string; ordering?: string; is_registered?: string; date_from?: string; date_to?: string },

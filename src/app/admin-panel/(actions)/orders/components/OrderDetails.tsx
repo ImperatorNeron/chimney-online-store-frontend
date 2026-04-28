@@ -1,7 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { MinusIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import type { ReadExtendedOrderSchema, ReadOrderItemSchema } from "@/api/types/types";
+import { orderService } from "@/api/services/order.service";
+import { NotificationService } from "@/api/services/notification.service";
+import { useAuthStore } from "@/store/auth.store";
 
 const inputClass =
     "w-full border border-gray-300 rounded-md px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-300";
@@ -15,12 +21,26 @@ function discountToPercent(total: number, discount: number) {
     return Math.round((discount / total) * 1000) / 10;
 }
 
-function OrderItems({ items }: { items: ReadOrderItemSchema[] }) {
+function OrderItems({ items, editable, onUpdate }: { items: ReadOrderItemSchema[]; editable?: boolean; onUpdate?: (items: ReadOrderItemSchema[]) => void }) {
+    const handleQuantityChange = (itemId: number, delta: number) => {
+        if (!onUpdate) return;
+        onUpdate(items.map(item => {
+            if (item.id !== itemId) return item;
+            const newQty = Math.max(1, item.quantity + delta);
+            return { ...item, quantity: newQty, price_at_order: Math.round(item.product_price * newQty) };
+        }));
+    };
+
+    const handleDelete = (itemId: number) => {
+        if (!onUpdate || items.length <= 1) return;
+        onUpdate(items.filter(item => item.id !== itemId));
+    };
+
     return (
         <div className="space-y-2">
             {items.map((item) => (
                 <div key={item.id} className="flex items-start justify-between gap-3 bg-gray-50 rounded-lg border p-3">
-                    <div className="min-w-0">
+                    <div className="min-w-0 flex-1">
                         {item.product_slug && item.product_id ? (
                             <Link
                                 href={`/products/${item.product_slug}/${item.product_id}`}
@@ -34,12 +54,39 @@ function OrderItems({ items }: { items: ReadOrderItemSchema[] }) {
                             </span>
                         )}
                         <div className="text-xs text-gray-500 mt-1">
-                            К-сть: <b>{item.quantity}</b> × {money(item.product_price)} грн
+                            {editable ? (
+                                <span className="inline-flex items-center gap-1.5">
+                                    К-сть:
+                                    <button type="button" onClick={() => handleQuantityChange(item.id, -1)} disabled={item.quantity <= 1} className="p-0.5 rounded hover:bg-gray-200 disabled:opacity-30">
+                                        <MinusIcon className="h-3.5 w-3.5" />
+                                    </button>
+                                    <b className="min-w-[1.2rem] text-center">{item.quantity}</b>
+                                    <button type="button" onClick={() => handleQuantityChange(item.id, 1)} className="p-0.5 rounded hover:bg-gray-200">
+                                        <PlusIcon className="h-3.5 w-3.5" />
+                                    </button>
+                                    × {money(item.product_price)} грн
+                                </span>
+                            ) : (
+                                <>К-сть: <b>{item.quantity}</b> × {money(item.product_price)} грн</>
+                            )}
                         </div>
                     </div>
-                    <div className="text-right shrink-0">
-                        <div className="text-xs text-gray-500">Сума</div>
-                        <div className="font-semibold">{money(item.price_at_order)} грн</div>
+                    <div className="flex items-center gap-2 shrink-0">
+                        <div className="text-right">
+                            <div className="text-xs text-gray-500">Сума</div>
+                            <div className="font-semibold">{money(item.price_at_order)} грн</div>
+                        </div>
+                        {editable && (
+                            <button
+                                type="button"
+                                onClick={() => handleDelete(item.id)}
+                                disabled={items.length <= 1}
+                                className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                                title="Видалити позицію"
+                            >
+                                <TrashIcon className="h-4 w-4" />
+                            </button>
+                        )}
                     </div>
                 </div>
             ))}
@@ -69,6 +116,7 @@ export default function OrderDetails({
     saving,
     onDelete,
     deleting,
+    onOrderUpdate,
 }: {
     order: ReadExtendedOrderSchema;
     isEditing: boolean;
@@ -80,8 +128,62 @@ export default function OrderDetails({
     saving: boolean;
     onDelete?: () => void;
     deleting?: boolean;
+    onOrderUpdate?: (updated: ReadExtendedOrderSchema) => void;
 }) {
-    const total = Number(order.total_price || 0);
+    const router = useRouter();
+    const { getValidToken } = useAuthStore();
+    const [editedItems, setEditedItems] = useState<ReadOrderItemSchema[] | null>(null);
+    const [savingItems, setSavingItems] = useState(false);
+
+    const isEditingItems = editedItems !== null;
+    const [savedItems, setSavedItems] = useState<ReadOrderItemSchema[] | null>(null);
+    const displayItems = editedItems ?? savedItems ?? order.items ?? [];
+
+    const startEditItems = () => setEditedItems([...displayItems]);
+    const cancelEditItems = () => setEditedItems(null);
+
+    const saveItems = async () => {
+        if (!editedItems) return;
+        const original = savedItems ?? order.items ?? [];
+        const actions: { item_id: number; action: string; quantity?: number }[] = [];
+
+        // Deleted items
+        for (const orig of original) {
+            if (!editedItems.find(e => e.id === orig.id)) {
+                actions.push({ item_id: orig.id, action: "delete" });
+            }
+        }
+        // Changed quantity
+        for (const edited of editedItems) {
+            const orig = original.find(o => o.id === edited.id);
+            if (orig && orig.quantity !== edited.quantity) {
+                actions.push({ item_id: edited.id, action: "update_quantity", quantity: edited.quantity });
+            }
+        }
+
+        if (actions.length === 0) {
+            setEditedItems(null);
+            return;
+        }
+
+        try {
+            setSavingItems(true);
+            const token = await getValidToken();
+            if (!token) return router.push("/auth/login");
+            const updated = await orderService.updateOrderItems(token, order.id, actions);
+            NotificationService.success("Позиції оновлено");
+            setSavedItems(editedItems);
+            setEditedItems(null);
+            if (onOrderUpdate && updated) onOrderUpdate(updated);
+        } catch (err) {
+            console.error(err);
+            NotificationService.error("Не вдалося оновити позиції");
+        } finally {
+            setSavingItems(false);
+        }
+    };
+
+    const total = displayItems.reduce((sum, item) => sum + Number(item.price_at_order || 0), 0);
     const discount = Number(order.price_discount || 0);
     const finalTotal = Math.max(0, Math.round(total - discount));
     const discountPercent = discountToPercent(total, discount);
@@ -96,50 +198,40 @@ export default function OrderDetails({
                             <div className="text-gray-600 text-xs">Товари замовлення</div>
                             <div className="font-bold">#{order.id}</div>
                         </div>
-                        {!isEditing ? (
-                            <div className="flex gap-2">
+                        <div className="flex gap-2">
+                            {!isEditingItems ? (
                                 <button
                                     type="button"
-                                    onClick={onStartEdit}
-                                    className="px-3 py-1.5 rounded bg-gray-100 text-gray-700 text-xs font-medium hover:bg-gray-200"
+                                    onClick={startEditItems}
+                                    className="px-3 py-1.5 rounded bg-blue-50 text-blue-600 text-xs font-medium hover:bg-blue-100"
                                 >
-                                    Редагувати дані
+                                    Редагувати позиції
                                 </button>
-                                {onDelete && (
+                            ) : (
+                                <>
                                     <button
                                         type="button"
-                                        onClick={onDelete}
-                                        disabled={deleting}
-                                        className="px-3 py-1.5 rounded bg-red-50 text-red-600 text-xs font-medium hover:bg-red-100 disabled:opacity-60"
+                                        onClick={cancelEditItems}
+                                        disabled={savingItems}
+                                        className="px-3 py-1.5 rounded bg-gray-100 text-gray-700 text-xs font-medium hover:bg-gray-200 disabled:opacity-60"
                                     >
-                                        {deleting ? "Видалення..." : "Видалити"}
+                                        Скасувати
                                     </button>
-                                )}
-                            </div>
-                        ) : (
-                            <div className="flex gap-2">
-                                <button
-                                    type="button"
-                                    onClick={onCancel}
-                                    disabled={saving}
-                                    className="px-3 py-1.5 rounded bg-gray-100 text-gray-700 text-xs font-medium hover:bg-gray-200 disabled:opacity-60"
-                                >
-                                    Скасувати
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={onSave}
-                                    disabled={saving}
-                                    className="px-3 py-1.5 rounded bg-green-600 text-white text-xs font-medium hover:bg-green-700 disabled:opacity-60"
-                                >
-                                    Зберегти
-                                </button>
-                            </div>
-                        )}
+                                    <button
+                                        type="button"
+                                        onClick={saveItems}
+                                        disabled={savingItems}
+                                        className="px-3 py-1.5 rounded bg-green-600 text-white text-xs font-medium hover:bg-green-700 disabled:opacity-60"
+                                    >
+                                        {savingItems ? "Збереження..." : "Зберегти позиції"}
+                                    </button>
+                                </>
+                            )}
+                        </div>
                     </div>
 
                     <div className="max-h-80 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-gray-300">
-                        <OrderItems items={order.items ?? []} />
+                        <OrderItems items={displayItems} editable={isEditingItems} onUpdate={setEditedItems} />
                     </div>
                 </div>
 
@@ -168,7 +260,49 @@ export default function OrderDetails({
             {/* Права частина: дані клієнта (вертикально) */}
             <div className="space-y-3">
                 <div className="bg-white border rounded-lg p-4">
-                    <div className="text-xs text-gray-600 mb-3">Дані клієнта</div>
+                    <div className="flex items-center justify-between mb-3">
+                        <div className="text-xs text-gray-600">Дані клієнта</div>
+                        {!isEditing ? (
+                            <div className="flex gap-2">
+                                <button
+                                    type="button"
+                                    onClick={onStartEdit}
+                                    className="px-2.5 py-1 rounded bg-gray-100 text-gray-700 text-xs font-medium hover:bg-gray-200"
+                                >
+                                    Редагувати
+                                </button>
+                                {onDelete && (
+                                    <button
+                                        type="button"
+                                        onClick={onDelete}
+                                        disabled={deleting}
+                                        className="px-2.5 py-1 rounded bg-red-50 text-red-600 text-xs font-medium hover:bg-red-100 disabled:opacity-60"
+                                    >
+                                        {deleting ? "..." : "Видалити"}
+                                    </button>
+                                )}
+                            </div>
+                        ) : (
+                            <div className="flex gap-2">
+                                <button
+                                    type="button"
+                                    onClick={onCancel}
+                                    disabled={saving}
+                                    className="px-2.5 py-1 rounded bg-gray-100 text-gray-700 text-xs font-medium hover:bg-gray-200 disabled:opacity-60"
+                                >
+                                    Скасувати
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={onSave}
+                                    disabled={saving}
+                                    className="px-2.5 py-1 rounded bg-green-600 text-white text-xs font-medium hover:bg-green-700 disabled:opacity-60"
+                                >
+                                    Зберегти
+                                </button>
+                            </div>
+                        )}
+                    </div>
                     <div className="space-y-3">
                         <div>
                             <div className="text-xs text-gray-500 mb-0.5">Прізвище</div>
