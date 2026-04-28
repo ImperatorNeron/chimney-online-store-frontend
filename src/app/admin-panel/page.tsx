@@ -7,6 +7,7 @@ import {
     UsersIcon,
     Cog6ToothIcon,
     TagIcon,
+    FolderIcon,
 } from "@heroicons/react/24/outline";
 import CardLink from "@/components/modules/admin/components/common/AdminCardLink";
 
@@ -54,6 +55,13 @@ export default function AdminDashboard() {
                     title="Вітрина знижок"
                     desc="Порядок акційних товарів на головній сторінці"
                     icon={<TagIcon className="h-6 w-6" />}
+                />
+
+                <CardLink
+                    href="/admin-panel/categories"
+                    title="Категорії"
+                    desc="Управління категоріями та підкатегоріями каталогу"
+                    icon={<FolderIcon className="h-6 w-6" />}
                 />
             </div>
         </main>
