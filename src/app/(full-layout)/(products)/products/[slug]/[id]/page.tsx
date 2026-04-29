@@ -239,7 +239,7 @@ export default async function ProductPage({
                     <ProductList
                         items={items?.items}
                         className="flex gap-2 pb-8"
-                        itemClassName="flex-1 min-w-[188px]"
+                        itemClassName="flex-1 min-w-[188px] max-w-[280px]"
                     />
                 </div>
             </div>

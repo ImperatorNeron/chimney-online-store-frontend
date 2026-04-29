@@ -8,7 +8,7 @@ interface TabsProps {
 }
 
 export default function Tabs({ description, specifications }: TabsProps) {
-    const [activeTab, setActiveTab] = useState<'description' | 'specs'>('description');
+    const [activeTab, setActiveTab] = useState<'description' | 'specs'>('specs');
 
     return (
         <div className="mt-12">
