@@ -23,7 +23,7 @@ export default function BannerSlider() {
                 }}
                 autoplay={{ delay: 6000, disableOnInteraction: false }}
                 loop={slides.length > 1}
-                className="h-[260px] sm:h-[320px] lg:h-full"
+                className="h-[240px] min-[560px]:h-[360px] sm:h-[400px] lg:h-full"
             >
                 {slides.map((slide) => (
                     <SwiperSlide key={slide.id}>

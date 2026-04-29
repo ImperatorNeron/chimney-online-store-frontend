@@ -10,7 +10,9 @@ export default function Footer() {
             <div className="max-w-7xl mx-auto px-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div>
-                        <Link href="/" className="text-2xl font-bold text-white">ChimneyHub</Link>
+                        <Link href="/" className="text-2xl font-bold text-white">
+                            Димок
+                        </Link>
                         <p className="mt-2 text-gray-400">
                             Найкращі товари для вашого комфорту. Дізнайтеся більше про нас!
                         </p>
@@ -29,7 +31,7 @@ export default function Footer() {
                     </div>
                 </div>
                 <div className="border-t border-gray-700 mt-8 pt-6 text-center text-sm">
-                    <p>&copy; {new Date().getFullYear()} ChimneyHub. Всі права захищені.</p>
+                    <p>&copy; {new Date().getFullYear()} Димок. Всі права захищені.</p>
                 </div>
             </div>
         </footer>
