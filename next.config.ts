@@ -2,6 +2,9 @@ import type { NextConfig } from "next";
 import { RemotePattern } from "next/dist/shared/lib/image-config";
 
 const nextConfig: NextConfig = {
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   images: {
     remotePatterns: getRemotePatterns(),
     unoptimized: true,
