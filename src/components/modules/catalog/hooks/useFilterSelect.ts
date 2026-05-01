@@ -7,6 +7,17 @@ export const useFilterSelect = (name: string, options: (string | null)[]) => {
     const { navigate } = useCatalogNavigation();
     const currentValue = searchParams.get(name) || '';
 
+    const handleChipToggle = (value: string) => {
+        const params = new URLSearchParams(searchParams);
+        if (currentValue === value) {
+            params.delete(name);
+        } else {
+            params.set(name, value);
+        }
+        params.delete("page");
+        navigate(() => router.replace(`?${params.toString()}`, { scroll: false }));
+    };
+
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const params = new URLSearchParams(searchParams);
         if (e.target.value) {
@@ -23,14 +34,7 @@ export const useFilterSelect = (name: string, options: (string | null)[]) => {
         .sort((a, b) => {
             const aNum = Number(a);
             const bNum = Number(b);
-
-            const aIsNum = !isNaN(aNum);
-            const bIsNum = !isNaN(bNum);
-
-            if (aIsNum && bIsNum) {
-                return aNum - bNum;
-            }
-
+            if (!isNaN(aNum) && !isNaN(bNum)) return aNum - bNum;
             return a.localeCompare(b, undefined, { sensitivity: 'base' });
         });
 
@@ -38,5 +42,6 @@ export const useFilterSelect = (name: string, options: (string | null)[]) => {
         currentValue,
         sortedOptions,
         handleChange,
+        handleChipToggle,
     };
 };

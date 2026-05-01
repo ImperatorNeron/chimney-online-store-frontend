@@ -6,6 +6,7 @@ import MobileFilterButton from "@/components/modules/catalog/components/MobileFi
 import ChildCategories, { type ChildCategoryItem } from "@/components/modules/catalog/components/ChildCategories";
 import LimitSelector from "@/components/modules/catalog/components/LimitSelector";
 import OrderSelector from "@/components/modules/catalog/components/OrderSelector";
+import ActiveFilters from "@/components/modules/catalog/components/ActiveFilters";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import CatalogResults from "@/components/modules/catalog/components/CatalogResults";
 
@@ -114,7 +115,7 @@ export default async function CatalogPage({
         <>
             <Breadcrumbs items={breadcrumbItems} />
 
-            <div className="flex gap-4 mt-5" itemScope itemType="https://schema.org/CollectionPage">
+            <div className="flex gap-4 mt-5 items-start" itemScope itemType="https://schema.org/CollectionPage">
                 <DesktopFilterBlock filters={filters} />
                 <MobileFilterButton filters={filters} />
                 <div className="w-full lg:w-3/4">
@@ -128,6 +129,8 @@ export default async function CatalogPage({
                         <LimitSelector />
                         <OrderSelector />
                     </div>
+
+                    <ActiveFilters />
 
                     <CatalogResults items={items as any[]} limit={limit} currentPage={currentPage} totalPages={totalPages} />
                 </div>

@@ -49,8 +49,26 @@ export const usePriceRange = (minPrice: number, maxPrice: number) => {
         [low, updateParams]
     );
 
+    const handleLowInput = useCallback(
+        (e: React.ChangeEvent<HTMLInputElement>) => {
+            const val = Math.max(minPrice, Math.min(Number(e.target.value), high));
+            setLow(val);
+            updateParams(val, high);
+        },
+        [high, minPrice, updateParams]
+    );
+
+    const handleHighInput = useCallback(
+        (e: React.ChangeEvent<HTMLInputElement>) => {
+            const val = Math.min(maxPrice, Math.max(Number(e.target.value), low));
+            setHigh(val);
+            updateParams(low, val);
+        },
+        [low, maxPrice, updateParams]
+    );
+
     const { left, width } = useMemo(() => {
-        const range = maxPrice - minPrice;
+        const range = maxPrice - minPrice || 1;
         return {
             left: ((low - minPrice) / range) * 100,
             width: ((high - low) / range) * 100,
@@ -68,6 +86,8 @@ export const usePriceRange = (minPrice: number, maxPrice: number) => {
         activeThumb,
         handleLowChange,
         handleHighChange,
+        handleLowInput,
+        handleHighInput,
         handleThumbMouseDown,
         left,
         width,
