@@ -30,12 +30,10 @@ export async function generateMetadata({ params }: { params: Params }) {
 
     return {
         title,
-        description: `Огляд категорії ${lastCategory ? lastCategory[0] : "каталог"} - знайдіть товари, що вас цікавлять.`,
+        description: `${lastCategory ? lastCategory[0] : "Каталог"} — купити димоходи та комплектуючі з доставкою по Україні. Великий вибір, гарантія якості.`,
         openGraph: {
             title,
-            description: `Огляд категорії ${lastCategory ? lastCategory[0] : "каталог"}`,
-            url: `.../${slug.join("/")}`,
-            siteName: "",
+            description: `${lastCategory ? lastCategory[0] : "Каталог"} — димоходи та комплектуючі за вигідними цінами.`,
             locale: "uk_UA",
             type: "website",
         },

@@ -34,7 +34,7 @@ export async function generateMetadata({
         const description = `Купити ${productName} за ${price}₴. ${variation.diameter ? `Діаметр: ${variation.diameter} мм. ` : ''}${variation.length ? `Довжина: ${variation.length} см. ` : ''}Гарантія якості, швидка доставка по Україні.`;
 
         return {
-            title: `${productName} - купити в інтернет-магазині | Магазин димоходів`,
+            title: `${productName} — купити в інтернет-магазині`,
             description: description,
             keywords: [
                 productName,
@@ -46,10 +46,12 @@ export async function generateMetadata({
                 ...(variation.diameter ? [`димохід ${variation.diameter} мм`] : [])
             ],
             openGraph: {
-                title: `${productName} | Магазин димоходів`,
+                title: `${productName} | Димок`,
                 description: description,
-                url: ``,
                 type: 'website',
+                images: fullItem.images?.[0]
+                    ? [`${process.env.NEXT_PUBLIC_MEDIA_PATH}/${process.env.NEXT_PUBLIC_MEDIA_ITEMS}/${fullItem.slug}/${fullItem.images[0].file_path?.split('/').pop()}`]
+                    : undefined,
             },
         };
     } catch {
@@ -114,8 +116,51 @@ export default async function ProductPage({
     const paginationIn = { offset: 0, limit: 5 };
     const filters = { category_slug: item.categories?.[0]?.[1] }
     const items = await productService.getProducts(paginationIn, undefined, filters);
+
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
+    const mediaPath = process.env.NEXT_PUBLIC_MEDIA_PATH || '';
+    const mediaItems = process.env.NEXT_PUBLIC_MEDIA_ITEMS || '';
+    const productImage = item.images?.[0]
+        ? `${mediaPath}/${mediaItems}/${item.slug}/${item.images[0].file_path?.split('/').pop()}`
+        : undefined;
+
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: item.name,
+        description: item.description,
+        sku: String(item.id),
+        image: productImage,
+        brand: { '@type': 'Brand', name: 'Димок' },
+        offers: {
+            '@type': 'Offer',
+            price: item.discount_price ?? item.price,
+            priceCurrency: 'UAH',
+            availability: 'https://schema.org/InStock',
+            url: `${siteUrl}/products/${item.slug}/${item.id}`,
+        },
+    };
+
+    const breadcrumbLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Головна', item: siteUrl },
+            ...(item.categories?.map(([name, slug]: [string, string], i: number) => ({
+                '@type': 'ListItem',
+                position: i + 2,
+                name,
+                item: `${siteUrl}/catalog/${slug}`,
+            })) || []),
+            { '@type': 'ListItem', position: (item.categories?.length || 0) + 2, name: item.name },
+        ],
+    };
+
     return (
-        <div className="min-h-screen bg-white" itemScope itemType="https://schema.org/Product">
+        <>
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+            <div className="min-h-screen bg-white" itemScope itemType="https://schema.org/Product">
             <meta itemProp="brand" content="Ваш бренд" />
             <meta itemProp="mpn" content={item.id?.toString() || ""} />
             <meta itemProp="sku" content={item.id?.toString() || ""} />
@@ -244,6 +289,7 @@ export default async function ProductPage({
                 </div>
             </div>
         </div>
+        </>
     );
 }
 

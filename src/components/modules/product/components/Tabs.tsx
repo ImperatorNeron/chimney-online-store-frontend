@@ -36,14 +36,12 @@ export default function Tabs({ description, specifications }: TabsProps) {
             <div className="mt-6">
                 {activeTab === 'description' && (
                     <div className="prose max-w-none">
-                        <h3 className="text-xl font-semibold mb-4 text-gray-900">
-                            Детальний опис товару
-                        </h3>
                         <div
-                            className="text-gray-600"
+                            className="text-gray-600 whitespace-pre-line"
                             itemProp="description"
-                            dangerouslySetInnerHTML={{ __html: description }}
-                        />
+                        >
+                            {description}
+                        </div>
                     </div>
                 )}
 
