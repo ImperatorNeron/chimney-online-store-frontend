@@ -11,13 +11,13 @@ export default function FilterSelect({ label, name, options }: { label: string, 
     return (
         <div className="flex flex-col gap-2">
             <span className="text-sm font-medium text-gray-900 ml-0.5">{label}</span>
-            <div className={`flex flex-wrap gap-1.5 ${isPending ? 'opacity-60 pointer-events-none' : ''}`}>
+            <div className={`flex flex-wrap gap-1 ${isPending ? 'opacity-60 pointer-events-none' : ''}`}>
                 {sortedOptions.map(option => (
                     <button
                         key={option}
                         onClick={() => handleChipToggle(option)}
                         disabled={isPending}
-                        className={`px-3 py-1.5 text-xs rounded-lg border transition-colors duration-150
+                        className={`px-2 py-1 text-xs rounded-md border transition-colors duration-150
                             ${currentValue === option
                                 ? 'bg-gray-900 text-white border-gray-900'
                                 : 'bg-white text-gray-700 border-gray-300 hover:border-gray-900'
