@@ -47,13 +47,13 @@ class MessageService {
     }
 
     async deleteMessage(token: string, messageId: number) {
-        const url = `${this.endpoint}${messageId}`
+        const url = `${this.endpoint}/${messageId}`
         await http.delete<null>(url, token)
     }
 
     async changeMessageStatus(token: string, messageId: number, messageIn: ChangeMessageStatusSchema) {
         console.log(token, messageId, messageIn)
-        const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}change-status/${messageId}`
+        const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}/change-status/${messageId}`
         const response = await http.patch<AReadMessageSchema>(url, messageIn, token)
         return response.data
     }
