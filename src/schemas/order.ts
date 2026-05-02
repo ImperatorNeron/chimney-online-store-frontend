@@ -8,7 +8,7 @@ export const orderSchema = z.object({
         errorMap: () => ({ message: "Оберіть спосіб доставки" })
     }),
 
-    payment_method: z.enum(["cash", "card", "online"], {
+    payment_method: z.enum(["cash", "card"], {
         errorMap: () => ({ message: "Оберіть спосіб оплати" })
     }),
 

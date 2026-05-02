@@ -253,7 +253,7 @@ export default async function ProductPage({
                                     <div>
                                         <p className="text-sm font-medium text-gray-900">Гнучкі способи оплати</p>
                                         <p className="text-xs text-gray-600 mt-1">
-                                            Оплата онлайн LiqPay, готівкою при отриманні або оплата на карту.
+                                            Оплата на карту, готівкою при отриманні або накладний платіж.
                                         </p>
                                     </div>
                                 </div>

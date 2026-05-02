@@ -1,6 +1,6 @@
 export const endpoints = {
     orders: '/orders',
-    messages: '/messages/',
+    messages: '/messages',
     auth: '/auth',
     users: '/users',
     products: '/products',
