@@ -3,6 +3,8 @@ import { MetadataRoute } from 'next';
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
 
+export const dynamic = 'force-dynamic';
+
 async function fetchProducts(): Promise<{ slug: string; id: number }[]> {
     try {
         const res = await fetch(`${API_URL}/products?offset=0&limit=1000`);

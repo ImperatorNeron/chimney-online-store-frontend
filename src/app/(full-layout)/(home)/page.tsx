@@ -2,7 +2,6 @@ import { productService } from "@/api/services/products.service";
 import CategoriesMobileServer from "@/components/modules/categories/components/CategoriesMobileServer";
 import ProductsGrid from "@/components/modules/products/components/ProductGrid";
 
-export const revalidate = 600;
 export const metadata = {
     title: 'Димоходи | Купити димохід та комплектуючі з доставкою по Україні',
     description:
