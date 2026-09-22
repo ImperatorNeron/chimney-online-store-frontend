@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { useAuthStore } from '@/store/auth.store';
+import { apiBase } from '@/api/config';
 
 export default function useUserData(redirectIfUnauthorized: boolean = true) {
     const router = useRouter();
@@ -40,7 +41,7 @@ export default function useUserData(redirectIfUnauthorized: boolean = true) {
                     return;
                 }
 
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/me`, {
+                const response = await fetch(`${apiBase()}/users/me`, {
                     headers: {
                         'Authorization': `Bearer ${tokenToUse}`,
                     },

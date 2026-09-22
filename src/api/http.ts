@@ -1,4 +1,4 @@
-const BASE_URL = '/backend';
+import { apiBase } from './config';
 
 async function request<T>(
     url: string,
@@ -18,7 +18,7 @@ async function request<T>(
     }
 
     const isFullUrl = /^https?:\/\//.test(url) || url.includes('//');
-    const finalUrl = isFullUrl ? url : BASE_URL + url;
+    const finalUrl = isFullUrl ? url : apiBase() + url;
 
     const response = await fetch(finalUrl, {
         ...options,

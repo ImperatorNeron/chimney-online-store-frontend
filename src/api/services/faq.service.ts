@@ -6,7 +6,7 @@ class FAQService {
     private endpoint = endpoints.faqs;
 
     async getFAQS() {
-        const response = await http.get<AlistReadFAQSchema>(`${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}`);
+        const response = await http.get<AlistReadFAQSchema>(`${this.endpoint}`);
         return response.data;
     }
 }

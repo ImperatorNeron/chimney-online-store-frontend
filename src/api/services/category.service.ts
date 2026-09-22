@@ -43,14 +43,14 @@ class CategoryService {
     private endpoint = endpoints.categories;
 
     async getCategories() {
-        const response = await http.get<AlistReadCategorySchema>(`${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}`);
+        const response = await http.get<AlistReadCategorySchema>(`${this.endpoint}`);
         return response.data;
     }
 
     async getCategoriesBySlugs(slugs: string[]) {
         const params = new URLSearchParams();
         slugs.forEach(slug => params.append('slugs', slug));
-        const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}/by-slugs?${params.toString()}`
+        const url = `${this.endpoint}/by-slugs?${params.toString()}`
         const response = await http.get<ReadCategoriesBySlug>(url);
         return response.data;
     }
@@ -58,7 +58,7 @@ class CategoryService {
     async getChildCategories(parentIds: number[]) {
         const params = new URLSearchParams();
         parentIds.forEach((id) => params.append('parent_ids', String(id)));
-        const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}/children?${params.toString()}`
+        const url = `${this.endpoint}/children?${params.toString()}`
         const response = await http.get<Child_AlistReadCategorySchema>(url);
         return response.data;
     }

@@ -34,7 +34,7 @@ export class ProductService {
             params.append("field", ordering.field);
             params.append("ordering", ordering.ordering);
         }
-        const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}?${params.toString()}`
+        const url = `${this.endpoint}?${params.toString()}`
         const response = await http.get<ALReadPreviewProductSchema>(url);
         return response.data;
     }
@@ -46,7 +46,7 @@ export class ProductService {
         if (slug) params.append("slug", String(slug));
         if (!slug && sp?.text) params.append("text", String(sp?.text))
 
-        const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}/filters?${params.toString()}`
+        const url = `${this.endpoint}/filters?${params.toString()}`
         const response = await http.get<AReadFiltersSchema>(url);
         return response.data;
     }
@@ -90,7 +90,7 @@ export class ProductService {
         if (params?.offset !== undefined) query.append("offset", String(params.offset));
         if (params?.limit !== undefined) query.append("limit", String(params.limit));
         const qs = query.toString();
-        const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}/${encodeURIComponent(slug)}${qs ? `?${qs}` : ''}`
+        const url = `${this.endpoint}/${encodeURIComponent(slug)}${qs ? `?${qs}` : ''}`
         const response = await http.get<Get_AReadAbsoluteProductSchema>(url)
         return response.data
     }
@@ -103,7 +103,7 @@ export class ProductService {
         if (params?.thickness) query.append("thickness", params.thickness);
         if (params?.angle) query.append("angle", params.angle);
         if (params?.metal_type) query.append("metal_type", params.metal_type);
-        const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}/${encodeURIComponent(slug)}/variations?${query.toString()}`
+        const url = `${this.endpoint}/${encodeURIComponent(slug)}/variations?${query.toString()}`
         const dto = (await http.get<Get_AReadAbsoluteProductSchema>(url, token)).data as any;
         return {
             items: dto?.variations ?? [],
@@ -112,7 +112,7 @@ export class ProductService {
     }
 
     async getVariationFilters(slug: string, token: string) {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}/${encodeURIComponent(slug)}/variations/filters`
+        const url = `${this.endpoint}/${encodeURIComponent(slug)}/variations/filters`
         const response = await http.get<{ data: Record<string, string[]> }>(url, token);
         return response.data;
     }
@@ -123,19 +123,19 @@ export class ProductService {
             params.append("offset", String(paginationIn.offset));
             params.append("limit", String(paginationIn.limit));
         }
-        const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}/popular?${params.toString()}`
+        const url = `${this.endpoint}/popular?${params.toString()}`
         const response = await http.get<ALReadPreviewProductSchema>(url)
         return response.data
     }
 
     async getDiscountedProducts(limit: number = 15, offset: number = 0) {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}/discounted?limit=${limit}&offset=${offset}`;
+        const url = `${this.endpoint}/discounted?limit=${limit}&offset=${offset}`;
         const response = await http.get<ALReadPreviewProductSchema>(url);
         return response.data;
     }
 
     async getNewProducts(limit: number = 10, offset: number = 0) {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}/new?limit=${limit}&offset=${offset}`;
+        const url = `${this.endpoint}/new?limit=${limit}&offset=${offset}`;
         const response = await http.get<ALReadPreviewProductSchema>(url);
         return response.data;
     }
