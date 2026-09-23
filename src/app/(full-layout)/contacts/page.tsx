@@ -5,7 +5,7 @@ import TitleBlock from "@/app/(full-layout)/contacts/components/TitleBlock";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Контакти | Магазин димоходів та комплектуючих",
+    title: "Контакти",
     description: "Зв'яжіться з нами для консультації з димоходів. Телефон, email, соцмережі та форма зворотного зв'язку. Швидка відповідь!",
     keywords: ["контакти димоходи", "зв'язок з магазином", "телефон для замовлення димоходу", "форма зворотного зв'язку"],
     openGraph: {

@@ -31,11 +31,40 @@ export async function generateMetadata({
         const productName = fullItem.name;
         const categoryNames = fullItem.categories?.map(c => c[0]).join(", ") || "";
         const price = variation.discount_price ?? variation.price;
-        const description = `Купити ${productName} за ${price}₴. ${variation.diameter ? `Діаметр: ${variation.diameter} мм. ` : ''}${variation.length ? `Довжина: ${variation.length} см. ` : ''}Гарантія якості, швидка доставка по Україні.`;
+
+        // Build a spec string from the variation so title/description are UNIQUE
+        // per variation and match how users search (e.g. "труба 200 нерж AISI 304").
+        // Title stays short: only the most-searched specs (diameter + metal).
+        const titleSpecParts = [
+            variation.diameter ? `Ø${variation.diameter} мм` : "",
+            variation.metal_type || "",
+        ].filter(Boolean);
+        const specTitle = titleSpecParts.length ? ` ${titleSpecParts.join(" ")}` : "";
+
+        const specSentence = [
+            variation.diameter ? `діаметр ${variation.diameter} мм` : "",
+            variation.length ? `довжина ${variation.length} м` : "",
+            variation.thickness ? `товщина ${variation.thickness} мм` : "",
+            variation.angle ? `кут ${variation.angle}°` : "",
+            variation.metal_type ? `метал ${variation.metal_type}` : "",
+        ].filter(Boolean).join(", ");
+
+        const description = `${productName}${specSentence ? ` (${specSentence})` : ""} — купити за ${price}₴. Гарантія якості, швидка доставка по Україні.`;
+
+        // Canonical points to the representative (cheapest) variation so every
+        // variation URL of the same product consolidates into a single indexed page.
+        const variations = (fullItem.variations ?? []) as Array<{
+            id: number; price: number; discount_price?: number | null;
+        }>;
+        const representative = variations
+            .slice()
+            .sort((a, b) => (a.discount_price ?? a.price) - (b.discount_price ?? b.price))[0];
+        const canonicalPath = `/products/${fullItem.slug}/${representative?.id ?? variation.id}`;
 
         return {
-            title: `${productName} — купити в інтернет-магазині`,
+            title: `${productName}${specTitle} — купити`,
             description: description,
+            alternates: { canonical: canonicalPath },
             keywords: [
                 productName,
                 "димохід",
@@ -46,7 +75,7 @@ export async function generateMetadata({
                 ...(variation.diameter ? [`димохід ${variation.diameter} мм`] : [])
             ],
             openGraph: {
-                title: `${productName} | Димок`,
+                title: `${productName}${specTitle} | Димок`,
                 description: description,
                 type: 'website',
                 images: fullItem.images?.[0]
@@ -161,7 +190,7 @@ export default async function ProductPage({
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
             <div className="min-h-screen bg-white" itemScope itemType="https://schema.org/Product">
-            <meta itemProp="brand" content="Ваш бренд" />
+            <meta itemProp="brand" content="Димок" />
             <meta itemProp="mpn" content={item.id?.toString() || ""} />
             <meta itemProp="sku" content={item.id?.toString() || ""} />
             <link itemProp="url" href={`/${item.slug}/${item.id}`} />

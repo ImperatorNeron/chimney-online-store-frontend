@@ -10,6 +10,7 @@ import CatalogResults from "@/components/modules/catalog/components/CatalogResul
 
 export const metadata = {
     title: 'Пошук в каталозі',
+    robots: { index: false, follow: true },
     openGraph: {
         title: 'Купити димохід від виробника | Інтернет-магазин димоходів',
         description:

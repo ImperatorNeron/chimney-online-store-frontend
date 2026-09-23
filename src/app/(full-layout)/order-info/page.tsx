@@ -3,7 +3,7 @@ import { TruckIcon, EnvelopeIcon, UserIcon, MapPinIcon, CreditCardIcon, Currency
 import ModernOption from './components/ModerOption';
 
 export const metadata = {
-    title: 'Оплата та доставка',
+    title: 'Оплата та доставка димоходів',
     description:
         'Інформація про способи оплати і доставки: Нова Пошта, Укр Пошта, самовивіз та інші. Зручні умови та швидка обробка замовлень.',
     keywords:

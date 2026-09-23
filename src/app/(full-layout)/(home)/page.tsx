@@ -3,7 +3,7 @@ import CategoriesMobileServer from "@/components/modules/categories/components/C
 import ProductsGrid from "@/components/modules/products/components/ProductGrid";
 
 export const metadata = {
-    title: 'Димоходи | Купити димохід та комплектуючі з доставкою по Україні',
+    title: 'Димоходи та комплектуючі від виробника',
     description:
         'Інтернет-магазин димоходів. Великий вибір димохідних систем, трійників, ревізій, переходів. Якість, гарантія, швидка доставка по всій Україні.',
     keywords:
@@ -22,8 +22,30 @@ export default async function Home() {
     const popularItems = await productService.getPopularProducts({ offset: 0, limit: 40 });
     const discountedItems = await productService.getDiscountedProducts(15, 0);
 
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "";
+    const orgLd = {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        name: "Димок",
+        url: siteUrl,
+        logo: `${siteUrl}/favicon.png`,
+    };
+    const websiteLd = {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        name: "Димок",
+        url: siteUrl,
+        potentialAction: {
+            "@type": "SearchAction",
+            target: `${siteUrl}/search?text={search_term_string}`,
+            "query-input": "required name=search_term_string",
+        },
+    };
+
     return (
         <div className="space-y-24 mt-8">
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgLd) }} />
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteLd) }} />
             <div className="lg:hidden">
                 <CategoriesMobileServer />
             </div>
