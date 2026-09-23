@@ -8,6 +8,7 @@ import { productService } from "@/api/services/products.service";
 import LikeButton from "@/components/modules/product/components/LikeButton";
 import Selectors from "./selectors";
 import NotFound from "@/app/not-found";
+import { serializeJsonLd } from "@/utils/jsonLd";
 
 export async function generateMetadata({
     params
@@ -187,8 +188,8 @@ export default async function ProductPage({
 
     return (
         <>
-            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }} />
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbLd) }} />
             <div className="min-h-screen bg-white" itemScope itemType="https://schema.org/Product">
             <meta itemProp="brand" content="Димок" />
             <meta itemProp="mpn" content={item.id?.toString() || ""} />

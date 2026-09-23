@@ -1,6 +1,7 @@
 import { productService } from "@/api/services/products.service";
 import CategoriesMobileServer from "@/components/modules/categories/components/CategoriesMobileServer";
 import ProductsGrid from "@/components/modules/products/components/ProductGrid";
+import { serializeJsonLd } from "@/utils/jsonLd";
 
 export const metadata = {
     title: 'Димоходи та комплектуючі від виробника',
@@ -44,8 +45,8 @@ export default async function Home() {
 
     return (
         <div className="space-y-24 mt-8">
-            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgLd) }} />
-            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteLd) }} />
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(orgLd) }} />
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(websiteLd) }} />
             <div className="lg:hidden">
                 <CategoriesMobileServer />
             </div>

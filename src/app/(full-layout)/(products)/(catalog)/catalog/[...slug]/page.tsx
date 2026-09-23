@@ -4,6 +4,7 @@ import { productService } from "@/api/services/products.service";
 import DesktopFilterBlock from "@/components/modules/catalog/components/DesktopFilterBlock";
 import MobileFilterButton from "@/components/modules/catalog/components/MobileFilterButton";
 import ChildCategories, { type ChildCategoryItem } from "@/components/modules/catalog/components/ChildCategories";
+import { serializeJsonLd } from "@/utils/jsonLd";
 import LimitSelector from "@/components/modules/catalog/components/LimitSelector";
 import OrderSelector from "@/components/modules/catalog/components/OrderSelector";
 import ActiveFilters from "@/components/modules/catalog/components/ActiveFilters";
@@ -134,7 +135,7 @@ export default async function CatalogPage({
 
     return (
         <>
-            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbLd) }} />
             <Breadcrumbs items={breadcrumbItems} />
 
             <h1 className="text-2xl font-semibold text-gray-900 mt-4">{pageHeading}</h1>
