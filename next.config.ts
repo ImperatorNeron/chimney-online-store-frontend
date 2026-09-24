@@ -12,16 +12,31 @@ const nextConfig: NextConfig = {
   reactStrictMode: false,
 
   async rewrites() {
-    return [
+    const rules = [
       {
         source: "/backend/:path*",
         destination: `${process.env.NEXT_PUBLIC_API_URL}/:path*`,
       },
-      {
-        source: `${process.env.NEXT_PUBLIC_MEDIA_PATH}/:path*`,
-        destination: `${process.env.NEXT_PUBLIC_MEDIA_URL}/:path*`,
-      },
     ];
+
+    // Media rewrite is only needed when media is served from an EXTERNAL origin
+    // (e.g. Supabase CDN). With the S3/Railway backend, media is served by our
+    // own /media/* route (nginx proxies it to the backend), so we must NOT
+    // rewrite it to an external URL — and self-rewriting would loop. Skip the
+    // rule when MEDIA_URL is unset or points back at MEDIA_PATH ("/media").
+    const mediaPath = process.env.NEXT_PUBLIC_MEDIA_PATH;
+    const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL;
+    const mediaIsExternal =
+      !!mediaUrl && !!mediaPath && mediaUrl !== mediaPath && /^https?:\/\//.test(mediaUrl);
+
+    if (mediaIsExternal) {
+      rules.push({
+        source: `${mediaPath}/:path*`,
+        destination: `${mediaUrl}/:path*`,
+      });
+    }
+
+    return rules;
   },
 
 };
