@@ -5,7 +5,12 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    remotePatterns: getRemotePatterns(),
+    // remotePatterns intentionally omitted: images.unoptimized=true means Next
+    // does NOT use them at all. Keeping getRemotePatterns() only produced a
+    // noisy "Missing NEXT_PUBLIC_MEDIA_*" console error with zero effect.
+    // If you ever switch to unoptimized:false, re-enable the line below and
+    // the getRemotePatterns() function at the bottom of this file.
+    // remotePatterns: getRemotePatterns(),
     unoptimized: true,
   },
   reactStrictMode: false,
@@ -82,41 +87,44 @@ function sanitizePathname(raw: string): string {
 
 /**
  * Builds the list of allowed remote image patterns for next/image.
+ * DISABLED: only needed when images.unoptimized=false. Re-enable together with
+ * the `remotePatterns: getRemotePatterns()` line above if you turn optimization on.
  *
  * Next.js >= 15.3.0 requires every entry in `images.remotePatterns`
- * to be an instance of the global `URL` class (the old object shape
- * `{ protocol, hostname, port, pathname }` is no longer accepted).
+ * to be an instance of the global `URL` class.
  */
-function getRemotePatterns(): URL[] {
-  const host = env("NEXT_PUBLIC_MEDIA_HOST");
-  const rawPath = env("NEXT_PUBLIC_MEDIA_PATH");
-  const port = env("NEXT_PUBLIC_MEDIA_PORT");
-  const schema = env("NEXT_PUBLIC_MEDIA_SCHEMA");
+// function getRemotePatterns(): URL[] {
+//   const host = env("NEXT_PUBLIC_MEDIA_HOST");
+//   const rawPath = env("NEXT_PUBLIC_MEDIA_PATH");
+//   const port = env("NEXT_PUBLIC_MEDIA_PORT");
+//   const schema = env("NEXT_PUBLIC_MEDIA_SCHEMA");
+//
+//   if (!host || !rawPath || !schema) {
+//     console.error(
+//       "Error: Missing NEXT_PUBLIC_MEDIA_HOST / NEXT_PUBLIC_MEDIA_PATH / NEXT_PUBLIC_MEDIA_SCHEMA environment variables",
+//     );
+//     return [];
+//   }
+//
+//   if (schema !== "http" && schema !== "https") {
+//     console.error(
+//       `Error: NEXT_PUBLIC_MEDIA_SCHEMA must be "http" or "https" (got "${schema}")`,
+//     );
+//     return [];
+//   }
+//
+//   const pathname = sanitizePathname(rawPath);
+//   const portPart = port ? `:${port}` : "";
+//   const href = `${schema}://${host}${portPart}${pathname}`;
+//
+//   try {
+//     return [new URL(href)];
+//   } catch (err) {
+//     console.error(`Error: Failed to build remote image pattern from "${href}"`, err);
+//     return [];
+//   }
+// }
 
-  if (!host || !rawPath || !schema) {
-    console.error(
-      "Error: Missing NEXT_PUBLIC_MEDIA_HOST / NEXT_PUBLIC_MEDIA_PATH / NEXT_PUBLIC_MEDIA_SCHEMA environment variables",
-    );
-    return [];
-  }
-
-  if (schema !== "http" && schema !== "https") {
-    console.error(
-      `Error: NEXT_PUBLIC_MEDIA_SCHEMA must be "http" or "https" (got "${schema}")`,
-    );
-    return [];
-  }
-
-  const pathname = sanitizePathname(rawPath);
-  const portPart = port ? `:${port}` : "";
-  const href = `${schema}://${host}${portPart}${pathname}`;
-
-  try {
-    return [new URL(href)];
-  } catch (err) {
-    console.error(`Error: Failed to build remote image pattern from "${href}"`, err);
-    return [];
-  }
-}
+export default nextConfig;
 
 export default nextConfig;
