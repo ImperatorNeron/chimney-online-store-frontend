@@ -1,4 +1,4 @@
-﻿import { catalogService } from "@/api/services/catalog.services";
+import { catalogService } from "@/api/services/catalog.services";
 import { categoryService } from "@/api/services/category.service";
 import { productService } from "@/api/services/products.service";
 import DesktopFilterBlock from "@/components/modules/catalog/components/DesktopFilterBlock";
