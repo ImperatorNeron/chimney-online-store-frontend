@@ -1,5 +1,6 @@
 import { http } from '@/api/http';
 import { endpoints } from '../endpoints';
+import { apiBase } from '@/api/config';
 import { AReadWebSiteSettingsSchema, UpdateWebSiteSettingsSchema } from '../types/types';
 
 export interface SiteContactInfo {
@@ -13,9 +14,7 @@ export interface SiteContactInfo {
 
 let cachedPublicSettings: SiteContactInfo | null = null;
 
-const PUBLIC_SETTINGS_URL = typeof window === 'undefined'
-    ? `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1'}/website-settings/public`
-    : `/backend/website-settings/public`;
+const PUBLIC_SETTINGS_URL = `${apiBase()}/website-settings/public`;
 
 class WebSiteSettingsService {
     private endpoint = endpoints.websiteSettings;

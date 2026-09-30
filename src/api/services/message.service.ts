@@ -41,19 +41,19 @@ class MessageService {
         }
         if (params?.date_from) query.append("date_from", params.date_from);
         if (params?.date_to) query.append("date_to", params.date_to);
-        const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}?${query.toString()}`
+        const url = `${this.endpoint}?${query.toString()}`
         const response = await http.get<ALReadMessageSchema>(url, token)
         return response.data
     }
 
     async deleteMessage(token: string, messageId: number) {
-        const url = `${this.endpoint}${messageId}`
+        const url = `${this.endpoint}/${messageId}`
         await http.delete<null>(url, token)
     }
 
     async changeMessageStatus(token: string, messageId: number, messageIn: ChangeMessageStatusSchema) {
         console.log(token, messageId, messageIn)
-        const url = `${process.env.NEXT_PUBLIC_API_URL}${this.endpoint}change-status/${messageId}`
+        const url = `${this.endpoint}/change-status/${messageId}`
         const response = await http.patch<AReadMessageSchema>(url, messageIn, token)
         return response.data
     }

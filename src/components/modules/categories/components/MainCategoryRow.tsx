@@ -44,11 +44,6 @@ export function MainCategoryRow({
           <h3 className="truncate text-[15px] font-medium text-zinc-950">
             {category.name}
           </h3>
-          {childrenCount > 0 && (
-            <p className="mt-1 text-xs text-zinc-500">
-              Кількість підкатегорій: {childrenCount}
-            </p>
-          )}
         </div>
       </Link>
 

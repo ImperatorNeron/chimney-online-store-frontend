@@ -1,53 +1,130 @@
 import type { NextConfig } from "next";
-import { RemotePattern } from "next/dist/shared/lib/image-config";
 
 const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
   images: {
-    remotePatterns: getRemotePatterns(),
+    // remotePatterns intentionally omitted: images.unoptimized=true means Next
+    // does NOT use them at all. Keeping getRemotePatterns() only produced a
+    // noisy "Missing NEXT_PUBLIC_MEDIA_*" console error with zero effect.
+    // If you ever switch to unoptimized:false, re-enable the line below and
+    // the getRemotePatterns() function at the bottom of this file.
+    // remotePatterns: getRemotePatterns(),
     unoptimized: true,
   },
   reactStrictMode: false,
 
   async rewrites() {
-    return [
-      {
-        source: "/backend/:path*",
-        destination: `${process.env.NEXT_PUBLIC_API_URL}/:path*`,
-      },
-      {
-        source: `${process.env.NEXT_PUBLIC_MEDIA_PATH}/:path*`,
-        destination: `${process.env.NEXT_PUBLIC_MEDIA_URL}/:path*`,
-      },
-    ];
-  },
+    const apiUrl = env("NEXT_PUBLIC_API_URL");
 
+    const rules: { source: string; destination: string }[] = [];
+
+    if (apiUrl) {
+      rules.push({
+        source: "/backend/:path*",
+        destination: `${apiUrl}/:path*`,
+      });
+    }
+
+    const rawMediaPath = env("NEXT_PUBLIC_MEDIA_PATH");
+    const mediaUrl = env("NEXT_PUBLIC_MEDIA_URL");
+
+    // ✅ Санитизуємо pathname так само, як у getRemotePatterns.
+    //    Це прибирає "D:/gitbush/Git/media" → "/media" і додає провідний "/".
+    const mediaPath = rawMediaPath ? sanitizePathname(rawMediaPath).replace(/\/\*\*$/, "") : undefined;
+
+    const mediaIsExternal =
+      !!mediaUrl &&
+      !!mediaPath &&
+      mediaUrl !== mediaPath &&
+      /^https?:\/\//.test(mediaUrl);
+
+    if (mediaIsExternal) {
+      rules.push({
+        source: `${mediaPath}/:path*`,
+        destination: `${mediaUrl}/:path*`,
+      });
+    }
+
+    return rules;
+  },
 };
 
-function getRemotePatterns(): RemotePattern[] {
-  const host = process.env.NEXT_PUBLIC_MEDIA_HOST;
-  const pathname = process.env.NEXT_PUBLIC_MEDIA_PATH
-  const port = process.env.NEXT_PUBLIC_MEDIA_PORT
-  const schema = process.env.NEXT_PUBLIC_MEDIA_SCHEMA
-
-  if (!host || !pathname || !schema) {
-    console.error('Error: Missing environment variables');
-    return [];
-  }
-
-  const pattern: RemotePattern = {
-    protocol: schema as "http" | "https",
-    hostname: `${host}/**`,
-    pathname: pathname,
-  };
-
-  if (port) {
-    pattern.port = port;
-  }
-
-  return [pattern];
+/**
+ * Reads an env variable and strips CR/LF + surrounding whitespace.
+ * This is critical on Windows-authored `.env` files (CRLF) — without it,
+ * values arrive as `"https\r"`, `"localhost\r"`, `"8080\r"`, etc., which
+ * blows up `new URL()` with `ERR_INVALID_URL`.
+ */
+function env(name: string): string | undefined {
+  const raw = process.env[name];
+  if (raw == null) return undefined;
+  const cleaned = raw.replace(/[\r\n]+/g, "").trim();
+  return cleaned.length > 0 ? cleaned : undefined;
 }
+
+/**
+ * Converts a possibly messy `NEXT_PUBLIC_MEDIA_PATH` into a valid URL pathname.
+ * - `\` → `/`
+ * - Local Windows paths like `D:/gitbush/Git/media` are reduced to `/media`
+ *   (their last segment), since the drive-letter prefix is meaningless in a URL.
+ * - Ensures a leading `/` and a trailing `/**` wildcard.
+ */
+function sanitizePathname(raw: string): string {
+  let p = raw.replace(/\\/g, "/").trim();
+
+  // Strip a Windows drive prefix (e.g. "D:/gitbush/Git/media" → "/media").
+  if (/^[A-Za-z]:\//.test(p)) {
+    const parts = p.split("/").filter(Boolean);
+    p = "/" + (parts[parts.length - 1] || "media");
+  }
+
+  if (!p.startsWith("/")) p = "/" + p;
+  if (!p.endsWith("/**")) p = p.replace(/\/+$/, "") + "/**";
+  return p;
+}
+
+/**
+ * Builds the list of allowed remote image patterns for next/image.
+ * DISABLED: only needed when images.unoptimized=false. Re-enable together with
+ * the `remotePatterns: getRemotePatterns()` line above if you turn optimization on.
+ *
+ * Next.js >= 15.3.0 requires every entry in `images.remotePatterns`
+ * to be an instance of the global `URL` class.
+ */
+// function getRemotePatterns(): URL[] {
+//   const host = env("NEXT_PUBLIC_MEDIA_HOST");
+//   const rawPath = env("NEXT_PUBLIC_MEDIA_PATH");
+//   const port = env("NEXT_PUBLIC_MEDIA_PORT");
+//   const schema = env("NEXT_PUBLIC_MEDIA_SCHEMA");
+//
+//   if (!host || !rawPath || !schema) {
+//     console.error(
+//       "Error: Missing NEXT_PUBLIC_MEDIA_HOST / NEXT_PUBLIC_MEDIA_PATH / NEXT_PUBLIC_MEDIA_SCHEMA environment variables",
+//     );
+//     return [];
+//   }
+//
+//   if (schema !== "http" && schema !== "https") {
+//     console.error(
+//       `Error: NEXT_PUBLIC_MEDIA_SCHEMA must be "http" or "https" (got "${schema}")`,
+//     );
+//     return [];
+//   }
+//
+//   const pathname = sanitizePathname(rawPath);
+//   const portPart = port ? `:${port}` : "";
+//   const href = `${schema}://${host}${portPart}${pathname}`;
+//
+//   try {
+//     return [new URL(href)];
+//   } catch (err) {
+//     console.error(`Error: Failed to build remote image pattern from "${href}"`, err);
+//     return [];
+//   }
+// }
+
+export default nextConfig;
 
 export default nextConfig;

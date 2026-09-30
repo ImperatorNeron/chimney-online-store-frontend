@@ -4,6 +4,8 @@ import Header from "@/components/layout/header/Header";
 import CartInitializer from "@/components/modules/cart/components/CartInitializer";
 import LikeInitializer from "@/components/modules/profile/components/LikeInitializer";
 
+export const dynamic = "force-dynamic";
+
 export default function FullLayout({
     children
 }: {

@@ -1,9 +1,10 @@
-﻿import { catalogService } from "@/api/services/catalog.services";
+import { catalogService } from "@/api/services/catalog.services";
 import { categoryService } from "@/api/services/category.service";
 import { productService } from "@/api/services/products.service";
 import DesktopFilterBlock from "@/components/modules/catalog/components/DesktopFilterBlock";
 import MobileFilterButton from "@/components/modules/catalog/components/MobileFilterButton";
 import ChildCategories, { type ChildCategoryItem } from "@/components/modules/catalog/components/ChildCategories";
+import { serializeJsonLd } from "@/utils/jsonLd";
 import LimitSelector from "@/components/modules/catalog/components/LimitSelector";
 import OrderSelector from "@/components/modules/catalog/components/OrderSelector";
 import ActiveFilters from "@/components/modules/catalog/components/ActiveFilters";
@@ -26,14 +27,24 @@ export async function generateMetadata({ params }: { params: Params }) {
     const categoryNames = Array.isArray(rawCategoryNames) ? (rawCategoryNames as [string, string][]) : [];
 
     const lastCategory = categoryNames[categoryNames.length - 1];
-    const title = lastCategory ? `Каталог - ${lastCategory[0]}` : "Каталог";
+    const categoryName = lastCategory ? lastCategory[0] : "Каталог";
+    const title = lastCategory
+        ? `${categoryName} — купити з доставкою по Україні`
+        : "Каталог димоходів та комплектуючих";
+
+    // Canonical = clean category path without query params (pagination/filters),
+    // so ?page=, ?diameter=, ?metal_type= variants consolidate into one page.
+    const canonicalPath = `/catalog/${slug.join("/")}`;
 
     return {
         title,
-        description: `${lastCategory ? lastCategory[0] : "Каталог"} — купити димоходи та комплектуючі з доставкою по Україні. Великий вибір, гарантія якості.`,
+        description: lastCategory
+            ? `${categoryName} — великий вибір, ціни від виробника, гарантія якості та швидка доставка по Україні. Замовляйте онлайн.`
+            : "Каталог димоходів та комплектуючих: труби, коліна, трійники, ревізії, хомути. Ціни від виробника, доставка по Україні.",
+        alternates: { canonical: canonicalPath },
         openGraph: {
             title,
-            description: `${lastCategory ? lastCategory[0] : "Каталог"} — димоходи та комплектуючі за вигідними цінами.`,
+            description: `${categoryName} — димоходи та комплектуючі за вигідними цінами.`,
             locale: "uk_UA",
             type: "website",
         },
@@ -88,6 +99,19 @@ export default async function CatalogPage({
 
     const breadcrumbItems = [{ title: "Головна", href: "/" }, ...breadcrumbsFromCategories];
 
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "";
+    const breadcrumbLd = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: breadcrumbItems.map((b, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            name: b.title,
+            ...(b.href ? { item: `${siteUrl}${b.href}` } : {}),
+        })),
+    };
+    const pageHeading = lastCategory ? lastCategory[0] : "Каталог";
+
     let childCategories: ChildCategoryItem[] = [];
     try {
         if (lastSlug) {
@@ -111,7 +135,10 @@ export default async function CatalogPage({
 
     return (
         <>
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbLd) }} />
             <Breadcrumbs items={breadcrumbItems} />
+
+            <h1 className="text-2xl font-semibold text-gray-900 mt-4">{pageHeading}</h1>
 
             <div className="flex gap-4 mt-5 items-start" itemScope itemType="https://schema.org/CollectionPage">
                 <DesktopFilterBlock filters={filters} />
