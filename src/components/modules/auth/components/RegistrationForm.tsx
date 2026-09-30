@@ -37,7 +37,7 @@ export default function RegistrationForm() {
 
                         <FormField
                             id="patronymic"
-                            label="Прізвище"
+                            label="По батькові"
                             {...register('patronymic')}
                             errorMessage={formState.errors.patronymic?.message}
                             placeholder="Введіть по батькові"
