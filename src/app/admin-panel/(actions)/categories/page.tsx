@@ -6,7 +6,6 @@ import { categoryService, ReadCategory } from "@/api/services/category.service";
 import { useAuthStore } from "@/store/auth.store";
 import { NotificationService } from "@/api/services/notification.service";
 import useFetchData from "@/components/modules/admin/hooks/common/useFetchData";
-import { CategoryImage } from "@/components/modules/categories/components/CategoryImage";
 import { joinMediaPath } from "@/utils/utils";
 
 interface CategoryFormData {
@@ -316,13 +315,19 @@ function CategoryRow({
     return (
         <div className={`flex items-center justify-between px-4 py-3 ${isChild ? 'border-b border-gray-50' : ''}`}>
             <div className="flex items-center gap-3">
-                <CategoryImage
-                    imageSrc={cat.file_path
-                        ? (parentSlug ? joinMediaPath("categories", parentSlug, cat.file_path) : joinMediaPath("categories", cat.file_path))
-                        : ""}
-                    alt={cat.name}
-                    size={32}
-                />
+                {cat.file_path ? (
+                    <img
+                        src={isChild
+                            ? joinMediaPath("categories", parentSlug, cat.file_path)
+                            : joinMediaPath("categories", cat.file_path)}
+                        alt={cat.name}
+                        className="h-8 w-8 rounded object-cover"
+                    />
+                ) : (
+                    <div className="h-8 w-8 rounded bg-gray-100 flex items-center justify-center">
+                        <PhotoIcon className="h-4 w-4 text-gray-400" />
+                    </div>
+                )}
                 <div>
                     <span className={`text-sm ${isChild ? 'text-gray-700' : 'font-medium'}`}>{cat.name}</span>
                     <span className="ml-2 text-xs text-gray-400">{cat.slug}</span>

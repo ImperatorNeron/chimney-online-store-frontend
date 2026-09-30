@@ -1,4 +1,4 @@
-﻿import OverlayHeader from "@/components/shared/OverlayHeader";
+import OverlayHeader from "@/components/shared/OverlayHeader";
 import Overlay from "@/components/ui/Overlay";
 import { ProductFiltersSchema } from "@/api/types/types";
 import Filters from "./Filters";

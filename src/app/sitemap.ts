@@ -1,7 +1,11 @@
 import { MetadataRoute } from 'next';
+import { SSR_API_BASE } from '@/api/config';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com';
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
+// sitemap.ts only ever runs on the server, so use the SSR (absolute) base.
+const API_URL = SSR_API_BASE;
+
+export const dynamic = 'force-dynamic';
 
 async function fetchProducts(): Promise<{ slug: string; id: number }[]> {
     try {

@@ -116,9 +116,6 @@ export default function CategoriesOverlay({
                         </div>
                         <div className="min-w-0">
                             <div className="truncate font-medium text-gray-900">{category.name}</div>
-                            <div className="mt-0.5 text-xs text-gray-500">
-                                {childCategories(category.id).length} підкатегорій
-                            </div>
                         </div>
                     </Link>
                     <button
@@ -261,9 +258,6 @@ export default function CategoriesOverlay({
                                         </div>
                                         <div className="min-w-0 flex-1">
                                             <div className="truncate font-medium text-gray-900">{category.name}</div>
-                                            <div className="mt-0.5 text-xs text-gray-500">
-                                                {childCategories(category.id).length} підкатегорій
-                                            </div>
                                         </div>
                                         <ChevronRightIcon className="h-5 w-5 text-gray-400 transition-colors group-hover:text-gray-700" />
                                     </Link>
